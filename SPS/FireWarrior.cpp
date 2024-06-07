@@ -26,18 +26,41 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetFPS(15.f);
 
     // TODO : Animation "Run"
+    
+    spriteGroup = spriteSheet->GetGroup("Run");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Run", spriteGroup);
+    anim->SetCycleCount(-1);
+    anim->SetFPS(15.f);
 
     // TODO : Animation "JumpUp"
+    spriteGroup = spriteSheet->GetGroup("JumpUp");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("JumpUp", spriteGroup);
+    anim->SetCycleCount(-1);
+    anim->SetFPS(15.f);
 
     // TODO : Animation "JumpTop"
+    
+    spriteGroup = spriteSheet->GetGroup("JumpTop");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("JumpTop", spriteGroup);
+    anim->SetCycleCount(-1);
+    anim->SetFPS(15.f);
 
     // TODO : Animation "JumpDown"
+
+    spriteGroup = spriteSheet->GetGroup("JumpDown");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("JumpDown", spriteGroup);
+    anim->SetCycleCount(-1);
+    anim->SetFPS(15.f);
 
     // TODO : Animation "Attack" (c'est fait, c'est cadeau)
     const float attackFPS = 1.0f / (float)ATTACK_FRAME_TIME;
     spriteGroup = spriteSheet->GetGroup("Attack1");
     AssertNew(spriteGroup);
-    anim = m_animator.CreateAnimation("Attack1", spriteGroup);
+    anim = m_animator.CreateAnimation("Attack1", spriteGroup);  
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
@@ -53,7 +76,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     // Physique
     m_accAir = 30.f;
     m_accGround = 60.f;
-    m_maxSpeed = 50.f; // TODO : adapter
+    m_maxSpeed = 15; // TODO : adapter
 
     // Render
     m_renderShift.Set(0.7f, 0.f);
@@ -79,7 +102,7 @@ void FireWarrior::Start()
 
     // TODO : Modifer les paramètres
     b2PolygonShape box;
-    box.SetAsBox(1.f, 1.f, b2Vec2(0.5f, -0.5), 0.f);
+    box.SetAsBox(0.6f, .85f, b2Vec2(-0.02f, 1.2), 0.f); //ici pour le rest
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &box;
@@ -93,8 +116,8 @@ void FireWarrior::Start()
 
     // TODO : Modifer les paramètres
     b2CircleShape circle;
-    circle.m_p = b2Vec2(0.5f, -0.5f);
-    circle.m_radius = 0.15f;
+    circle.m_p = b2Vec2(0.0f, 0.5f); //ici pour le cercle
+    circle.m_radius = 0.5f;
 
     fixtureDef.shape = &circle;
     fixtureDef.density = 2.f;
@@ -112,9 +135,11 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
 
     switch (state) // TODO : décommenter, compléter
     {
-    case State::IDLE:        m_animator.PlayAnimation("Idle");         break;
-    //case State::RUN:         m_animator.PlayAnimation("Run");          break;
-    case State::ATTACK:      m_animator.PlayAnimation("Attack1");      break;
+    case State::IDLE:        m_animator.PlayAnimation("Idle");  printf("Is Idle\n");       break;
+    case State::RUN:         m_animator.PlayAnimation("Run");   printf("Is Running\n");        break;
+    case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking1\n");      break;
+    case State::JUMP:      m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");   break;
+
     // TODO : Gérer d'autres animations
     default:
         break;
@@ -137,6 +162,7 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         {
             // TODO : decommenter
             //m_animator.PlayAnimation("Attack2");
+            SetState(Player::State::IDLE);
         }
         else
         {

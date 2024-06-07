@@ -14,7 +14,7 @@
 #  define FHD
 #  define FULLSCREEN
 #endif
-//#define SKIP_MENU
+#define SKIP_MENU
 
 
 #ifdef FHD

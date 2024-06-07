@@ -25,8 +25,16 @@ LightningWarrior::LightningWarrior(Scene *scene, const PlayerConfig *config, Pla
     anim->SetFPS(15.f);
 
     // TODO : Toutes les animations
+    // Animation "Run"
+    spriteGroup = spriteSheet->GetGroup("Run");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Run", spriteGroup);
+    anim->SetCycleCount(-1);
+    anim->SetFPS(15.f);
 
-    m_animator.PlayAnimation("Idle");
+
+     m_animator.PlayAnimation("Idle");
+
 
     // Physique
     m_accAir = 30.f;

@@ -58,10 +58,14 @@ Player::Player(Scene *scene, const PlayerConfig *config, PlayerStats *stats) :
     // Physique
     m_accAir = 30.f;
     m_accGround = 60.f;
-    m_maxSpeed = 50.f; // TODO : adapter
+    m_maxSpeed = 15.f; // TODO : adapter
 
     // Délais 
-    // AddFixedUpdateDelay(&m_delayLock);// TODO : decommenter
+     AddFixedUpdateDelay(&m_delayLock);
+     AddFixedUpdateDelay(&m_delayEarlyJump);
+     AddFixedUpdateDelay(&m_delayAttack);
+     AddFixedUpdateDelay(&m_delayLockAttack); // TODO : decommenter
+
 }
 
 Player::~Player()
@@ -90,6 +94,7 @@ void Player::Update()
 
     SetVisible(true);
     m_hDirection = input.axisX;
+    m_delayEarlyJump = input.jumpPressed;
 
     StageManager *stageManager = StageManager::GetFromScene(m_scene);
     if (stageManager == nullptr) return;
@@ -97,11 +102,14 @@ void Player::Update()
 
     if (input.jumpPressed) // TODO : décommenter pour récupérer l'information de saut
     {
-        //m_delayEarlyJump = 0.1f;
+        m_delayEarlyJump = 0.12f;
     }
     if (input.attackPressed)
     {
-        // TODO : membre m_attackType à modifier
+        m_attackType = AttackType::COMBO ;
+        m_delayAttack = 0.5;
+       
+
     }
 
     // TODO : membre m_defend à modifier
@@ -251,15 +259,28 @@ void Player::FixedUpdateState()
         // TODO : modifier
         if (IsAttacking() == false)
         {
-            if (CanAttack())
+            if (CanAttack() &&  m_delayAttack >0)
             {
                 SetState(State::ATTACK);
+                
             }
             else
             {
-                SetState(State::IDLE);
+                if (velocity.x != 0)
+                {
+                    SetState(State::RUN);
+                }
+                else if (m_delayEarlyJump)
+                    SetState(State::JUMP);
+
+                else
+                {
+                    SetState(State::IDLE);
+                }
             }
         }
+       
+
     }
     else // Etat en l'air 
     {
@@ -336,7 +357,10 @@ void Player::FixedUpdatePhysics()
         // TODO : vitesse verticale et reinit m_delayEarlyJump
 
         // TODO : décommenter
-        // m_scene->GetAssetManager()->PlaySoundFX(SFX_JUMP_GROUND); 
+         m_scene->GetAssetManager()->PlaySoundFX(SFX_JUMP_GROUND); 
+         velocity.y = m_jumpImpulse;
+         m_delayEarlyJump = 0;
+
         
     }
 
@@ -351,7 +375,7 @@ void Player::FixedUpdatePhysics()
     m_hVelocity = 0.f;
     if (m_state != State::DEFEND)
     {
-        //m_hVelocity = m_maxSpeed * m_hDirection;
+        m_hVelocity = m_maxSpeed * m_hDirection;
     }
     velocity.x = m_hVelocity;
 
@@ -365,7 +389,7 @@ void Player::FixedUpdatePhysics()
     //}
 
     velocity += m_externalVelocity; // Vitese de la plateforme a ajouter au joueur
-    //body->SetLinearVelocity(velocity); // TODO : decommenter pour appliquer la vitesse au corps
+    body->SetLinearVelocity(velocity); // TODO : decommenter pour appliquer la vitesse au corps
     m_externalVelocity.SetZero();
 }
 
@@ -473,14 +497,15 @@ void Player::EmitDustImpact()
 
     b2Vec2 position = GetPosition() + b2Vec2(0.f, 0.0f); // TODO : modifier
     Particle *particle = m_scene->GetParticleSystem(LAYER_PARTICLES)
-        ->EmitParticle(spriteGroup, position, 12.f); // TODO : modifier
+        ->EmitParticle(spriteGroup, position, 40.f); // TODO : modifier
 
     SpriteAnim *anim = particle->GetSpriteAnimation();
     anim->SetFPS(60.f); // TODO : modifier
     anim->SetCycleCount(1);
     anim->SetDelay(0.1f);
 
-    particle->SetLifetimeFromAnim();
+     particle->SetLifetimeFromAnim();
+   // particle->SetLifetime(1000);
     particle->SetAnchor(Anchor::SOUTH);
     particle->CreateAlphaAnimation(0.8f, 0.4f);
 }
@@ -548,12 +573,9 @@ void Player::OnStateChanged(Player::State state, Player::State prevState)
 
     switch (state)
     {
-    case State::ATTACK:
-        m_delayAttack = -1.f;
-        break;
+    case State::ATTACK: m_delayAttack = -1.f;
 
     // TODO : en DEFEND, animation
-
     default:
         break;
     }
