@@ -162,7 +162,7 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         {
             // TODO : decommenter
             //m_animator.PlayAnimation("Attack2");
-            SetState(Player::State::IDLE);
+            SetState(Player::State::IDLE); 
         }
         else
         {
@@ -200,9 +200,10 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
         switch (frameID)
         {
             // TODO : Vitesse crédible
-        case 0: m_autoVelocity = s * 12.0f; break;
+        case 0: m_autoVelocity = s * 6.0f; break;
         case 1: m_autoVelocity = s * 12.0f; break;
-        case 2: m_autoVelocity = s * 12.0f; break;
+        case 2: m_autoVelocity = s * 5.0f; break;
+        case 3: m_autoVelocity = s * 2.0f; break;
         default: break;
         }
 
@@ -214,7 +215,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
         {
             // TODO : apdapter le centre de l'attaque
             b2Vec2 position = GetPosition();
-            position += b2Vec2(s * 1.0f, 0.0f); 
+            position += b2Vec2(s * 1.f, 1.f); 
 
             Damage damage;
             damage.amount = 3.f;
@@ -223,9 +224,9 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
             damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
 
             // TODO : adapter la zone d'attaque
-            bool hit = AttackCircle(damage, filter, position, 2.f) ;
+            bool hit = AttackCircle(damage, filter, position, 1.f) ;
 
-            //PlaySFXHit(hit, SFX_HIT);
+            PlaySFXHit(hit, SFX_HIT);   
         }
     }
     else if (name == "Attack2")

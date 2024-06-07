@@ -9,6 +9,8 @@
 #include "PlayerAI.h"
 #include "StageManager.h"
 
+
+
 const float ATTACK_FRAME_TIME = 0.04f;
 
 Player::Player(Scene *scene, const PlayerConfig *config, PlayerStats *stats) :
@@ -44,6 +46,15 @@ Player::Player(Scene *scene, const PlayerConfig *config, PlayerStats *stats) :
     anim->SetCycleCount(-1);
     anim->SetFPS(20.f);
 
+
+    AddFixedUpdateDelay(&m_delayLock);
+    AddFixedUpdateDelay(&m_delayAttack);
+    AddFixedUpdateDelay(&m_delayLockAttack);
+    if (m_delayLock >0)
+    {
+        return;
+    }
+
     // IA
     if (config->isCPU)
     {
@@ -60,11 +71,7 @@ Player::Player(Scene *scene, const PlayerConfig *config, PlayerStats *stats) :
     m_accGround = 60.f;
     m_maxSpeed = 15.f; // TODO : adapter
 
-    // Délais 
-     AddFixedUpdateDelay(&m_delayLock);
-     AddFixedUpdateDelay(&m_delayEarlyJump);
-     AddFixedUpdateDelay(&m_delayAttack);
-     AddFixedUpdateDelay(&m_delayLockAttack); // TODO : decommenter
+  
 
 }
 
@@ -307,7 +314,8 @@ void Player::FixedUpdateAutoVelocity()
 {
     switch (m_state)
     {
-    case State::ATTACK: 
+    case State::ATTACK:
+        m_hasAutoVelocity = true;
         // TODO forcer hasAutoVelocity en cas d'attaque et autres
         break;
     default:
@@ -379,14 +387,14 @@ void Player::FixedUpdatePhysics()
     }
     velocity.x = m_hVelocity;
 
-    //if (m_hasAutoVelocity) // TODO : décommenter pour gérer la vitesse automatique
-    //{
-    //    velocity.x = m_autoVelocity;
-    //}
-    //else
-    //{
-    //    velocity.x = m_hVelocity;
-    //}
+    if (m_hasAutoVelocity) // TODO : décommenter pour gérer la vitesse automatique
+    {
+        velocity.x = m_autoVelocity;
+    }
+    else
+    {
+        velocity.x = m_hVelocity;
+    }
 
     velocity += m_externalVelocity; // Vitese de la plateforme a ajouter au joueur
     body->SetLinearVelocity(velocity); // TODO : decommenter pour appliquer la vitesse au corps
@@ -565,6 +573,8 @@ void Player::LockAttack(float lockTime)
     m_delayLockAttack = b2Max(m_delayLockAttack, lockTime);
 }
 
+
+
 void Player::OnStateChanged(Player::State state, Player::State prevState)
 {
     AssetManager *assets = m_scene->GetAssetManager();
@@ -596,22 +606,11 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
         return false;
     }
     m_lastDamager = damager;
-
-    // TODO : emission de particules hit
-
-    // TODO : Changement d'état
-
     m_delayLockAttack = b2Max(m_delayLockAttack, damage.lockAttackTime);
-
-    // TODO : Mettre à jour le delayLock
-
-    // TODO : Faire des dégats
-
-    // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegins
-
-    // Stats
+    m_delayLock = damage.lockTime;
     m_stats->damageTaken += damage.amount;
-
+    m_ejectionScore += damage.amount;
+    // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegin
     return true;
 }
 
