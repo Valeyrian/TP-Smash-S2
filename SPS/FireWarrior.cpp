@@ -223,7 +223,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
     QueryFilter filter(m_config->otherTeamMask | CATEGORY_ITEM);
 
-    const float lockTime = 0.2f;
+    const float lockTime = -1.f;
     float s = m_facingRight ? 1.f : -1.f;
 
     if (name == "Attack1")
@@ -315,7 +315,8 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
             damage.ejection = b2Vec2(s *25.0f, 5.0f); // TODO : param�tres suppl�mentaire // TODO : angle d'éjection fonction de la position du joueur
           
-           
+            //damage.ejection = GetPosition; // TODO : param�tres suppl�mentaire // TODO : angle d'éjection fonction de la position du joueur
+
             
 
             // TODO : Zone de collision adapt�e

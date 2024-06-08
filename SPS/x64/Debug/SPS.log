@@ -1,2 +1,5 @@
-﻿  UIStageHUD.cpp
+﻿  FireWarrior.cpp
+C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\SPS\FireWarrior.cpp(120,45): warning C4305: 'argument' : troncation de 'double' à 'float'
+  Player.cpp
+  Génération de code en cours...
   SPS.vcxproj -> C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\x64\Debug\SPS.exe
