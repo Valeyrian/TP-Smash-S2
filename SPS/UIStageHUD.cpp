@@ -58,6 +58,16 @@ UIStageHUD::UIStageHUD(Scene *scene) :
         hLayout->AddObject(text, 0, i);
 
         m_damageTexts.push_back(text);
+
+
+        // Compteur de fall
+        font = assets->GetFont(FONT_NORMAL);     
+        text = new UIText(scene, "0", font, Colors::Gold);    
+        text->SetAnchor(Anchor::SOUTH);    
+
+        hLayout->AddObject(text, 0, i); 
+        m_fallTexts.push_back(text);  
+
     }
 
     // Compteur du temps restant
@@ -86,7 +96,9 @@ void UIStageHUD::Update()
     {
         Player *player = stageManager->GetPlayer(i);
         int score = (int)player->GetEjectionScore();
+        PlayerStats const * stat = player->GetStats();
 
         m_damageTexts[i]->SetString(std::to_string(score) + "%");
+        m_fallTexts[i]->SetString(std::to_string(stat->fallCount));
     }
 }

@@ -35,7 +35,7 @@ public:
     virtual bool TakeDamage(const Damage &damage, Damager *damager) override;
 
     virtual void OnStateChanged(Player::State state, Player::State prevState);
-    //void Heal(float amount); // TODO : decommenter
+    void Heal(float amount); // TODO : decommenter
 
     const PlayerConfig *GetConfig() const;
     Player::State GetState() const;
