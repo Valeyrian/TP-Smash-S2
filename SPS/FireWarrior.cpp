@@ -273,7 +273,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
         // TODO : déclenchement de l'attaque
         if (frameID == 2)
         {
-            PlaySFXAttack(SFX_WHOOSH);
+            PlaySFXAttack(SFX_WHOOSH); 
 
             b2Vec2 position = GetPosition();
 
