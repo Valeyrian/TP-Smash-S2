@@ -262,7 +262,6 @@ void Player::FixedUpdateState()
         if (velocity.y > -4.f && velocity.Length() > 1.f)
             return;
     }
-    // TODO : quitter si delaylock
  
 
     // TODO : état DEFEND
