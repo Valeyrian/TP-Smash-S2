@@ -1,3 +1,3 @@
 ﻿  FireWarrior.cpp
-D:\Cours\tp s2\SPS\FireWarrior.cpp(116,45): warning C4305: 'argument' : troncation de 'double' à 'float'
-  SPS.vcxproj -> D:\Cours\tp s2\x64\Debug\SPS.exe
+C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\SPS\FireWarrior.cpp(120,45): warning C4305: 'argument' : troncation de 'double' à 'float'
+  SPS.vcxproj -> C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\x64\Debug\SPS.exe

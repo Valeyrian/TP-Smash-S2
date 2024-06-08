@@ -91,7 +91,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     // Physique
     m_accAir = 30.f;
     m_accGround = 60.f;
-    m_maxSpeed = 15; // TODO : adapter
+    m_maxSpeed = 10; // TODO : adapter
 
     // Render
     m_renderShift.Set(0.7f, 0.f);
@@ -152,7 +152,7 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     {
     case State::IDLE:        m_animator.PlayAnimation("Idle");  printf("Is Idle\n");       break;
     case State::RUN:         m_animator.PlayAnimation("Run");   printf("Is Running\n");        break;
-    case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking1\n");      break;
+    case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");      break;
     case State::JUMP:      m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");   break;
 
     // TODO : Gérer d'autres animations
@@ -202,16 +202,10 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
 
     else if (name == "Attack3")
     {
-        if (GetPlayerInput().attackDown)
-        {
+        
             SetState(Player::State::IDLE);
-
-        }
-        else
-        {
-            SetState(Player::State::IDLE);
-            LockAttack(0.1f);
-        }
+            LockAttack(0.25f);
+          
     }
 
 }
@@ -256,6 +250,8 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
             Damage damage;
             damage.amount = 3.f;
+
+
             // TODO : Verrouillage pour la victime
 
             damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
@@ -296,7 +292,14 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
     }
     else if (name == "Attack3")
     {
+
         // TODO : autoVelocité
+        switch (frameID) {     // TODO : Vitesse crédible
+        case 0: m_autoVelocity = s * -2.0f; break;
+        case 1: m_autoVelocity = s * 2.0f; break;
+        case 2: m_autoVelocity = s * 10.0f; break; 
+        case 3: m_autoVelocity = s * 2.0f; break; 
+        default: break; }
 
         // TODO : déclenchement de l'attaque avec smash
         if (frameID == 2)
@@ -307,13 +310,13 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
             position += b2Vec2(s * 1.7f, 1.0f);
 
             Damage damage;
-            damage.hasEjection = true;
             damage.amount = 5.f;
-            // TODO : param�tres suppl�mentaires
+            damage.hasEjection = true;
 
-
-            // TODO : angle d'éjection fonction de la position du joueur
-            damage.ejection = b2Vec2(10.0f, 10.0f);
+            damage.ejection = b2Vec2(s *25.0f, 5.0f); // TODO : param�tres suppl�mentaire // TODO : angle d'éjection fonction de la position du joueur
+          
+           
+            
 
             // TODO : Zone de collision adapt�e
             bool hit = AttackBox(damage, filter, position, 0.8f, 0.1f, 0.f);
