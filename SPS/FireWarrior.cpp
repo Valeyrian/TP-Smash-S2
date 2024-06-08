@@ -306,12 +306,14 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
             Damage damage;
             damage.hasEjection = true;
+            damage.amount = 5.f;
             // TODO : paramètres supplémentaires
 
             // TODO : angle d'éjection fonction de la position du joueur
             damage.ejection = b2Vec2(10.0f, 10.0f);
 
             // TODO : Zone de collision adaptée
+            bool hit = AttackBox(damage, filter, position, 0.8f, 0.1f, 0.f);
         }
     }
     // TODO : D'autres évènement sur frames ?
