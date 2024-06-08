@@ -62,10 +62,17 @@ public:
         LIMITED_LIVES = 0, LIMITED_TIME
     };
 
+
     Type type;
     Mode mode;
     // TODO : Ajouter un membre pour gérer la fréquence d'apparition des potions
+  
+    enum class Potion : int
+    {
+        AUCUNE = 0, LENTE, NORMALE, RAPIDE
+    };
 
+    Potion potionLevel;
     int duration;
     int lifeCount;
     
