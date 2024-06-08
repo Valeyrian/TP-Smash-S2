@@ -65,7 +65,18 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetFPS(attackFPS);
 
     // TODO : Animations Attack2 et Attack3
+    spriteGroup = spriteSheet->GetGroup("Attack2"); 
+    AssertNew(spriteGroup); 
+    anim = m_animator.CreateAnimation("Attack2", spriteGroup); 
+    anim->SetCycleCount(1); 
+    anim->SetFPS(attackFPS); 
 
+
+    spriteGroup = spriteSheet->GetGroup("Attack3"); 
+    AssertNew(spriteGroup); 
+    anim = m_animator.CreateAnimation("Attack3", spriteGroup); 
+    anim->SetCycleCount(1); 
+    anim->SetFPS(attackFPS); 
     // TODO : Anmisation "Defend"
 
     // TODO : Anmisation "TakeHit"
@@ -76,7 +87,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     // Physique
     m_accAir = 30.f;
     m_accGround = 60.f;
-    m_maxSpeed = 15; // TODO : adapter
+    m_maxSpeed = 10; // TODO : adapter
 
     // Render
     m_renderShift.Set(0.7f, 0.f);
@@ -139,6 +150,11 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     case State::RUN:         m_animator.PlayAnimation("Run");   printf("Is Running\n");        break;
     case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking1\n");      break;
     case State::JUMP:      m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");   break;
+    case State::ATTACK2:      m_animator.PlayAnimation("Attack2"); printf("Is Attacking2\n");      break;
+    case State::ATTACK3:      m_animator.PlayAnimation("Attack3"); printf("Is Attacking3\n");      break;
+
+
+
 
     // TODO : Gérer d'autres animations
     default:
@@ -161,8 +177,9 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         if (GetPlayerInput().attackDown)
         {
             // TODO : decommenter
-            //m_animator.PlayAnimation("Attack2");
-            SetState(Player::State::IDLE); 
+            m_animator.PlayAnimation("Attack2");
+            printf("attack2");
+            
         }
         else
         {
@@ -172,10 +189,29 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
     }
     
     // TODO : Enchainement des Attack2, Attack3
-    //else if (name == "Attack2")
-    //{
+    else if (name == "Attack2")
+    {
 
-    //}
+        if (GetPlayerInput().attackDown)
+        {
+
+            m_animator.PlayAnimation("Attack3");
+            SetState(Player::State::LAUNCHED); 
+            m_launchBegins = true;
+            printf("attack3");
+        }
+        else
+        {
+            SetState(Player::State::IDLE); 
+            LockAttack(0.1f); 
+        }
+    }
+
+
+    else if (name == "Attack3")
+    { 
+        SetState(Player::State::IDLE);
+    }
 
 }
 
@@ -253,7 +289,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
                 position + b2Vec2(s * 0.9f, 2.3f)
             };
             bool hit = AttackPolygon(damage, filter, vertices, 5);
-            //PlaySFXHit(hit, SFX_HIT);
+            PlaySFXHit(hit, SFX_HIT);
         }
     }
     else if (name == "Attack3")

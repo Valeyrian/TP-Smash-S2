@@ -188,6 +188,9 @@ void Player::FixedUpdate()
     // Met à jour l'état du joueur
     FixedUpdateState();
 
+    if (m_delayLock > 0.f)
+        return;
+
     FixedUpdateAutoVelocity();
 
     // Calcule l'orientation
@@ -202,6 +205,9 @@ void Player::FixedUpdate()
 
     // Met à jour la physique
     FixedUpdatePhysics();
+
+    if (m_delayLock > 0.f)
+        return;
 
     m_inContact = false;
     m_launchBegins = false;
@@ -247,10 +253,12 @@ void Player::FixedUpdateState()
     if (m_launchBegins)
     {
         SetState(State::LAUNCHED);
+        printf("state launched\n");
         return;
     }
     if (m_state == State::LAUNCHED)
     {
+        velocity.x += 3.f;
         if (velocity.y > -4.f && velocity.Length() > 1.f)
             return;
     }
@@ -611,6 +619,10 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
     m_stats->damageTaken += damage.amount;
     m_ejectionScore += damage.amount;
     // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegin
+   /* if (m_launchBegins)
+    {
+        m_launchBegins
+    }*/
     return true;
 }
 
