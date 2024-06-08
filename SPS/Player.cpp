@@ -628,14 +628,16 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
     m_stats->damageTaken += damage.amount;
     m_ejectionScore += damage.amount;
    
-    /*if (damage.hasEjection)
-    {
-        printf("ici launche begin de damager\n");
-        damage.ejection *= 1/ 2
-        m_ejection = damage.ejection;
-        m_launchBegins = true;
-        SetState(Player::State::LAUNCHED);
-    }*/
+    //if (damage.hasEjection)
+    //{
+    //    printf("ici launche begin de damager\n");
+    //    m_ejection = damage.ejection - GetPosition();
+    //   
+    //    m_ejection *= m_ejectionScore ;
+    //    //augmentation de du kb 
+    //    m_launchBegins = true;
+    //    SetState(Player::State::LAUNCHED);
+    //}
 
  
     // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegin
