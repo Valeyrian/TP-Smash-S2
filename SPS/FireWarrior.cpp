@@ -231,10 +231,10 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
         switch (frameID)
         {
             // TODO : Vitesse crédible
-        case 0: m_autoVelocity = s * 6.0f; break;
-        case 1: m_autoVelocity = s * 10.0f; break;
-        case 2: m_autoVelocity = s * 4.0f; break;
-        case 3: m_autoVelocity = s * 2.0f; break;
+        case 0: m_autoVelocity = s * 3.0f; break;
+        case 1: m_autoVelocity = s * 5.0f; break;
+        case 2: m_autoVelocity = s * 2.0f; break;
+        case 3: m_autoVelocity = s * 1.0f; break;
         default: break;
         }
 
