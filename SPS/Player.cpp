@@ -46,7 +46,7 @@ Player::Player(Scene *scene, const PlayerConfig *config, PlayerStats *stats) :
     anim->SetCycleCount(-1);
     anim->SetFPS(20.f);
 
-
+    //gestion des delais qui diminues
     AddFixedUpdateDelay(&m_delayLock);
     AddFixedUpdateDelay(&m_delayAttack);
     AddFixedUpdateDelay(&m_delayLockAttack);
@@ -254,6 +254,11 @@ void Player::FixedUpdateState()
         if (velocity.y > -4.f && velocity.Length() > 1.f)
             return;
     }
+    
+    if (m_delayLock > 0)
+    {
+        return;
+    }
  
 
     // TODO : état DEFEND
@@ -338,6 +343,10 @@ void Player::FixedUpdatePhysics()
     if (m_launchBegins) // TODO
     {
         body->SetLinearVelocity(m_ejection);
+        return;
+    }
+    if (m_delayLock > 0)
+    {
         return;
     }
 
@@ -549,10 +558,10 @@ void Player::OnPlayerKO()
     m_ejectionScore = 0.f;
 
     // TODO : Décommenter une fois les délais utilisés
-    //m_delayAttack = -1.f;
-    //m_delayEarlyJump = -1.f;
-    //m_delayLock = -1.f;
-    //m_delayLockAttack = -1.f;
+    m_delayAttack = -1.f;
+    m_delayEarlyJump = -1.f;
+    m_delayLock = -1.f;
+    m_delayLockAttack = -1.f;
 
     m_stats->fallCount++;
 

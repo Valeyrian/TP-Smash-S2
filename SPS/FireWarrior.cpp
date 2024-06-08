@@ -58,13 +58,28 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
 
     // TODO : Animation "Attack" (c'est fait, c'est cadeau)
     const float attackFPS = 1.0f / (float)ATTACK_FRAME_TIME;
+
     spriteGroup = spriteSheet->GetGroup("Attack1");
     AssertNew(spriteGroup);
     anim = m_animator.CreateAnimation("Attack1", spriteGroup);  
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
+
     // TODO : Animations Attack2 et Attack3
+   
+    spriteGroup = spriteSheet->GetGroup("Attack2");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Attack2", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
+
+   
+    spriteGroup = spriteSheet->GetGroup("Attack3");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Attack3", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
 
     // TODO : Anmisation "Defend"
 
@@ -160,9 +175,8 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
     {
         if (GetPlayerInput().attackDown)
         {
-            // TODO : decommenter
-            //m_animator.PlayAnimation("Attack2");
-            SetState(Player::State::IDLE); 
+            m_animator.PlayAnimation("Attack2");
+            
         }
         else
         {
@@ -172,10 +186,33 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
     }
     
     // TODO : Enchainement des Attack2, Attack3
-    //else if (name == "Attack2")
-    //{
+    else if (name == "Attack2")
+    {
+        if (GetPlayerInput().attackDown)
+        {
+            m_animator.PlayAnimation("Attack3");
 
-    //}
+        }
+        else
+        {
+            SetState(Player::State::IDLE);
+            LockAttack(0.1f);
+        }
+    }
+
+    else if (name == "Attack3")
+    {
+        if (GetPlayerInput().attackDown)
+        {
+            SetState(Player::State::IDLE);
+
+        }
+        else
+        {
+            SetState(Player::State::IDLE);
+            LockAttack(0.1f);
+        }
+    }
 
 }
 
@@ -201,8 +238,8 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
         {
             // TODO : Vitesse crédible
         case 0: m_autoVelocity = s * 6.0f; break;
-        case 1: m_autoVelocity = s * 12.0f; break;
-        case 2: m_autoVelocity = s * 5.0f; break;
+        case 1: m_autoVelocity = s * 10.0f; break;
+        case 2: m_autoVelocity = s * 4.0f; break;
         case 3: m_autoVelocity = s * 2.0f; break;
         default: break;
         }
@@ -245,14 +282,15 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
             damage.lockTime = lockTime;
             // TODO : paramètres supplémentaires ?
 
-            b2Vec2 vertices[5] = { // C'est cadeau
-                position + b2Vec2(s * 0.0f, 2.3f),
-                position + b2Vec2(s * 0.0f, 0.0f),
-                position + b2Vec2(s * 1.9f, 0.0f),
-                position + b2Vec2(s * 1.8f, 1.5f),
+            b2Vec2 vertices[6] = { // C'est cadeau
+                position + b2Vec2(s * -0.4f, 2.6f),
+                position + b2Vec2(s * 1.15f, 1.5f),
+                position + b2Vec2(s * 1.0f, 0.5f),
+                position + b2Vec2(s * 2.f, 0.5f),
+                position + b2Vec2(s * 2.f, 1.5f),
                 position + b2Vec2(s * 0.9f, 2.3f)
             };
-            bool hit = AttackPolygon(damage, filter, vertices, 5);
+            bool hit = AttackPolygon(damage, filter, vertices, 6);
             //PlaySFXHit(hit, SFX_HIT);
         }
     }
