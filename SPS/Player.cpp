@@ -210,7 +210,7 @@ void Player::FixedUpdate()
         return;
 
     m_inContact = false;
-    m_launchBegins = false;
+//    m_launchBegins = false;
     m_externalVelocity.SetZero();
     m_lastDamager = nullptr;
 }
@@ -250,12 +250,13 @@ void Player::FixedUpdateState()
     b2Vec2 velocity = body->GetLinearVelocity() - m_externalVelocity;
 
     // Conditions de sortie
-    if (m_launchBegins)
+
+ /*   if (m_launchBegins)
     {
         SetState(State::LAUNCHED);
         printf("state launched\n");
         return;
-    }
+    }*/
     if (m_state == State::LAUNCHED)
     {
         velocity.x += 3.f;
@@ -343,11 +344,17 @@ void Player::FixedUpdatePhysics()
     body->SetGravityScale(1.f);
 
     // Conditions de sorties
+
     if (m_launchBegins) // TODO
     {
+        printf("ici lineare velocity \n");
+      //  m_ejection = b2Vec2(150, 150);
         body->SetLinearVelocity(m_ejection);
+        m_launchBegins = false;
         return;
     }
+    m_launchBegins = false;
+
 
     // TODO : jouer sur la gravité 
     //if (m_state == State::LAUNCHED) 
@@ -557,10 +564,10 @@ void Player::OnPlayerKO()
     m_ejectionScore = 0.f;
 
     // TODO : Décommenter une fois les délais utilisés
-    //m_delayAttack = -1.f;
-    //m_delayEarlyJump = -1.f;
-    //m_delayLock = -1.f;
-    //m_delayLockAttack = -1.f;
+    m_delayAttack = -1.f;
+    m_delayEarlyJump = -1.f;
+    m_delayLock = -1.f;
+    m_delayLockAttack = -1.f;
 
     m_stats->fallCount++;
 
@@ -617,11 +624,18 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
     m_delayLock = damage.lockTime;
     m_stats->damageTaken += damage.amount;
     m_ejectionScore += damage.amount;
-    // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegin
-   /* if (m_launchBegins)
+   
+    if (damage.hasEjection)
     {
-        m_launchBegins
-    }*/
+        printf("ici launche begin de damager\n");
+        m_ejection = damage.ejection;
+        m_launchBegins = true;
+        SetState(Player::State::LAUNCHED);
+    }
+
+ 
+    // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegin
+  
     return true;
 }
 
