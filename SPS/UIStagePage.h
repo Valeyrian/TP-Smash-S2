@@ -34,8 +34,10 @@ private:
     UIText *m_titleText;
     UIText *m_playerText;
     UIText *m_optionText;
+    UIText *m_potionText;
     // TODO : texte pour la potion
 
+    UITextList* m_potionlevel;
     UITextList *m_player1List;
     UITextList *m_player2List;
     UITextList *m_timeList;

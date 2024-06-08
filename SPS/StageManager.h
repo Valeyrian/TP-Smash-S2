@@ -60,7 +60,8 @@ private:
     bool m_paused;
 
     float m_delayStage;
-//    float m_delayPotion; // ADD
+    float m_delayPotion; // ADD
+    float m_MaxDelayPotion;
 };
 
 inline Player *StageManager::GetPlayer(int playerID)

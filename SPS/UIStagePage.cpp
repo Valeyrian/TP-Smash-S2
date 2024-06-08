@@ -123,6 +123,20 @@ UIStagePage::UIStagePage(
     ////--------------------------------------------------------------------------
     //// TODO : Ajout d'un texte et d'une liste pour la fréquence d'apparition des potions
 
+    font = assets->GetFont(FONT_LARGE); 
+   
+      
+    labelString.assign("Potion level");
+    textStrings.clear();    
+    textStrings.push_back("Aucune");
+    textStrings.push_back("Lente"); 
+    textStrings.push_back("Normale"); 
+    textStrings.push_back("Rapide"); 
+    m_potionlevel = new UITextList(    
+        m_scene, labelString, textStrings, Colors::White, textWidth
+    );
+    m_potionlevel->SetIsCycle(true);
+    m_potionlevel->AddSelectableListener(this);
 
     //--------------------------------------------------------------------------
     // Buttons
@@ -137,13 +151,17 @@ UIStagePage::UIStagePage(
     // Grid layouts
 
     // TODO : Modifier le vLayout pour ajouter un champ potion
-    UIGridLayout *vLayout = new UIGridLayout(m_scene, 6, 1); 
+    UIGridLayout *vLayout = new UIGridLayout(m_scene, 7, 1); 
     vLayout->SetParent(m_content);
     vLayout->SetAnchor(Anchor::CENTER);
+
     vLayout->SetSpacing(2.f);
+
     vLayout->SetRowSpacing(2, 10.f);
-    vLayout->SetRowSpacing(4, 20.f);
-    vLayout->SetRowSize(22.f);
+    vLayout->SetRowSpacing(4, 10.f);
+    vLayout->SetRowSpacing(5, 10.f); 
+    
+    vLayout->SetRowSize(25.f);
     vLayout->SetColumnSize(300.f);
 
     vLayout->AddObject(m_playerText, 0, 0);
@@ -151,18 +169,20 @@ UIStagePage::UIStagePage(
     vLayout->AddObject(m_player2List, 2, 0);
     vLayout->AddObject(m_optionText, 3, 0);
     vLayout->AddObject(m_timeList, 4, 0);
+    vLayout->AddObject(m_potionlevel, 5, 0);
+
     // TODO : Ajout de l'objet potion
 
     UIGridLayout *hLayout = new UIGridLayout(m_scene, 1, 2);
     hLayout->SetSpacing(20.f);
-    hLayout->SetAnchor(Anchor::CENTER);
+    hLayout->SetAnchor(Anchor::SOUTH);
     hLayout->SetColumnSize(100.f);
 
     hLayout->AddObject(m_backButton, 0, 0);
     hLayout->AddObject(m_startButton, 0, 1);
 
     // TODO : Modifier pour laisser la place au champ potion
-    vLayout->AddObject(hLayout, 5, 0);
+    vLayout->AddObject(hLayout, 6, 0);
 
     vLayout->Update();
     hLayout->Update();
@@ -179,6 +199,8 @@ UIStagePage::UIStagePage(
     m_group->AddSelectable(m_player1List);
     m_group->AddSelectable(m_player2List);
     m_group->AddSelectable(m_timeList);
+    m_group->AddSelectable(m_potionlevel);
+
     m_group->AddSelectable(m_backButton);
     m_group->AddSelectable(m_startButton);
     // TODO : Ajouter la potion
@@ -328,5 +350,14 @@ void UIStagePage::UpdateConfigs()
     case 2: m_stageConfig.duration = 3; break;
     }
 
-    // TODO : Gérer la fréquence de la potion
+   switch (m_potionlevel->GetSelectedItem())
+   {
+   case 0: m_stageConfig.potionLevel = StageConfig::Potion::AUCUNE; break;
+   case 1: m_stageConfig.potionLevel = StageConfig::Potion::LENTE; break;
+   case 2: m_stageConfig.potionLevel = StageConfig::Potion::NORMALE; break;
+   case 3: m_stageConfig.potionLevel = StageConfig::Potion::RAPIDE; break;
+
+
+   }
+
 }

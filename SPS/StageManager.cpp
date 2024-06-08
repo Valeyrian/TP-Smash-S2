@@ -23,7 +23,7 @@ StageManager::StageManager(
     BaseSceneManager(inputManager), m_configs(),
     m_players(), m_paused(false),
     m_pauseMenu(nullptr), m_stageConfig(stageConfig),
-    m_delayStage(0.f), m_playerStats()// TODO : ajouter un membre pour le délai de la potion (init -1)
+    m_delayStage(0.f), m_playerStats(), m_delayPotion(0),m_MaxDelayPotion(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
 {
     Scene *scene = GetScene();
     AssetManager *assets = scene->GetAssetManager();
@@ -96,6 +96,13 @@ StageManager::StageManager(
     m_stageHUD = new UIStageHUD(scene);
 
     // TODO : Initialiser les potions en fonction du m_stageConfig
+    switch (m_stageConfig.potionLevel)
+    {
+    case StageConfig::Potion::AUCUNE :m_MaxDelayPotion = -1; break;
+    case StageConfig::Potion::LENTE: m_MaxDelayPotion = 45; break;
+    case StageConfig::Potion::NORMALE: m_MaxDelayPotion = 30; break;
+    case StageConfig::Potion::RAPIDE: m_MaxDelayPotion = 15; break;
+    }
 
     
 }
@@ -148,6 +155,17 @@ void StageManager::OnSceneFixedUpdate()
     BaseSceneManager::OnSceneFixedUpdate();
     Scene *scene = GetScene();
 
+    printf("delayPotion : %f \n",m_delayPotion);
+
+    if (m_delayPotion > 0.f)
+    {
+        m_delayPotion--;
+    }
+    else if (m_delayPotion <= 0 && m_delayPotion >= -1)
+    {
+        AddPotion();
+
+    }
     // TODO : mettre a jour le délai + ajout si délai<0
 
 }
@@ -176,10 +194,14 @@ void StageManager::AddPotion()
 {
     Scene *scene = GetScene();
     Potion *potion = new Potion(scene);
-    b2Vec2 position(Random::RangeF(-7.f, 7.f), 10.f);
-    potion->SetStartPosition(position);
-
-    // TODO : mettre un délai positif à la potion en fonction du m_stageConfig
+    b2Vec2 position(Random::RangeF(-7.f, 7.f), 10.f); 
+   // b2Vec2 position(10.f, 10.f);
+    potion->SetStartPosition(position);  
+    if (m_MaxDelayPotion >= 0)
+        m_delayPotion = Random::RangeF(250.f, 50.f *m_MaxDelayPotion);
+    else
+        m_delayPotion = -1;
+    printf("add potion \n");
 }
 
 void StageManager::InitRockyPass()

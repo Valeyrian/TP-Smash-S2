@@ -17,6 +17,14 @@ Potion::Potion(Scene *scene) :
     SpriteGroup *spriteGroup = nullptr;
     SpriteAnim *anim = nullptr;
 
+
+    spriteGroup = spriteSheet->GetGroup("Potion");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Potion", spriteGroup);
+    anim->SetCycleCount(-1);
+    anim->SetFPS(15.f);
+
+    m_animator.PlayAnimation("Potion"); 
     // TODO : charger l'animation et la lancer
 }
 
@@ -79,19 +87,19 @@ void Potion::Render()
     if (body == nullptr) return;
 
     // TODO : decommenter  pour afficher la potion
-    //const float angle = body->GetAngle() / b2_pi * 180.f;
-    //SDL_Texture *texture = m_animator.GetTexture();
-    //if (texture)
-    //{
-    //    const SDL_Rect *src = m_animator.GetSourceRect();
-    //    b2Vec2 position = GetInterpolatedPosition();
-    //    SDL_FRect rect = { 0 };
-    //    camera->WorldToView(position, src, 22.f, rect);
-    //    RenderCopyExF(
-    //        g_renderer, texture, src, &rect, Anchor::CENTER,
-    //        -angle, b2Vec2(0.5f, 0.5f), SDL_FLIP_NONE
-    //    );
-    //}
+    const float angle = body->GetAngle() / b2_pi * 180.f;
+    SDL_Texture *texture = m_animator.GetTexture();
+    if (texture)
+    {
+        const SDL_Rect *src = m_animator.GetSourceRect();
+        b2Vec2 position = GetInterpolatedPosition();
+        SDL_FRect rect = { 0 };
+        camera->WorldToView(position, src, 22.f, rect);
+        RenderCopyExF(
+            g_renderer, texture, src, &rect, Anchor::CENTER,
+            -angle, b2Vec2(0.5f, 0.5f), SDL_FLIP_NONE
+        );
+    }
 }
 
 void Potion::FixedUpdate()
