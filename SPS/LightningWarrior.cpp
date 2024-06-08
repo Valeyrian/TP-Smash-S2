@@ -111,7 +111,7 @@ void LightningWarrior::Start()
 
     b2Body *body = CreateBody(&bodyDef);
 
-    // TODO : Modifer les paramètres
+    // TODO : Modifer les paramÃ¨tres
     b2PolygonShape box;
     box.SetAsBox(0.5f, 0.75f, b2Vec2(0.f, 1.1f), 0.f);
 
@@ -125,7 +125,7 @@ void LightningWarrior::Start()
 
     m_bodyFixture = CreateFixture(&fixtureDef);
 
-    // TODO : Modifer les paramètres
+    // TODO : Modifer les paramÃ¨tres
     b2CircleShape circle;
     circle.m_p = b2Vec2(0.0f, 0.5f); //ici pour le cercle
     circle.m_radius = 0.5f;
@@ -226,7 +226,7 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
     {
         switch (frameID)
         {
-            // TODO : Vitesse crédible
+            // TODO : Vitesse crÃ©dible
         case 0: m_autoVelocity = s * 1.0f; break;
         case 1: m_autoVelocity = s * 2.0f; break;
         case 2: m_autoVelocity = s * 2.0f; break;
@@ -260,9 +260,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
     }
     else if (name == "Attack2")
     {
-        // TODO : autoVelocité
+        // TODO : autoVelocitÃ©
 
-        // TODO : déclenchement de l'attaque
+        // TODO : dÃ©clenchement de l'attaque
         if (frameID == 2)
         {
             PlaySFXAttack(SFX_WHOOSH);
@@ -272,7 +272,7 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
             Damage damage;
             damage.amount = 3.f;
             damage.lockTime = lockTime;
-            // TODO : paramètres supplémentaires ?
+            // TODO : paramÃ¨tres supplÃ©mentaires ?
 
             b2Vec2 vertices[] = { // C'est cadeau
                 position + b2Vec2(s * 0.7f, 2.2f), //1
@@ -290,8 +290,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
     else if (name == "Attack3")
     {
 
-        // TODO : autoVelocité
-        switch (frameID) {     // TODO : Vitesse crédible
+        // TODO : autoVelocitÃ©
+        switch (frameID) {     // TODO : Vitesse crÃ©dible
         case 0: m_autoVelocity = s * -2.0f; break;
         case 1: m_autoVelocity = s * 2.0f; break;
         case 2: m_autoVelocity = s * 10.0f; break;
@@ -299,7 +299,7 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
         default: break;
         }
 
-        // TODO : déclenchement de l'attaque avec smash
+        // TODO : dÃ©clenchement de l'attaque avec smash
         if (frameID == 2)
         {
             PlaySFXAttack(SFX_WHOOSH);
@@ -311,7 +311,7 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
             damage.amount = 6.f;
             damage.hasEjection = true;
 
-            damage.ejection = b2Vec2(s * 25.0f, 5.0f); // TODO : param?tres suppl?mentaire // TODO : angle d'éjection fonction de la position du joueur
+            damage.ejection = b2Vec2(s * 25.0f, 5.0f); // TODO : param?tres suppl?mentaire // TODO : angle d'Ã©jection fonction de la position du joueur
 
 
 
@@ -322,3 +322,4 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
         }
     }
 }
+
