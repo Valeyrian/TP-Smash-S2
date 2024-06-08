@@ -58,36 +58,40 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
 
     // TODO : Animation "Attack" (c'est fait, c'est cadeau)
     const float attackFPS = 1.0f / (float)ATTACK_FRAME_TIME;
+
     spriteGroup = spriteSheet->GetGroup("Attack1");
     AssertNew(spriteGroup);
     anim = m_animator.CreateAnimation("Attack1", spriteGroup);  
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
+
     // TODO : Animations Attack2 et Attack3
-    spriteGroup = spriteSheet->GetGroup("Attack2"); 
-    AssertNew(spriteGroup); 
-    anim = m_animator.CreateAnimation("Attack2", spriteGroup); 
-    anim->SetCycleCount(1); 
-    anim->SetFPS(attackFPS); 
+   
+    spriteGroup = spriteSheet->GetGroup("Attack2");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Attack2", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
 
+   
+    spriteGroup = spriteSheet->GetGroup("Attack3");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Attack3", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
 
-    spriteGroup = spriteSheet->GetGroup("Attack3"); 
-    AssertNew(spriteGroup); 
-    anim = m_animator.CreateAnimation("Attack3", spriteGroup); 
-    anim->SetCycleCount(1); 
-    anim->SetFPS(attackFPS); 
     // TODO : Anmisation "Defend"
 
     // TODO : Anmisation "TakeHit"
 
-    // TODO : Décommenter pour lancer l'animation initiale
+    // TODO : DÃ©commenter pour lancer l'animation initiale
     m_animator.PlayAnimation("Idle"); 
 
     // Physique
     m_accAir = 30.f;
     m_accGround = 60.f;
-    m_maxSpeed = 10; // TODO : adapter
+    m_maxSpeed = 15; // TODO : adapter
 
     // Render
     m_renderShift.Set(0.7f, 0.f);
@@ -111,7 +115,7 @@ void FireWarrior::Start()
 
     b2Body *body = CreateBody(&bodyDef);
 
-    // TODO : Modifer les paramètres
+    // TODO : Modifer les paramÃ¨tres
     b2PolygonShape box;
     box.SetAsBox(0.6f, .85f, b2Vec2(-0.02f, 1.2), 0.f); //ici pour le rest
 
@@ -125,7 +129,7 @@ void FireWarrior::Start()
 
     m_bodyFixture = CreateFixture(&fixtureDef);
 
-    // TODO : Modifer les paramètres
+    // TODO : Modifer les paramÃ¨tres
     b2CircleShape circle;
     circle.m_p = b2Vec2(0.0f, 0.5f); //ici pour le cercle
     circle.m_radius = 0.5f;
@@ -144,19 +148,14 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
 {
     Player::OnStateChanged(state, prevState);
 
-    switch (state) // TODO : décommenter, compléter
+    switch (state) // TODO : dÃ©commenter, complÃ©ter
     {
     case State::IDLE:        m_animator.PlayAnimation("Idle");  printf("Is Idle\n");       break;
     case State::RUN:         m_animator.PlayAnimation("Run");   printf("Is Running\n");        break;
     case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking1\n");      break;
     case State::JUMP:      m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");   break;
-    case State::ATTACK2:      m_animator.PlayAnimation("Attack2"); printf("Is Attacking2\n");      break;
-    case State::ATTACK3:      m_animator.PlayAnimation("Attack3"); printf("Is Attacking3\n");      break;
 
-
-
-
-    // TODO : Gérer d'autres animations
+    // TODO : GÃ©rer d'autres animations
     default:
         break;
     }
@@ -176,9 +175,7 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
     {
         if (GetPlayerInput().attackDown)
         {
-            // TODO : decommenter
             m_animator.PlayAnimation("Attack2");
-            printf("attack2");
             
         }
         else
@@ -191,26 +188,30 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
     // TODO : Enchainement des Attack2, Attack3
     else if (name == "Attack2")
     {
-
         if (GetPlayerInput().attackDown)
         {
-
             m_animator.PlayAnimation("Attack3");
-            SetState(Player::State::LAUNCHED); 
-            m_launchBegins = true;
-            printf("attack3");
+
         }
         else
         {
-            SetState(Player::State::IDLE); 
-            LockAttack(0.1f); 
+            SetState(Player::State::IDLE);
+            LockAttack(0.1f);
         }
     }
 
-
     else if (name == "Attack3")
-    { 
-        SetState(Player::State::IDLE);
+    {
+        if (GetPlayerInput().attackDown)
+        {
+            SetState(Player::State::IDLE);
+
+        }
+        else
+        {
+            SetState(Player::State::IDLE);
+            LockAttack(0.1f);
+        }
     }
 
 }
@@ -235,10 +236,10 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
     {
         switch (frameID)
         {
-            // TODO : Vitesse crédible
+            // TODO : Vitesse crÃ©dible
         case 0: m_autoVelocity = s * 6.0f; break;
-        case 1: m_autoVelocity = s * 12.0f; break;
-        case 2: m_autoVelocity = s * 5.0f; break;
+        case 1: m_autoVelocity = s * 10.0f; break;
+        case 2: m_autoVelocity = s * 4.0f; break;
         case 3: m_autoVelocity = s * 2.0f; break;
         default: break;
         }
@@ -267,36 +268,37 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
     }
     else if (name == "Attack2")
     {
-        // TODO : autoVelocité
+        // TODO : autoVelocitÃ©
 
-        // TODO : déclenchement de l'attaque
+        // TODO : dÃ©clenchement de l'attaque
         if (frameID == 2)
         {
-            PlaySFXAttack(SFX_WHOOSH);
+            PlaySFXAttack(SFX_WHOOSH); 
 
             b2Vec2 position = GetPosition();
 
             Damage damage;
             damage.amount = 3.f;
             damage.lockTime = lockTime;
-            // TODO : paramètres supplémentaires ?
+            // TODO : paramÃ¨tres supplÃ©mentaires ?
 
-            b2Vec2 vertices[5] = { // C'est cadeau
-                position + b2Vec2(s * 0.0f, 2.3f),
-                position + b2Vec2(s * 0.0f, 0.0f),
-                position + b2Vec2(s * 1.9f, 0.0f),
-                position + b2Vec2(s * 1.8f, 1.5f),
+            b2Vec2 vertices[6] = { // C'est cadeau
+                position + b2Vec2(s * -0.4f, 2.6f),
+                position + b2Vec2(s * 1.15f, 1.5f),
+                position + b2Vec2(s * 1.0f, 0.5f),
+                position + b2Vec2(s * 2.f, 0.5f),
+                position + b2Vec2(s * 2.f, 1.5f),
                 position + b2Vec2(s * 0.9f, 2.3f)
             };
-            bool hit = AttackPolygon(damage, filter, vertices, 5);
+            bool hit = AttackPolygon(damage, filter, vertices, 6);
             PlaySFXHit(hit, SFX_HIT);
         }
     }
     else if (name == "Attack3")
     {
-        // TODO : autoVelocité
+        // TODO : autoVelocitÃ©
 
-        // TODO : déclenchement de l'attaque avec smash
+        // TODO : dÃ©clenchement de l'attaque avec smash
         if (frameID == 2)
         {
             PlaySFXAttack(SFX_WHOOSH);
@@ -306,13 +308,13 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
             Damage damage;
             damage.hasEjection = true;
-            // TODO : paramètres supplémentaires
+            // TODO : paramÃ¨tres supplÃ©mentaires
 
-            // TODO : angle d'éjection fonction de la position du joueur
+            // TODO : angle d'Ã©jection fonction de la position du joueur
             damage.ejection = b2Vec2(10.0f, 10.0f);
 
-            // TODO : Zone de collision adaptée
+            // TODO : Zone de collision adaptÃ©e
         }
     }
-    // TODO : D'autres évènement sur frames ?
+    // TODO : D'autres Ã©vÃ¨nement sur frames ?
 }
