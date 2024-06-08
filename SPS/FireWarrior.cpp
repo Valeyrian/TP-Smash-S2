@@ -291,7 +291,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
                 position + b2Vec2(s * 0.9f, 2.3f)
             };
             bool hit = AttackPolygon(damage, filter, vertices, 6);
-            //PlaySFXHit(hit, SFX_HIT);
+            PlaySFXHit(hit, SFX_HIT);
         }
     }
     else if (name == "Attack3")
