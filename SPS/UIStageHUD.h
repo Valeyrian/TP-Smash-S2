@@ -19,4 +19,5 @@ public:
 private:
     std::vector<UIText *>m_damageTexts;
     UIText *m_timeText;
+    std::vector<UIText *>m_fallTexts;
 };

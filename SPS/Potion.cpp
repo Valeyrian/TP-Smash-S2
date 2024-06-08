@@ -114,8 +114,10 @@ bool Potion::TakeDamage(const Damage &damage, Damager *damager)
     Player *player = dynamic_cast<Player *>(damager);
     if (player)
     {
+
         // TODO : appeler la méthode Heal() du Player
 
+        player->Heal(10);
         m_used = true;
         Delete();
     }

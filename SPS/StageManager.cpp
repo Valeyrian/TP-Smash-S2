@@ -23,7 +23,7 @@ StageManager::StageManager(
     BaseSceneManager(inputManager), m_configs(),
     m_players(), m_paused(false),
     m_pauseMenu(nullptr), m_stageConfig(stageConfig),
-    m_delayStage(0.f), m_playerStats(), m_delayPotion(0),m_MaxDelayPotion(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
+    m_delayStage(0.f), m_playerStats(), m_delayPotion(Random::RangeF(250.f, 50.f * 30)),m_MaxDelayPotion(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
 {
     Scene *scene = GetScene();
     AssetManager *assets = scene->GetAssetManager();
@@ -155,13 +155,13 @@ void StageManager::OnSceneFixedUpdate()
     BaseSceneManager::OnSceneFixedUpdate();
     Scene *scene = GetScene();
 
-    printf("delayPotion : %f \n",m_delayPotion);
+    //printf("delayPotion : %f \n",m_delayPotion);
 
     if (m_delayPotion > 0.f)
     {
         m_delayPotion--;
     }
-    else if (m_delayPotion <= 0 && m_delayPotion >= -1)
+    else if (m_delayPotion <= 0 && m_MaxDelayPotion != -1)
     {
         AddPotion();
 
