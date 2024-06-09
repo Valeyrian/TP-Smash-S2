@@ -81,12 +81,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
-    // Animation AttackAir
-    spriteGroup = spriteSheet->GetGroup("AttackAir");
-    AssertNew(spriteGroup); 
-    anim = m_animator.CreateAnimation("AttackAir", spriteGroup);
-    anim->SetCycleCount(1); 
-    anim->SetFPS(attackFPS); 
+    
 
   //ici l
      

@@ -65,7 +65,7 @@ LightningWarrior::LightningWarrior(Scene *scene, const PlayerConfig *config, Pla
     anim->SetFPS(attackFPS);
 
 
-    // TODO : Animations Attack2 et Attack3
+    // TODO : Animations Attack2 et Attack3 et Attack 4
 
     spriteGroup = spriteSheet->GetGroup("Attack2");
     AssertNew(spriteGroup);
@@ -80,7 +80,25 @@ LightningWarrior::LightningWarrior(Scene *scene, const PlayerConfig *config, Pla
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
-   
+    spriteGroup = spriteSheet->GetGroup("Attack4");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Attack4", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
+
+    
+    spriteGroup = spriteSheet->GetGroup("Slide");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Slide", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(15.f);
+
+    // Animation AttackAir
+    spriteGroup = spriteSheet->GetGroup("AttackAir");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("AttackAir", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
 
 
      m_animator.PlayAnimation("Idle");
@@ -148,10 +166,12 @@ void LightningWarrior::OnStateChanged(Player::State state, Player::State prevSta
 
     switch (state)
     {
-    case State::IDLE:        m_animator.PlayAnimation("Idle");  printf("Is Idle\n");       break;
-    case State::RUN:         m_animator.PlayAnimation("Run");   printf("Is Running\n");        break;
-    case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");      break;
-    case State::JUMP:      m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");   break;
+    case State::IDLE:        m_animator.PlayAnimation("Idle");  printf("Is Idle\n");                    break;
+    case State::RUN:         m_animator.PlayAnimation("Run");   printf("Is Running\n");                 break;
+    case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");             break;
+    case State::JUMP:        m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");             break;
+    case State::ROLLING:     m_animator.PlayAnimation("Slide");   printf("Is  Sliding (=rolling)\n");   break;
+    case State::ATTACK_AIR:  m_animator.PlayAnimation("AttackAir");   printf("Is  Attacking in Air\n"); break;
     default:
         break;
     }
@@ -196,7 +216,21 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         }
     }
 
-    else if (name == "Attack3")
+    else if (name == "Attack3") 
+    {
+        if (GetPlayerInput().attackDown) 
+        {
+            m_animator.PlayAnimation("Attack4");
+
+        }
+        else 
+        {
+            SetState(Player::State::IDLE); 
+            LockAttack(0.1f); 
+        }
+    }
+
+    else if (name == "Attack4")
     {
 
         SetState(Player::State::IDLE);
@@ -204,6 +238,20 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
 
     }
 
+
+    if (name == "Slide")
+    {
+        m_delayLockRoll = 2;
+        SetState(Player::State::IDLE);
+
+    }
+    else if (name == "AttackAir")
+    {
+
+        SetState(Player::State::IDLE);
+        LockAttack(0.1f);
+
+    }
 }
 
 void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name, int frameID)
@@ -326,5 +374,139 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
             bool hit = AttackBox(damage, filter, position, 1.85f, 0.7f, 0.f);
 
         }
+
     }
-}
+
+    else if (name == "Attack4")
+    {
+
+        // TODO : autoVelocité
+        switch (frameID) {     // TODO : Vitesse crédible
+        case 0: m_autoVelocity = s * -2.0f; break;
+        case 1: m_autoVelocity = s * 1.0f; break;
+        case 2: m_autoVelocity = s * 4.0f; break;
+        case 3: m_autoVelocity = s * 0.0f; break;
+        case 4: m_autoVelocity = s * -1.0f; break;
+        case 5: m_autoVelocity = s * 0.0f; break;
+        case 6: m_autoVelocity = s * 2.0f; break;
+        case 9: m_autoVelocity = s * 1.0f; break;
+
+
+
+        default: break;
+        }
+
+        // TODO : déclenchement de l'attaque avec smash
+        if (frameID == 2)
+        {
+            PlaySFXAttack(SFX_WHOOSH);
+
+            b2Vec2 position = GetPosition();
+            position += b2Vec2(s * 1.5f, 1.17f);
+
+            Damage damage;
+            damage.amount = 2.f;
+
+
+
+            // TODO : Zone de collision adapt?e
+            bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
+        }
+
+        if (frameID == 6)
+        {
+            PlaySFXAttack(SFX_WHOOSH);
+
+            b2Vec2 position = GetPosition();
+            position += b2Vec2(s * 1.55f, 0.9f);
+
+            Damage damage;
+            damage.amount = 2.f;
+
+
+
+            // TODO : Zone de collision adapt?e
+            bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
+        }
+        if (frameID == 9)
+        {
+            PlaySFXAttack(SFX_WHOOSH);
+
+            b2Vec2 position = GetPosition();
+            position += b2Vec2(s * 1.55f, 1.2f);
+
+            Damage damage;
+            damage.amount = 1.f;
+
+
+
+            // TODO : Zone de collision adapt?e
+            bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
+        }
+        if (frameID == 10)
+        {
+            PlaySFXAttack(SFX_WHOOSH);
+
+            b2Vec2 position = GetPosition();
+            position += b2Vec2(s * 1.55f, 1.17f);;
+
+            Damage damage;
+            damage.amount = 1.f;
+
+
+
+            // TODO : Zone de collision adapt?e
+            bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
+        }
+        
+
+     }
+
+
+    else if (name == "Slide")
+    {
+        printf("ici \n");
+        switch (frameID)
+        {
+        case 0: m_autoVelocity = s * 2.0f; break;
+        case 1: m_autoVelocity = s * 3.0f; break;
+        case 2: m_autoVelocity = s * 6.0f; break;
+        case 4: m_autoVelocity = s * 4.0f; break;
+        case 6: m_autoVelocity = s * 2.0f; break;
+        default:
+            break;
+        }
+
+        }
+    else if (name == "AttackAir")
+    {
+
+
+        if (frameID == 1)
+        {
+            PlaySFXAttack(SFX_WHOOSH);
+        }
+        if (frameID == 2)
+        {
+            // TODO : apdapter le centre de l'attaque
+            b2Vec2 position = GetPosition();
+            position += b2Vec2(s * 0.f, 1.08f);
+
+            Damage damage;
+            damage.amount = 5.f;
+
+
+            // TODO : Verrouillage pour la victime
+
+            damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
+
+            // TODO : adapter la zone d'attaque
+            bool hit = AttackBox(damage, filter, position, 1.8f, 0.6f, 0.f);
+
+            PlaySFXHit(hit, SFX_HIT);
+        }
+        }
+    }
+
+
+
