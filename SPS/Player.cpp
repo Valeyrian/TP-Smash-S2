@@ -13,7 +13,7 @@
 
 const float ATTACK_FRAME_TIME = 0.04f;
 
-Player::Player(Scene *scene, const PlayerConfig *config, PlayerStats *stats) :
+Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     Damager(scene, Layer::LAYER_PLAYER), m_config(config), m_stats(stats),
     m_facingRight(true), m_hDirection(0.f),
     m_state(State::IDLE), m_animator(),
@@ -21,12 +21,12 @@ Player::Player(Scene *scene, const PlayerConfig *config, PlayerStats *stats) :
     m_ejection(b2Vec2_zero), m_hVelocity(0.f),
     m_jumpImpulse(14.f), m_ai(nullptr),
     m_attackType(AttackType::NONE),
-    m_delayAttack(-1.f), m_delayEarlyJump(-1.f), 
+    m_delayAttack(-1.f), m_delayEarlyJump(-1.f),
     m_delayLock(-1.f), m_delayLockAttack(-1.f),
     m_autoVelocity(0.f), m_hasAutoVelocity(false), m_externalVelocity(b2Vec2_zero),
     m_isGrounded(true), m_wasGrounded(true), m_inContact(false),
     m_bodyFixture(nullptr), m_feetFixture(nullptr), m_lastDamager(nullptr),
-    m_renderShift(b2Vec2_zero)
+    m_renderShift(b2Vec2_zero), m_delayRoll(), m_delayLockRoll(1)
 {
     SetName("Player");
     SetStartPosition(0.f, 3.f);
@@ -50,6 +50,9 @@ Player::Player(Scene *scene, const PlayerConfig *config, PlayerStats *stats) :
     AddFixedUpdateDelay(&m_delayLock);
     AddFixedUpdateDelay(&m_delayAttack);
     AddFixedUpdateDelay(&m_delayLockAttack);
+    AddFixedUpdateDelay(&m_delayLockRoll);
+    AddFixedUpdateDelay(&m_delayRoll);
+
     if (m_delayLock >0)
     {
         return;
@@ -111,12 +114,14 @@ void Player::Update()
     {
         m_delayEarlyJump = 0.12f;
     }
-    if (input.attackPressed)
+    else  if (input.attackPressed)
     {
         m_attackType = AttackType::COMBO ;
         m_delayAttack = 0.5;
-       
-
+    }
+    else if (input.goDownDown)
+    {
+        m_delayRoll = 0.5f;
     }
 
     // TODO : membre m_defend à modifier
@@ -187,11 +192,13 @@ void Player::FixedUpdate()
 
     // Met à jour l'état du joueur
     FixedUpdateState();
+    FixedUpdateAutoVelocity();
 
     if (m_delayLock > 0.f)
         return;
+    
 
-    FixedUpdateAutoVelocity();
+   
 
     // Calcule l'orientation
     if ((IsAttacking() == false) && m_delayLock < 0.f)
@@ -206,9 +213,7 @@ void Player::FixedUpdate()
     // Met à jour la physique
     FixedUpdatePhysics();
 
-    if (m_delayLock > 0.f)
-        return;
-
+  
     m_inContact = false;
 //    m_launchBegins = false;
     m_externalVelocity.SetZero();
@@ -257,6 +262,9 @@ void Player::FixedUpdateState()
         printf("state launched\n");
         return;
     }*/
+    if (GetState() == State::ROLLING)
+        return;
+
     if (m_state == State::LAUNCHED)
     {
         velocity.x += 3.f;
@@ -271,6 +279,7 @@ void Player::FixedUpdateState()
     // Etat au sol
     if (m_isGrounded)
     {
+        printf("delay roll %f et delay lock %f\n", m_delayRoll, m_delayLockRoll);
         // TODO : modifier
         if (IsAttacking() == false)
         {
@@ -279,7 +288,7 @@ void Player::FixedUpdateState()
                 SetState(State::ATTACK);
                 
             }
-            else
+            else 
             {
                 if (velocity.x != 0)
                 {
@@ -287,7 +296,8 @@ void Player::FixedUpdateState()
                 }
                 else if (m_delayEarlyJump)
                     SetState(State::JUMP);
-
+                else if (m_delayRoll >0 && m_delayLockRoll <0 )
+                    SetState(State::ROLLING);
                 else
                 {
                     SetState(State::IDLE);
@@ -323,9 +333,9 @@ void Player::FixedUpdateAutoVelocity()
     switch (m_state)
     {
     case State::ATTACK:
-        m_hasAutoVelocity = true;
-        // TODO forcer hasAutoVelocity en cas d'attaque et autres
-        break;
+        m_hasAutoVelocity = true; break;
+    case State::ROLLING :
+        m_hasAutoVelocity = true ; break;
     default:
         m_hasAutoVelocity = false;
         m_autoVelocity = 0.f;
@@ -345,7 +355,7 @@ void Player::FixedUpdatePhysics()
 
     // Conditions de sorties
 
-    if (m_launchBegins) // TODO
+    if (m_launchBegins) // TODO //pour le kb
     {
         printf("ici lineare velocity \n");
       //  m_ejection = b2Vec2(150, 150);
@@ -353,7 +363,7 @@ void Player::FixedUpdatePhysics()
         m_launchBegins = false;
         return;
     }
-    m_launchBegins = false;
+   
 
 
     // TODO : jouer sur la gravité 
@@ -404,6 +414,7 @@ void Player::FixedUpdatePhysics()
     if (m_hasAutoVelocity) // TODO : décommenter pour gérer la vitesse automatique
     {
         velocity.x = m_autoVelocity;
+        
     }
     else
     {
@@ -628,16 +639,16 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
     m_stats->damageTaken += damage.amount;
     m_ejectionScore += damage.amount;
    
-    //if (damage.hasEjection)
-    //{
-    //    printf("ici launche begin de damager\n");
-    //    m_ejection = damage.ejection - GetPosition();
-    //   
-    //    m_ejection *= m_ejectionScore ;
-    //    //augmentation de du kb 
-    //    m_launchBegins = true;
-    //    SetState(Player::State::LAUNCHED);
-    //}
+    if (damage.hasEjection)
+    {
+        printf("ici launche begin de damager\n");
+        m_ejection = -damage.ejection + GetPosition();
+       
+        m_ejection *= m_ejectionScore * m_ejectionScore;
+        //augmentation de du kb 
+        m_launchBegins = true;
+        SetState(Player::State::LAUNCHED);
+    }
 
  
     // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegin
