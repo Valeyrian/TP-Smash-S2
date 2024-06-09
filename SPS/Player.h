@@ -27,8 +27,8 @@ public:
     enum class State
     {
         IDLE, RUN, JUMP, FALL,
-        ATTACK, ATTACK2, ATTACK3, DEFEND, TAKE_DAMAGE, LAUNCHED
-        // ATTACK_AIR, SMASH_START, SMASH_HOLD, SMASH_RELEASE, ROLLING
+        ATTACK, ATTACK2, ATTACK3, DEFEND, TAKE_DAMAGE, LAUNCHED,
+        ATTACK_AIR//, SMASH_START, SMASH_HOLD, SMASH_RELEASE, ROLLING
     };
 
     virtual void OnCollisionStay(GameCollision &collision) override;
@@ -124,7 +124,7 @@ private:
 
 inline bool Player::IsAttacking() const
 {
-    return (m_state == State::ATTACK);
+    return (m_state == State::ATTACK)|| (m_state == State::ATTACK_AIR);
 }
 
 inline bool Player::CanAttack() const
