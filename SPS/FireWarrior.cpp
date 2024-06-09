@@ -87,6 +87,8 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim = m_animator.CreateAnimation("AttackAir", spriteGroup);
     anim->SetCycleCount(1); 
     anim->SetFPS(attackFPS); 
+
+  //ici le attack on air
      
     // TODO : Anmisation "Defend"
 
