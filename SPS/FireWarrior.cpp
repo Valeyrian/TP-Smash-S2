@@ -96,6 +96,13 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetCycleCount(1);
     anim->SetFPS(15.f);
 
+    // Animation AttackAir
+    spriteGroup = spriteSheet->GetGroup("AttackAir");   
+    AssertNew(spriteGroup); 
+    anim = m_animator.CreateAnimation("AttackAir", spriteGroup);    
+    anim->SetCycleCount(1); 
+    anim->SetFPS(attackFPS);    
+
     // TODO : Anmisation "Defend"
 
     // TODO : Anmisation "TakeHit"
@@ -170,6 +177,8 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");      break;
     case State::JUMP:        m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");   break;
     case State::ROLLING:     m_animator.PlayAnimation("Roll");   printf("Is  Rolling\n");   break;
+    case State::ATTACK_AIR:  m_animator.PlayAnimation("AttackAir");   printf("Is  Attacking in Air\n");   break;
+
 
 
     // TODO : Gérer d'autres animations
@@ -224,12 +233,21 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
             LockAttack(0.25f);
           
     }
-    else if (name == "Roll")
+    
+ if (name == "Roll")
     {
         m_delayLockRoll = 2;
         SetState(Player::State::IDLE);
 
     }
+    else if (name == "AttackAir")
+    {
+       
+            SetState(Player::State::IDLE);
+            LockAttack(0.1f);
+        
+    }
+    
 
 }
 
@@ -360,6 +378,35 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
             default:
                 break;
             }
-    }
+
+        }
+        else if (name == "AttackAir")
+        {
+
+
+            if (frameID == 1)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+            }
+            if (frameID == 2)
+            {
+                // TODO : apdapter le centre de l'attaque
+                b2Vec2 position = GetPosition();
+                position += b2Vec2(s * 0.75f, 1.2f);
+
+                Damage damage;
+                damage.amount = 5.f;
+
+
+                // TODO : Verrouillage pour la victime
+
+                damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
+
+                // TODO : adapter la zone d'attaque
+                bool hit = AttackCircle(damage, filter, position, 1.f);
+
+                PlaySFXHit(hit, SFX_HIT);
+            }
+            }
     // TODO : D'autres évènement sur frames ?
 }

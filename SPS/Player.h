@@ -124,7 +124,7 @@ private:
 
 inline bool Player::IsAttacking() const
 {
-    return (m_state == State::ATTACK);
+    return (m_state == State::ATTACK || m_state == State::ATTACK_AIR); 
 }
 
 inline bool Player::CanAttack() const
