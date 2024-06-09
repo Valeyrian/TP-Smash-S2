@@ -296,9 +296,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             Damage damage;
             damage.amount = 3.f;
-            damage.hasEjection = true;
+            /*damage.hasEjection = true;
 
-            damage.ejection = b2Vec2(s * 5.0f, 1.0f); // TODO : param?tres suppl?mentaire // TODO : angle d'éjection fonction de la position du joueur
+            damage.ejection = b2Vec2(s * 5.0f, 1.0f);*/ // TODO : param?tres suppl?mentaire // TODO : angle d'éjection fonction de la position du joueur
 
 
 
@@ -363,9 +363,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             Damage damage;
             damage.amount = 6.f;
-            damage.hasEjection = true;
+            //damage.hasEjection = true;
 
-            damage.ejection = b2Vec2(s * 25.0f, 5.0f); // TODO : param?tres suppl?mentaire // TODO : angle d'éjection fonction de la position du joueur
+            //damage.ejection = b2Vec2(s * 25.0f, 5.0f); // TODO : param?tres suppl?mentaire // TODO : angle d'éjection fonction de la position du joueur
 
 
 
@@ -452,6 +452,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             Damage damage;
             damage.amount = 1.f;
+            /*damage.hasEjection = true;
+
+            damage.ejection = b2Vec2(s * 5.0f, 1.0f); */
 
 
 

@@ -98,6 +98,26 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetCycleCount(1); 
     anim->SetFPS(attackFPS);    
 
+
+    // Animation smash
+     
+    spriteGroup = spriteSheet->GetGroup("SmashStart");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("SmashStart", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
+
+    spriteGroup = spriteSheet->GetGroup("SmashHold");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("SmashHold", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
+
+    spriteGroup = spriteSheet->GetGroup("SmashRelease");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("SmashRelease", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
     // TODO : Anmisation "Defend"
 
     // TODO : Anmisation "TakeHit"
@@ -167,14 +187,15 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
 
     switch (state) // TODO : décommenter, compléter
     {
-    case State::IDLE:        m_animator.PlayAnimation("Idle");  printf("Is Idle\n");       break;
-    case State::RUN:         m_animator.PlayAnimation("Run");   printf("Is Running\n");        break;
-    case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");      break;
-    case State::JUMP:        m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");   break;
-    case State::ROLLING:     m_animator.PlayAnimation("Roll");   printf("Is  Rolling\n");   break;
-    case State::ATTACK_AIR:  m_animator.PlayAnimation("AttackAir");   printf("Is  Attacking in Air\n");   break;
-
-
+    case State::IDLE:           m_animator.PlayAnimation("Idle");  printf("Is Idle\n");                     break;
+    case State::RUN:            m_animator.PlayAnimation("Run");   printf("Is Running\n");                  break;
+    case State::ATTACK:         m_animator.PlayAnimation("Attack"); printf("Is Attacking\n");               break;
+    case State::JUMP:           m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");              break;
+    case State::ROLLING:        m_animator.PlayAnimation("Roll");   printf("Is  Rolling\n");                break;
+    case State::ATTACK_AIR:     m_animator.PlayAnimation("AttackAir");   printf("Is  Attacking in Air\n");  break;
+    case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
+    case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
+    case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing\n");           break;
 
     // TODO : Gérer d'autres animations
     default:
@@ -229,7 +250,7 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
           
     }
     
- if (name == "Roll")
+    if (name == "Roll")
     {
         m_delayLockRoll = 2;
         SetState(Player::State::IDLE);
@@ -242,8 +263,34 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
             LockAttack(0.1f);
         
     }
-    
+    else if (name == "SmashStart")
+    {
+        if (GetPlayerInput().attackDown)
+        {
+            m_animator.PlayAnimation("Attack2");
 
+        }
+        else
+        {
+            SetState(Player::State::IDLE);
+            LockAttack(0.1f);
+        }
+    }
+
+    else if (name == "SmashHold")
+    {
+        if (GetPlayerInput().smashDown)
+        {
+            m_animator.PlayAnimation("Smashrelease");
+
+        }
+        else
+        {
+            SetState(Player::State::IDLE);
+            LockAttack(0.1f);
+        }
+    }
+    
 }
 
 void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int frameID)

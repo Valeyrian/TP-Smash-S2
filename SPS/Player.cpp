@@ -21,7 +21,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     m_ejection(b2Vec2_zero), m_hVelocity(0.f),
     m_jumpImpulse(14.f), m_ai(nullptr),
     m_attackType(AttackType::NONE),
-    m_delayAttack(-1.f), m_delayEarlyJump(-1.f),
+    m_delayAttack(-1.f), m_delaySmash(-1.f), m_delayEarlyJump(-1.f),
     m_delayLock(-1.f), m_delayLockAttack(-1.f),
     m_autoVelocity(0.f), m_hasAutoVelocity(false), m_externalVelocity(b2Vec2_zero),
     m_isGrounded(true), m_wasGrounded(true), m_inContact(false),
@@ -52,6 +52,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     AddFixedUpdateDelay(&m_delayLockAttack);
     AddFixedUpdateDelay(&m_delayLockRoll);
     AddFixedUpdateDelay(&m_delayRoll);
+    AddFixedUpdateDelay(&m_delaySmash);
 
     if (m_delayLock >0)
     {
@@ -123,7 +124,11 @@ void Player::Update()
     {
         m_delayRoll = 0.5f;
     }
-
+    else  if (input.smashPressed)
+    {
+        m_attackType = AttackType::SMASH; 
+        m_delaySmash = 0.5;
+    }
     // TODO : membre m_defend à modifier
 }
 
@@ -290,6 +295,11 @@ void Player::FixedUpdateState()
                 SetState(State::ATTACK);
                 
             }
+            else if (CanAttack() && m_delaySmash > 0)
+            {
+                SetState(State::SMASH_START);
+
+            }
             else 
             {
                 if (velocity.x != 0)
@@ -344,6 +354,9 @@ void Player::FixedUpdateAutoVelocity()
     case State::ROLLING :
         m_hasAutoVelocity = true ; break;
     case State::ATTACK_AIR:
+        m_hasAutoVelocity = true;
+        break;
+    case State::SMASH_RELEASE:
         m_hasAutoVelocity = true;
         break;
     default:

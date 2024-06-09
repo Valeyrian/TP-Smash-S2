@@ -63,6 +63,7 @@ protected:
 
     float m_delayEarlyJump;
     float m_delayAttack;
+    float m_delaySmash;
     float m_delayLock;
     float m_delayLockAttack;
     float m_delayRoll;
