@@ -301,16 +301,21 @@ void Player::FixedUpdateState()
     {
         if (IsAttacking() == false)
         {
-            if (m_state != State::JUMP && m_state != State::FALL)
+            if (CanAttack() && m_delayAttack > 0)
+            {
+                SetState(State::ATTACK_AIR);
+
+            }
+            if (m_state != State::JUMP && m_state != State::FALL && IsAttacking() == false)
             {
                 SetState(State::JUMP);
             }
 
-            if (m_state == State::JUMP && velocity.y <= 2.f)
+            if (m_state == State::JUMP && velocity.y <= 2.f && IsAttacking() == false)
             {
                 SetState(State::FALL);
             }
-            else if (m_state == State::FALL && velocity.y > 6.f)
+            else if (m_state == State::FALL && velocity.y > 6.f && IsAttacking() == false)
             {
                 SetState(State::JUMP);
             }
@@ -325,6 +330,9 @@ void Player::FixedUpdateAutoVelocity()
     case State::ATTACK:
         m_hasAutoVelocity = true;
         // TODO forcer hasAutoVelocity en cas d'attaque et autres
+        break;
+    case State::ATTACK_AIR:
+        m_hasAutoVelocity = true;
         break;
     default:
         m_hasAutoVelocity = false;
@@ -386,12 +394,12 @@ void Player::FixedUpdatePhysics()
         
     }
 
-    // TODO : décommenter pour le saut long (on joue directement sur la gravité
-    //if ((m_isGrounded == false)) 
-    //{
-    //    float scale = input.jumpDown ? 0.5f : 1.0f;
-    //    body->SetGravityScale(scale);
-    //}
+     //TODO : décommenter pour le saut long (on joue directement sur la gravité
+    if ((m_isGrounded == false)) 
+    {
+        float scale = input.jumpDown ? 0.5f : 1.0f;
+        body->SetGravityScale(scale);
+    }
 
     // TODO : Mise a jour de la vitesse
     m_hVelocity = 0.f;
@@ -622,22 +630,22 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
     {
         return false;
     }
-    m_lastDamager = damager;
-    m_delayLockAttack = b2Max(m_delayLockAttack, damage.lockAttackTime);
-    m_delayLock = damage.lockTime;
-    m_stats->damageTaken += damage.amount;
-    m_ejectionScore += damage.amount;
+    m_lastDamager = damager; 
+    m_delayLockAttack = b2Max(m_delayLockAttack, damage.lockAttackTime); 
+    m_delayLock = damage.lockTime; 
+    m_stats->damageTaken += damage.amount; 
+    m_ejectionScore += damage.amount; 
    
-    //if (damage.hasEjection)
-    //{
-    //    printf("ici launche begin de damager\n");
-    //    m_ejection = damage.ejection - GetPosition();
-    //   
-    //    m_ejection *= m_ejectionScore ;
-    //    //augmentation de du kb 
-    //    m_launchBegins = true;
-    //    SetState(Player::State::LAUNCHED);
-    //}
+    if (damage.hasEjection)
+    {
+        printf("ici launche begin de damager\n");
+        m_ejection = damage.ejection - GetPosition();
+       
+        m_ejection *= m_ejectionScore ;
+        //augmentation de du kb 
+        m_launchBegins = true;
+        SetState(Player::State::LAUNCHED);
+    }
 
  
     // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegin

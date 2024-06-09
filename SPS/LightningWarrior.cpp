@@ -246,6 +246,10 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             Damage damage;
             damage.amount = 3.f;
+            damage.hasEjection = true;
+
+            damage.ejection = b2Vec2(s * 5.0f, 1.0f); // TODO : param?tres suppl?mentaire // TODO : angle d'éjection fonction de la position du joueur
+
 
 
             // TODO : Verrouillage pour la victime
@@ -293,8 +297,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
         // TODO : autoVelocité
         switch (frameID) {     // TODO : Vitesse crédible
         case 0: m_autoVelocity = s * -2.0f; break;
-        case 1: m_autoVelocity = s * 2.0f; break;
-        case 2: m_autoVelocity = s * 10.0f; break;
+        case 1: m_autoVelocity = s * 6.0f; break;
+        case 2: m_autoVelocity = s * 4.0f; break;
         case 3: m_autoVelocity = s * 2.0f; break;
         default: break;
         }
