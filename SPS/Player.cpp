@@ -264,6 +264,8 @@ void Player::FixedUpdateState()
     }*/
     if (GetState() == State::ROLLING)
         return;
+    if (GetState() == State::ATTACK_AIR)
+        return;
 
     if (m_state == State::LAUNCHED)
     {
@@ -279,7 +281,7 @@ void Player::FixedUpdateState()
     // Etat au sol
     if (m_isGrounded)
     {
-        printf("delay roll %f et delay lock %f\n", m_delayRoll, m_delayLockRoll);
+       // printf("delay roll %f et delay lock %f\n", m_delayRoll, m_delayLockRoll);
         // TODO : modifier
         if (IsAttacking() == false)
         {
@@ -308,23 +310,28 @@ void Player::FixedUpdateState()
 
     }
     else // Etat en l'air 
-    {
-        if (IsAttacking() == false)
+    {   
+        if (IsAttacking() == false)     
         {
-            if (m_state != State::JUMP && m_state != State::FALL)
+            if (CanAttack() && m_delayAttack > 0)
+            {
+                SetState(State::ATTACK_AIR);
+
+            }
+            if (m_state != State::JUMP && m_state != State::FALL && IsAttacking() == false)
             {
                 SetState(State::JUMP);
             }
 
-            if (m_state == State::JUMP && velocity.y <= 2.f)
+            if (m_state == State::JUMP && velocity.y <= 2.f && IsAttacking() == false)
             {
                 SetState(State::FALL);
             }
-            else if (m_state == State::FALL && velocity.y > 6.f)
+            else if (m_state == State::FALL && velocity.y > 6.f && IsAttacking() == false)
             {
                 SetState(State::JUMP);
             }
-        }
+        } 
     }
 }
 
@@ -336,6 +343,9 @@ void Player::FixedUpdateAutoVelocity()
         m_hasAutoVelocity = true; break;
     case State::ROLLING :
         m_hasAutoVelocity = true ; break;
+    case State::ATTACK_AIR:
+        m_hasAutoVelocity = true;
+        break;
     default:
         m_hasAutoVelocity = false;
         m_autoVelocity = 0.f;
