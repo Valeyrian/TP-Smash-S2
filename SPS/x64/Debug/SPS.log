@@ -1,0 +1,36 @@
+﻿  ApplicationInput.cpp
+  Background.cpp
+  BaseSceneManager.cpp
+  LightningWarrior.cpp
+  RockyPassStage.cpp
+  Potion.cpp
+  Damager.cpp
+  GameAssets.cpp
+  GameCommon.cpp
+  Platform.cpp
+  UIDefaultButton.cpp
+  UIDefaultCursor.cpp
+  UIStagePage.cpp
+  UITextList.cpp
+  UITitleBackground.cpp
+  TitleManager.cpp
+  ControlsInput.cpp
+  DebugCamera.cpp
+  DebugInput.cpp
+  FireWarrior.cpp
+C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\SPS\FireWarrior.cpp(126,45): warning C4305: 'argument' : troncation de 'double' à 'float'
+  Génération de code en cours...
+  Compilation en cours...
+  UIStageHUD.cpp
+  Main.cpp
+  MainCamera.cpp
+  MouseInput.cpp
+  UIPauseMenu.cpp
+  Player.cpp
+  PlayerAI.cpp
+  StageManager.cpp
+  Terrain.cpp
+  UITitlePage.cpp
+  Génération de code en cours...
+     Création de la bibliothèque C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\x64\Debug\SPS.lib et de l'objet C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\x64\Debug\SPS.exp
+  SPS.vcxproj -> C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\x64\Debug\SPS.exe
