@@ -80,6 +80,8 @@ LightningWarrior::LightningWarrior(Scene *scene, const PlayerConfig *config, Pla
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
+   
+
 
      m_animator.PlayAnimation("Idle");
 
