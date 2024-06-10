@@ -133,7 +133,7 @@ private:
 
 inline bool Player::IsAttacking() const
 {
-    return (m_state == State::ATTACK || m_state == State::ATTACK_AIR || m_state == State::SMASH_START || m_state == State::SMASH_HOLD || m_state == State::SMASH_START || m_state == State::SPECIAL);
+    return (m_state == State::ATTACK || m_state == State::ATTACK_AIR || m_state == State::SMASH_START || m_state == State::SMASH_HOLD || m_state == State::SMASH_START);//|| m_state == State::SPECIAL);
 }
 
 inline bool Player::CanAttack() const

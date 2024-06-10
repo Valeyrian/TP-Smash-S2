@@ -126,6 +126,7 @@ LightningWarrior::LightningWarrior(Scene *scene, const PlayerConfig *config, Pla
     m_accAir = 30.f;
     m_accGround = 60.f;
     m_maxSpeed = 8.f;
+    m_countSmash = 1.f;
 
     // Render
     m_renderShift.Set(0.4f, -0.75f);
@@ -571,7 +572,7 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
         position += b2Vec2(s * 0.2f, 2.f);
 
         Damage damage;
-        damage.amount = 1.5f;
+        damage.amount = 4.f * m_countSmash;
 
         // TODO : Verrouillage pour la victime
 
