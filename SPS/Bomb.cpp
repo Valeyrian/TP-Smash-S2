@@ -146,7 +146,7 @@ bool Bomb::TakeDamage(const Damage& damage, Damager* damager)
         else
             s = -1;
 
-        BodyBombe->SetLinearVelocity(b2Vec2(8.f * s, 2));
+        BodyBombe->SetLinearVelocity(b2Vec2(8 * s, 2));
    
     }
    // b2Vec2 damagerposition = damager;

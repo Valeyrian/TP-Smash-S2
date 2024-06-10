@@ -12,6 +12,8 @@
 #include "LightningWarrior.h"
 
 #include "RockyPassStage.h"
+#include "platformG.h"
+#include "platformD.h"
 #include "Background.h"
 
 #include "Potion.h"
@@ -25,8 +27,8 @@ StageManager::StageManager(
     BaseSceneManager(inputManager), m_configs(),
     m_players(), m_paused(false),
     m_pauseMenu(nullptr), m_stageConfig(stageConfig),
-    m_delayStage(0.f), m_playerStats(), m_delayPotion(Random::RangeF(250.f, 60.f * 30)),m_MaxDelayPotion(-1),
-    m_delayBomb(Random::RangeF(1,  30)), m_MaxDelayBomb(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
+    m_delayStage(0.f), m_playerStats(), m_delayPotion(Random::RangeF(1.f, 30.f)),m_MaxDelayPotion(-1),
+    m_delayBomb(Random::RangeF(1,  30.f)), m_MaxDelayBomb(-1) // TODO : ajouter un membre pour le dÃ©lai de la potion (init -1)
 {
     Scene *scene = GetScene();
     AssetManager *assets = scene->GetAssetManager();
@@ -40,9 +42,11 @@ StageManager::StageManager(
     if (true)
     {
         InitRockyPass();
+        InitPlatformG();
+        InitPlatformD();
     }
 
-    // Crée la caméra
+    // CrÃ©e la camÃ©ra
     SetMainCamera(new MainCamera(scene));
 
 
@@ -71,7 +75,7 @@ StageManager::StageManager(
     }
     m_playerCount = playerID;
 
-    // Crée les joueurs
+    // CrÃ©e les joueurs
     for (int i = 0; i < m_playerCount; i++)
     {
         PlayerConfig *config = &m_configs[i];
@@ -95,7 +99,7 @@ StageManager::StageManager(
         m_players.push_back(player);
     }
 
-    // Crée l'interface utilisateur
+    // CrÃ©e l'interface utilisateur
     m_stageHUD = new UIStageHUD(scene);
 
     // TODO : Initialiser les potions en fonction du m_stageConfig
@@ -134,8 +138,12 @@ void StageManager::OnSceneUpdate()
     m_delayStage -= scene->GetDelta();
     m_delayBomb -= scene->GetDelta(); 
     m_delayPotion -= scene->GetDelta();
+   // printf("mdelaypotion : %f \n", m_delayPotion);
+     // mouvement de la platform
   //  printf("mdelayBombde : %f \n", m_delayBomb);
 
+
+    
 
     if (m_delayStage < 0.f)
     {
@@ -180,7 +188,7 @@ void StageManager::OnSceneFixedUpdate()
         AddPotion();
 
     }
-    // TODO : mettre a jour le délai + ajout si délai potion et bombe
+    // TODO : mettre a jour le dÃ©lai + ajout si dÃ©lai potion et bombe
     //printf("delayBomb : %f et maxdealayBomb %f\n", m_delayBomb, m_MaxDelayBomb);
     
    if (m_delayBomb <= 0 && m_MaxDelayBomb != -1)
@@ -264,6 +272,65 @@ void StageManager::InitRockyPass()
     background->SetPixelsPerUnit(14.f);
     b2Vec2 worldDim = background->GetWorldDimensions();
     background->SetWorldCenter(0.5f * worldDim + b2Vec2(0.f, -5.f));
+
+    // Music
+    scene->GetAssetManager()->FadeInMusic(MUSIC_ROCKY_PASS);
+}
+
+void StageManager::InitPlatformG()
+{
+    Scene* scene = GetScene();
+
+    // Stage
+    PlatformG* stage = new PlatformG(scene);
+
+    // Background
+    AssetManager* assets = scene->GetAssetManager();
+    Background* background = new Background(scene, LAYER_BACKGROUND);
+    const std::vector<SDL_Texture*>& m_textures = assets->GetBackgrounds();
+    assert(m_textures.size() == 3);
+    float factors[] = { 0.05f, 0.3f, 0.6f };
+    Background::RenderMode modes[] = {
+        Background::RenderMode::FILL_VERTICAL,
+        Background::RenderMode::FILL_BELOW,
+        Background::RenderMode::FILL_BELOW
+    };
+    for (int i = 0; i < 3; i++)
+    {
+        background->AddLayer(m_textures[i], b2Vec2(factors[i], 0.9f * factors[i]), modes[i]);
+    }
+    background->SetPixelsPerUnit(14.f);
+    b2Vec2 worldDim = background->GetWorldDimensions();
+    background->SetWorldCenter(0.5f * worldDim + b2Vec2(0.f, -1.f)); // 0 -5 origine
+
+    // Music
+    scene->GetAssetManager()->FadeInMusic(MUSIC_ROCKY_PASS);
+}
+void StageManager::InitPlatformD()
+{
+    Scene* scene = GetScene();
+
+    // Stage
+    PlatformD* stage = new PlatformD(scene);
+
+    // Background
+    AssetManager* assets = scene->GetAssetManager();
+    Background* background = new Background(scene, LAYER_BACKGROUND);
+    const std::vector<SDL_Texture*>& m_textures = assets->GetBackgrounds();
+    assert(m_textures.size() == 3);
+    float factors[] = { 0.05f, 0.3f, 0.6f };
+    Background::RenderMode modes[] = {
+        Background::RenderMode::FILL_VERTICAL,
+        Background::RenderMode::FILL_BELOW,
+        Background::RenderMode::FILL_BELOW
+    };
+    for (int i = 0; i < 3; i++)
+    {
+        background->AddLayer(m_textures[i], b2Vec2(factors[i], 0.9f * factors[i]), modes[i]);
+    }
+    background->SetPixelsPerUnit(14.f);
+    b2Vec2 worldDim = background->GetWorldDimensions();
+    background->SetWorldCenter(0.5f * worldDim + b2Vec2(0.f, -1.f)); // 0 -5 origine
 
     // Music
     scene->GetAssetManager()->FadeInMusic(MUSIC_ROCKY_PASS);

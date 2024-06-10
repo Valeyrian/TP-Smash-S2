@@ -14,7 +14,7 @@
 #  define FHD
 #  define FULLSCREEN
 #endif
-//#define SKIP_MENU
+#define SKIP_MENU
 
 
 #ifdef FHD
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     InitInputConfig(inputManager);
     ApplicationInput *appInput = ApplicationInput::GetFromManager(inputManager);
 
-    inputManager->SetKeyboardIsPlayer(true);
+    inputManager->SetKeyboardIsPlayer(false); //clavier
 
     // Config du jeu par défaut
 

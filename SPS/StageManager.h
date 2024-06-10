@@ -46,6 +46,8 @@ public:
 
 private:
     void InitRockyPass();
+    void InitPlatformG();
+    void InitPlatformD();
     void AddPotion();
     void AddBomb();
 

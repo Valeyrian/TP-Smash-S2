@@ -62,7 +62,12 @@ void Platform::FixedUpdate()
     {
         body->SetAngularVelocity(0.f);
     }
+
+  //  Platform* platformG = dynamic_cast<Platform*>();
+
+
 }
+
 
 void Platform::SetTargetPosition(b2Vec2 position, float smoothTime, float maxSpeed)
 {

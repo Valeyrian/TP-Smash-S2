@@ -149,6 +149,12 @@
     <ClCompile Include="Bomb.cpp">
       <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
     </ClCompile>
+    <ClCompile Include="platformG.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformD.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationInput.h">
@@ -243,6 +249,12 @@
     </ClInclude>
     <ClInclude Include="Bomb.h">
       <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="platformG.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="platformD.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
