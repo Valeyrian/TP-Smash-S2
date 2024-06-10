@@ -52,6 +52,12 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     AddFixedUpdateDelay(&m_delayLockAttack);
     AddFixedUpdateDelay(&m_delayLockRoll);
     AddFixedUpdateDelay(&m_delayRoll);
+    AddFixedUpdateDelay(&m_delayLockFarAttack);
+    AddFixedUpdateDelay(&m_askedFarAttack);
+    
+
+
+
 
     if (m_delayLock >0)
     {
@@ -112,7 +118,7 @@ void Player::Update()
 
     if (input.jumpPressed) // TODO : décommenter pour récupérer l'information de saut
     {
-        m_delayEarlyJump = 0.12f;
+        m_delayEarlyJump = 0.5f;
     }
     else  if (input.attackPressed)
     {
@@ -122,6 +128,11 @@ void Player::Update()
     else if (input.goDownDown)
     {
         m_delayRoll = 0.5f;
+    }
+    else if (input.specialDown)
+    {
+        m_askedFarAttack = 0.5;
+        printf("in here c down\n");
     }
 
     // TODO : membre m_defend à modifier
@@ -215,7 +226,7 @@ void Player::FixedUpdate()
 
   
     m_inContact = false;
-//    m_launchBegins = false;
+    m_launchBegins = false;
     m_externalVelocity.SetZero();
     m_lastDamager = nullptr;
 }
@@ -256,20 +267,24 @@ void Player::FixedUpdateState()
 
     // Conditions de sortie
 
- /*   if (m_launchBegins)
+    if (m_launchBegins)
     {
-        SetState(State::LAUNCHED);
+        SetState(State::LAUNCHED); 
         printf("state launched\n");
         return;
-    }*/
+    }
     if (GetState() == State::ROLLING)
         return;
     if (GetState() == State::ATTACK_AIR)
         return;
+   //// if (velocity.y > -4 && velocity.Length() > -1)
+   // {
+   //     return;
+   // }
 
     if (m_state == State::LAUNCHED)
     {
-        velocity.x += 3.f;
+      
         if (velocity.y > -4.f && velocity.Length() > 1.f)
             return;
     }
@@ -277,6 +292,19 @@ void Player::FixedUpdateState()
 
     // TODO : état DEFEND
  
+    if (m_askedFarAttack > 0 && m_delayLockFarAttack <0)
+    {
+        SetState(State::FAR_ATTACK); 
+        printf("on y go\n");
+    }
+
+    if (m_launchBegins)
+    {
+        SetState(State::LAUNCHED);
+        return;
+    }
+    
+    
 
     // Etat au sol
     if (m_isGrounded)
@@ -299,10 +327,10 @@ void Player::FixedUpdateState()
                 else if (m_delayEarlyJump)
                     SetState(State::JUMP);
                 else if (m_delayRoll >0 && m_delayLockRoll <0 )
-                    SetState(State::ROLLING);
+                    SetState(State::ROLLING);   
                 else
                 {
-                    SetState(State::IDLE);
+                    SetState(State::IDLE);      
                 }
             }
         }
@@ -367,21 +395,22 @@ void Player::FixedUpdatePhysics()
 
     if (m_launchBegins) // TODO //pour le kb
     {
-        printf("ici lineare velocity \n");
-      //  m_ejection = b2Vec2(150, 150);
         body->SetLinearVelocity(m_ejection);
         m_launchBegins = false;
         return;
     }
    
 
+  
+
+
 
     // TODO : jouer sur la gravité 
-    //if (m_state == State::LAUNCHED) 
-    //{
-    //
-    //    return;
-    //}
+    if (m_state == State::LAUNCHED) 
+    {
+    
+        return;
+    }
 
     // TODO : jouer sur la gravité (0) et annuler la vitesse
     //if (m_state == State::TAKE_DAMAGE)
@@ -414,6 +443,8 @@ void Player::FixedUpdatePhysics()
     //}
 
     // TODO : Mise a jour de la vitesse
+
+
     m_hVelocity = 0.f;
     if (m_state != State::DEFEND)
     {
@@ -651,13 +682,18 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
    
     if (damage.hasEjection)
     {
-        printf("ici launche begin de damager\n");
-        m_ejection = -damage.ejection + GetPosition();
+       // printf("ici launche begin de damager\n");
+        
+        m_ejection = (1 + m_ejectionScore * 0.01f) * damage.ejection ;
        
-        m_ejection *= m_ejectionScore * m_ejectionScore;
-        //augmentation de du kb 
+     //   m_ejection.x *= 100;
+      //  m_ejection.y *= 100;
+
+        
+        //augmentation de du kb*
         m_launchBegins = true;
-        SetState(Player::State::LAUNCHED);
+
+ 
     }
 
  
