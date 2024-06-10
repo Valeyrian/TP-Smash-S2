@@ -228,8 +228,9 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
     case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
     case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
-    case State::FAR_ATTACK:     m_animator.PlayAnimation("CastSpell");   printf("Is  fireBalling\n");       break;
-    case State::LAUNCHED:       m_animator.PlayAnimation("Roll");   printf("Is  launched\n");               break;
+    case State::FAR_ATTACK:  m_animator.PlayAnimation("CastSpell");   printf("Is  fireBalling\n");   break;
+    case State::LAUNCHED:    m_animator.PlayAnimation("Roll");   printf("Is  launched\n");   break;
+
     //case State::SPECIAL:        m_animator.PlayAnimation("Special"); printf("smashiiing pressed\n");        break;
   
 
@@ -391,6 +392,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
             // TODO : Verrouillage pour la victime
 
+            damage.ejection = GetPosition(); 
             damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
 
             // TODO : adapter la zone d'attaque

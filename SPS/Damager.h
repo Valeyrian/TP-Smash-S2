@@ -20,6 +20,9 @@ public:
     float lockAttackTime;
     bool hasEjection;
     b2Vec2 ejection;
+
+    bool isfromBomb;
+    b2Vec2 bombCenter;
 };
 
 class Damager : public GameBody

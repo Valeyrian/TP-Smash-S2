@@ -717,6 +717,10 @@ void Player::Heal(float amount) // TODO : compléter pour soigner
 bool Player::TakeDamage(const Damage &damage, Damager *damager)
 {
     // TODO : Pendre en compte l'état DEFEND
+
+        
+    b2Vec2 playerposition = GetPosition();
+    
     if (m_lastDamager == damager)
     {
         return false;
@@ -732,15 +736,21 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
        // printf("ici launche begin de damager\n");
         
         m_ejection = (1 + m_ejectionScore * 0.01f) * damage.ejection ;
-       
-     //   m_ejection.x *= 100;
-      //  m_ejection.y *= 100;
 
-        
         //augmentation de du kb*
+        m_launchBegins = true; 
+    }
+    if (damage.isfromBomb)
+    {
+        float s = 0;
+        if ((damage.bombCenter.x - playerposition.x) > 0)
+            s = -1;
+        else
+            s = 1;
+        
+        m_ejection = (1 + m_ejectionScore * 0.01f ) * damage.ejection;
+        m_ejection.x *= s;
         m_launchBegins = true;
-
- 
     }
 
  

@@ -17,13 +17,14 @@ Bomb::Bomb(Scene* scene) :
     SpriteGroup* spriteGroup = nullptr;
     SpriteAnim* anim = nullptr;
 
-
+    
     spriteGroup = spriteSheet->GetGroup("Bomb");
     AssertNew(spriteGroup);
     anim = m_animator.CreateAnimation("Bomb", spriteGroup);
     anim->SetCycleCount(1);
     anim->SetFPS(15.f);
 
+    timeBeforeExplode = 0;
 
 
     m_animator.PlayAnimation("Bomb");
@@ -121,10 +122,36 @@ void Bomb::FixedUpdate()
 
 bool Bomb::TakeDamage(const Damage& damage, Damager* damager)
 {
+
+   // Damage damage;
     if (m_used) return false;
 
     Player* player = dynamic_cast<Player*>(damager);
+    if (player)
+    { 
+        b2Vec2 playerpos = player->GetPosition();
+        b2Body* BodyBombe = GetBody();
+        b2Vec2 bombposition = GetPosition();
+        b2Vec2 ejctionpos = b2Vec2(0, 0); 
+        
+        float playerposx = playerpos.x;
+        float playerposy = playerpos.y;
+        float bombposx = bombposition.x;
+        float bombposy = bombposition.y;
+        
+
+        float s = 0;
+        if ((bombposition.x - playerposx) > 0)
+            s = 1;
+        else
+            s = -1;
+
+        BodyBombe->SetLinearVelocity(b2Vec2(8.f * s, 2));
    
+    }
+   // b2Vec2 damagerposition = damager;
+   // if (  )
+    
 
    
 }
@@ -132,24 +159,15 @@ bool Bomb::TakeDamage(const Damage& damage, Damager* damager)
 void Bomb::Explode()
 {
     Damage damage;  
-   // Player* player = dynamic_cast<Player*>(damager); 
-    //
-   // const PlayerConfig *config = player->GetConfig(); 
-    
-    b2Vec2 bombposition = GetPosition();
-   
-    // b2Vec2 playerposition = player->GetPosition(); 
-    // float s = bombposition.x - playerposition.x ? 1 :-1;
-    //   bombposition += b2Vec2(s * 1.7f, 1.0f);
 
+    b2Vec2 bombposition = GetPosition();
     QueryFilter filter(CATEGORY_ALL_TEAMS); 
 
    
-    damage.amount = 6.f;
-    damage.hasEjection = true;
-
-    damage.ejection = b2Vec2( 10.0f, 10.f);
-    //bool hit = AttackBox(damage, filter, bombposition, 0.8f, 0.1f, 0.f);
+    damage.amount = 12.f;
+    damage.isfromBomb = true;
+    damage.bombCenter = bombposition;
+    damage.ejection = b2Vec2(8.0f, 5.0f);
     bool hit = AttackCircle(damage, filter, bombposition, 0.8f);
     
     
