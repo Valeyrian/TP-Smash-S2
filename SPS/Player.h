@@ -26,7 +26,9 @@ public:
 
     enum class State
     {
-        IDLE, RUN, JUMP, FALL, ATTACK, ATTACK2, ATTACK3, DEFEND, TAKE_DAMAGE, LAUNCHED, ATTACK_AIR, SMASH_START, SMASH_HOLD, SMASH_RELEASE, ROLLING, DASH, FAR_ATTACK
+
+        IDLE, RUN, JUMP, FALL, ATTACK, ATTACK2, ATTACK3, DEFEND, TAKE_DAMAGE, LAUNCHED, ATTACK_AIR, SMASH_START, SMASH_HOLD, SMASH_RELEASE, ROLLING, DASH, SPECIAL,FAR_ATTACK
+
     };
 
     virtual void OnCollisionStay(GameCollision &collision) override;
@@ -63,6 +65,8 @@ protected:
 
     float m_delayEarlyJump;
     float m_delayAttack;
+    float m_delaySmash;
+    float m_delaySpecial;
     float m_delayLock;
     float m_delayLockAttack;
     float m_delayRoll;
@@ -97,6 +101,7 @@ protected:
     float m_autoVelocity;
 
     float m_jumpImpulse;
+    float m_countSmash;
 
     b2Fixture *m_feetFixture;
     b2Fixture *m_bodyFixture;
@@ -128,7 +133,7 @@ private:
 
 inline bool Player::IsAttacking() const
 {
-    return (m_state == State::ATTACK || m_state == State::ATTACK_AIR); 
+    return (m_state == State::ATTACK || m_state == State::ATTACK_AIR || m_state == State::SMASH_START || m_state == State::SMASH_HOLD || m_state == State::SMASH_START || m_state == State::SPECIAL);
 }
 
 inline bool Player::CanAttack() const
