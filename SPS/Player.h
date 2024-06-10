@@ -103,6 +103,8 @@ protected:
     float m_jumpImpulse;
     float m_countSmash;
     float m_countJump;
+    int m_delayAnimation;
+    int m_delayAnimationLight;
 
     b2Fixture *m_feetFixture;
     b2Fixture *m_bodyFixture;
@@ -126,8 +128,10 @@ protected:
     void EmitEjectionParticles();
     void EmitSmallDust(float xShift);
     void EmitDustImpact();
+    void EmitDustJump();
     void EmitHitParticle();
     void SmashParticle();
+    void SmashParticleLight();
 
 private:
     State m_state;

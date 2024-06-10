@@ -81,7 +81,11 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
-    
+    spriteGroup = spriteSheet->GetGroup("AttackAir");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("AttackAir", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
 
   //ici l
      
@@ -146,6 +150,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     m_accGround = 60.f;
     m_maxSpeed = 10; // TODO : adapter
     m_countSmash = 1;
+    m_delayAnimation = 1;
     // Render
     m_renderShift.Set(0.7f, 0.f);
 }
@@ -228,8 +233,8 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
     case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
     case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
-    case State::FAR_ATTACK:  m_animator.PlayAnimation("CastSpell");   printf("Is  fireBalling\n");   break;
-    case State::LAUNCHED:    m_animator.PlayAnimation("Roll");   printf("Is  launched\n");   break;
+    //case State::FAR_ATTACK:  m_animator.PlayAnimation("CastSpell");   printf("Is  fireBalling\n");   break;
+    //case State::LAUNCHED:    m_animator.PlayAnimation("Roll");   printf("Is  launched\n");   break;
 
     //case State::SPECIAL:        m_animator.PlayAnimation("Special"); printf("smashiiing pressed\n");        break;
   
@@ -320,6 +325,8 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
             m_animator.PlayAnimation("SmashHold");
             m_countSmash+= 0.05f;
             m_delayLock = 1;
+            m_delayAnimation++;
+            if((m_delayAnimation % 5)  == 2)
             SmashParticle();
         }
         else
@@ -592,16 +599,21 @@ void Player::SmashParticle()
     AssertNew(spriteGroup);
 
     b2Vec2 position = GetPosition();
-    position.x += Random::RangeF(-0.8f, 0.f);
-    position.y += Random::RangeF(0.f, 1.5f);
+   
+    position.x += 0.f;
+    position.y += 0.5f;
+    //position.x += Random::RangeF(-0.2f, 0.2f);
+    //position.y += Random::RangeF(-0.2f, 0.2f);
 
     Particle* particle = m_scene->GetParticleSystem(LAYER_PARTICLES)
-        ->EmitParticle(spriteGroup, position, 20.f);
+        ->EmitParticle(spriteGroup, position, 40.f);
 
     SpriteAnim* anim = particle->GetSpriteAnimation();
     anim->SetFPS(30.f);
     anim->SetCycleCount(1);
 
     particle->SetLifetimeFromAnim();
-    particle->SetOpacity(0.8f);
-}
+    particle->SetOpacity(0.9f);
+    //particle->SetFlip(SDL_FLIP_HORIZONTAL);
+    //particle->SetAngularVelocity(180.f);
+}   

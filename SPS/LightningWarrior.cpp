@@ -127,6 +127,7 @@ LightningWarrior::LightningWarrior(Scene *scene, const PlayerConfig *config, Pla
     m_accGround = 60.f;
     m_maxSpeed = 8.f;
     m_countSmash = 1.f;
+    m_delayAnimationLight = 1;
 
     // Render
     m_renderShift.Set(0.4f, -0.75f);
@@ -294,6 +295,9 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
             m_animator.PlayAnimation("SmashHold");
             m_countSmash += 0.05f;
             m_delayLock = 1;
+            m_delayAnimationLight++;
+            if (m_delayAnimationLight % 34 == 2)
+                SmashParticleLight();
         }
         else
         {
@@ -308,6 +312,7 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         LockAttack(0.5f);
         m_countSmash = 1;
         m_delayLock = 0.5;
+        m_delayAnimationLight = 1;
     }
 }
 
@@ -639,6 +644,34 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
         }
 
     }
+}
+
+void Player::SmashParticleLight()
+{
+    AssetManager* assets = m_scene->GetAssetManager();
+    SpriteSheet* spriteSheet = assets->GetSpriteSheet(SHEET_VFX_SMASHLIGHT);
+    AssertNew(spriteSheet);
+    SpriteGroup* spriteGroup = spriteSheet->GetGroup("SmashPreparationLight");
+    AssertNew(spriteGroup);
+
+    b2Vec2 position = GetPosition();
+
+    position.x += 0.f;
+    position.y += 3.8f;
+    //position.x += Random::RangeF(-0.2f, 0.2f);
+    //position.y += Random::RangeF(-0.2f, 0.2f);
+
+    Particle* particle = m_scene->GetParticleSystem(LAYER_PARTICLES)
+        ->EmitParticle(spriteGroup, position, 40.f);
+
+    SpriteAnim* anim = particle->GetSpriteAnimation();
+    anim->SetFPS(15.f);
+    anim->SetCycleCount(1);
+
+    particle->SetLifetimeFromAnim();
+    particle->SetOpacity(0.8f);
+    //particle->SetFlip(SDL_FLIP_HORIZONTAL);
+    //particle->SetAngularVelocity(180.f);
 }
 
 
