@@ -134,7 +134,7 @@ void StageManager::OnSceneUpdate()
     m_delayStage -= scene->GetDelta();
     m_delayBomb -= scene->GetDelta(); 
     m_delayPotion -= scene->GetDelta();
-    printf("mdelayBombde : %f \n", m_delayBomb);
+  //  printf("mdelayBombde : %f \n", m_delayBomb);
 
 
     if (m_delayStage < 0.f)

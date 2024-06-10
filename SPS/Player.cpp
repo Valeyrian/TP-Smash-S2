@@ -58,10 +58,6 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     AddFixedUpdateDelay(&m_askedFarAttack);
     
 
-
-
-
-
     if (m_delayLock >0)
     {
         return;
@@ -347,10 +343,10 @@ void Player::FixedUpdateState()
             else if (CanAttack() && m_delaySmash > 0)
             {
                 SetState(State::SMASH_START);
-                if (input.smashDown)
+                /*if (input.smashDown)
                 {
                     SetState(State::SMASH_HOLD);
-                }
+                }*/
 
             }
            /* else if (CanAttack() && m_delaySpecial > 0)
@@ -477,6 +473,7 @@ void Player::FixedUpdatePhysics()
             velocity.y = m_jumpImpulse;
             m_delayEarlyJump = 0;
             m_countJump++;
+            EmitDustJump();
         }
     }
 
@@ -629,6 +626,30 @@ void Player::EmitDustImpact()
     particle->CreateAlphaAnimation(0.8f, 0.4f);
 }
 
+
+void Player::EmitDustJump()
+{
+    AssetManager* assets = m_scene->GetAssetManager();
+    SpriteSheet* spriteSheet = assets->GetSpriteSheet(SHEET_VFX_IMPACT_DUST);
+    AssertNew(spriteSheet);
+    SpriteGroup* spriteGroup = spriteSheet->GetGroup("EffectJump");
+    AssertNew(spriteGroup);
+
+    b2Vec2 position = GetPosition() + b2Vec2(0.f, 0.0f); // TODO : modifier
+    Particle* particle = m_scene->GetParticleSystem(LAYER_PARTICLES)
+        ->EmitParticle(spriteGroup, position, 60.f); // TODO : modifier
+
+    SpriteAnim* anim = particle->GetSpriteAnimation();
+    anim->SetFPS(60.f); // TODO : modifier
+    anim->SetCycleCount(1);
+    anim->SetDelay(0.1f);
+
+    particle->SetLifetimeFromAnim();
+    //particle->SetLifetime(1000);
+    particle->SetAnchor(Anchor::SOUTH);
+    particle->CreateAlphaAnimation(0.8f, 0.4f);
+}
+
 void Player::EmitHitParticle()
 {
     AssetManager *assets = m_scene->GetAssetManager();
@@ -739,6 +760,8 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
 
         //augmentation de du kb*
         m_launchBegins = true; 
+
+        EmitEjectionParticles();
     }
     if (damage.isfromBomb)
     {
@@ -752,7 +775,7 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
         m_ejection.x *= s;
         m_launchBegins = true;
     }
-
+    EmitHitParticle();
  
     // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegin
   

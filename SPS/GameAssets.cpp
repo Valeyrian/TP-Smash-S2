@@ -66,7 +66,11 @@ void InitAssets(AssetManager *assets)
         "../Assets/Atlas/VFX_particles.json");
     assets->AddSpriteSheet(
         SHEET_VFX_SMASH,
-        "../Assets/Atlas/redSparkjs.json");
+        "../Assets/Atlas/firebis.json");
+    assets->AddSpriteSheet(
+        SHEET_VFX_SMASHLIGHT,
+        "../Assets/Atlas/cloud.json");
+
 }
 
 void InitBackground(AssetManager * assets, int type)
