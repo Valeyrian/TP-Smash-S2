@@ -22,8 +22,11 @@ public:
     virtual void FixedUpdate() override;
 
     virtual bool TakeDamage(const Damage& damage, Damager* damager);
+    float timeBeforeExplode;
+    virtual void Explode();
 
 protected:
     bool m_used;
     Animator m_animator;
+   
 };

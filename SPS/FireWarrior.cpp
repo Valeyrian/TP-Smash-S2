@@ -382,7 +382,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
             damage.hasEjection = true;
 
-            damage.ejection = b2Vec2(s *1.0f, 1.f); // TODO : param�tres suppl�mentaire // TODO : angle d'éjection fonction de la position du joueur
+            damage.ejection = b2Vec2(s *8.0f, 8.f); // TODO : param�tres suppl�mentaire // TODO : angle d'éjection fonction de la position du joueur
           
             //damage.ejection = GetPosition; // TODO : param�tres suppl�mentaire // TODO : angle d'éjection fonction de la position du joueur
 

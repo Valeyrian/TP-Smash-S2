@@ -226,7 +226,7 @@ void Player::FixedUpdate()
 
   
     m_inContact = false;
-//    m_launchBegins = false;
+    m_launchBegins = false;
     m_externalVelocity.SetZero();
     m_lastDamager = nullptr;
 }
@@ -267,21 +267,24 @@ void Player::FixedUpdateState()
 
     // Conditions de sortie
 
- /*   if (m_launchBegins)
+    if (m_launchBegins)
     {
-        SetState(State::LAUNCHED);
+        SetState(State::LAUNCHED); 
         printf("state launched\n");
         return;
-    }*/
+    }
     if (GetState() == State::ROLLING)
         return;
     if (GetState() == State::ATTACK_AIR)
         return;
-   
+   //// if (velocity.y > -4 && velocity.Length() > -1)
+   // {
+   //     return;
+   // }
 
     if (m_state == State::LAUNCHED)
     {
-        velocity.x += 3.f;
+      
         if (velocity.y > -4.f && velocity.Length() > 1.f)
             return;
     }
@@ -298,8 +301,9 @@ void Player::FixedUpdateState()
     if (m_launchBegins)
     {
         SetState(State::LAUNCHED);
-
+        return;
     }
+    
     
 
     // Etat au sol
@@ -402,11 +406,11 @@ void Player::FixedUpdatePhysics()
 
 
     // TODO : jouer sur la gravité 
-    //if (m_state == State::LAUNCHED) 
-    //{
-    //
-    //    return;
-    //}
+    if (m_state == State::LAUNCHED) 
+    {
+    
+        return;
+    }
 
     // TODO : jouer sur la gravité (0) et annuler la vitesse
     //if (m_state == State::TAKE_DAMAGE)
@@ -680,12 +684,11 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
     {
        // printf("ici launche begin de damager\n");
         
-        m_ejection = damage.ejection ;
+        m_ejection = (1 + m_ejectionScore * 0.01f) * damage.ejection ;
        
-        m_ejection.x *= 100;
-        m_ejection.y *= 200;
+     //   m_ejection.x *= 100;
+      //  m_ejection.y *= 100;
 
-        //m_ejection.x *= m_ejectionScore *10 ;
         
         //augmentation de du kb*
         m_launchBegins = true;
