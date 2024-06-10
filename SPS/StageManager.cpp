@@ -185,7 +185,7 @@ void StageManager::OnSceneFixedUpdate()
     }
     else if (m_delayBomb <= 0 && m_MaxDelayBomb != -1)
     {
-                    AddBomb();
+        AddBomb();
 
     }
 
