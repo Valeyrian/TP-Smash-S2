@@ -47,6 +47,9 @@ void InitAssets(AssetManager *assets)
     assets->AddSpriteSheet(
         SHEET_ITEM_POTION,
         "../Assets/Atlas/Potion.json");
+    assets->AddSpriteSheet(
+        SHEET_ITEM_BOMB,
+        "../Assets/Atlas/bomb.json");
 
     // Effects
     assets->AddSpriteSheet(

@@ -91,12 +91,15 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetCycleCount(1);
     anim->SetFPS(15.f);
 
-    // Animation AttackAir
-    spriteGroup = spriteSheet->GetGroup("AttackAir");   
-    AssertNew(spriteGroup); 
-    anim = m_animator.CreateAnimation("AttackAir", spriteGroup);    
-    anim->SetCycleCount(1); 
-    anim->SetFPS(attackFPS);    
+    // farAttack
+    spriteGroup = spriteSheet->GetGroup("CastSpell");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("CastSpell", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(15.f);
+
+
+
 
 
     // Animation smash
@@ -128,6 +131,12 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     // TODO : Anmisation "Defend"
 
     // TODO : Anmisation "TakeHit"
+
+    spriteGroup = spriteSheet->GetGroup("TakeHit");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("TakeHit", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(15.f);
 
     // TODO : Décommenter pour lancer l'animation initiale
     m_animator.PlayAnimation("Idle"); 
@@ -186,6 +195,21 @@ void FireWarrior::Start()
     fixtureDef.filter.maskBits = CATEGORY_TERRAIN;
 
     m_feetFixture = CreateFixture(&fixtureDef);
+
+
+    //creation du projectile
+
+    b2CircleShape fireball;
+    fireball.m_p = b2Vec2(1, 1);
+    fireball.m_radius = 1.f;
+
+    fixtureDef.shape = &fireball;
+    fixtureDef.density = 0.f;
+    fixtureDef.friction = 0.f;
+    fixtureDef.restitution = 0.f;
+    fixtureDef.filter.categoryBits =  CATEGORY_PROJECTILE;
+    fixtureDef.filter.maskBits = m_config->otherTeamMask;
+
 }
 
 void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
@@ -194,6 +218,7 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
 
     switch (state) // TODO : décommenter, compléter
     {
+
     case State::IDLE:           m_animator.PlayAnimation("Idle");  printf("Is Idle\n");                     break;
     case State::RUN:            m_animator.PlayAnimation("Run");   printf("Is Running\n");                  break;
     case State::ATTACK:         m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");              break;
@@ -203,7 +228,10 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
     case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
     case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
+         case State::FAR_ATTACK:  m_animator.PlayAnimation("CastSpell");   printf("Is  fireBalling\n");   break;
+    case State::LAUNCHED:    m_animator.PlayAnimation("Roll");   printf("Is  launched\n");   break;
     //case State::SPECIAL:        m_animator.PlayAnimation("Special"); printf("smashiiing pressed\n");        break;
+  
 
     // TODO : Gérer d'autres animations
     default:
@@ -313,6 +341,7 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
 
     }*/
 
+
 }
 
 void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int frameID)
@@ -336,10 +365,10 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
         switch (frameID)
         {
             // TODO : Vitesse crédible
-        case 0: m_autoVelocity = s * 6.0f; break;
-        case 1: m_autoVelocity = s * 10.0f; break;
-        case 2: m_autoVelocity = s * 4.0f; break;
-        case 3: m_autoVelocity = s * 2.0f; break;
+        case 0: m_autoVelocity = s * 1.0f; break;
+        case 1: m_autoVelocity = s * 3.0f; break;
+        case 2: m_autoVelocity = s * 3.0f; break;
+        case 3: m_autoVelocity = s * 1.0f; break;
         default: break;
         }
 
@@ -416,13 +445,12 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
             Damage damage;
             damage.amount = 6.f;
+
             damage.hasEjection = true;
 
-            damage.ejection = b2Vec2(s *25.0f, 5.0f); // TODO : param�tres suppl�mentaire // TODO : angle d'éjection fonction de la position du joueur
+            damage.ejection = b2Vec2(s *8.0f, 8.f); // TODO : param�tres suppl�mentaire // TODO : angle d'éjection fonction de la position du joueur
           
             //damage.ejection = GetPosition; // TODO : param�tres suppl�mentaire // TODO : angle d'éjection fonction de la position du joueur
-
-            
 
             // TODO : Zone de collision adapt�e
             bool hit = AttackBox(damage, filter, position, 0.8f, 0.1f, 0.f);

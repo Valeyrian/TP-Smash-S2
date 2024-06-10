@@ -146,6 +146,9 @@
     <ClCompile Include="UITitleBackground.cpp">
       <Filter>Fichiers sources\GameObject\UI\Title</Filter>
     </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationInput.h">
@@ -237,6 +240,9 @@
     </ClInclude>
     <ClInclude Include="UITitleBackground.h">
       <Filter>Fichiers sources\GameObject\UI\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

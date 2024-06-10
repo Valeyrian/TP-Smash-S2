@@ -71,8 +71,15 @@ public:
     {
         AUCUNE = 0, LENTE, NORMALE, RAPIDE
     };
-
     Potion potionLevel;
+    
+
+    enum class Bomb : int
+    {
+        AUCUNE = 0, LENTE, NORMALE, RAPIDE
+    };
+    Bomb bombLevel;
+
     int duration;
     int lifeCount;
     
