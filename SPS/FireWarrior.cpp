@@ -230,6 +230,7 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
     case State::FAR_ATTACK:  m_animator.PlayAnimation("CastSpell");   printf("Is  fireBalling\n");   break;
     case State::LAUNCHED:    m_animator.PlayAnimation("Roll");   printf("Is  launched\n");   break;
+
     //case State::SPECIAL:        m_animator.PlayAnimation("Special"); printf("smashiiing pressed\n");        break;
   
 
@@ -318,19 +319,22 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         {
             m_animator.PlayAnimation("SmashHold");
             m_countSmash+= 0.05f;
-
+            m_delayLock = 1;
+            SmashParticle();
         }
         else
         {
             m_animator.PlayAnimation("SmashRelease");
+            m_delayLock = 1;
         }
     }
     else if (name == "SmashRelease")
     {
 
         SetState(Player::State::IDLE); 
-        LockAttack(0.25f); 
+        LockAttack(0.5f); 
         m_countSmash = 1;
+        m_delayLock = 0.5;
 
     }
     /*else if (name == "Special")
@@ -488,9 +492,11 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
                 position += b2Vec2(s * 0.75f, 1.2f);
 
                 Damage damage;
-                damage.amount = 5.f;
+                damage.amount = 6.f;
 
+                damage.hasEjection = true;
 
+                damage.ejection = b2Vec2(s * 3.0f, 5.f);
                 // TODO : Verrouillage pour la victime
 
                 damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
@@ -566,8 +572,36 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
                 position -= b2Vec2(0.f, 0.15f);
 
 
+                damage.hasEjection = true;
+
+                damage.ejection = b2Vec2(s * 8.0f, 5.f);
+
                 bool hit = AttackBox(damage, filter, position, 1.0f, 0.5f, 0.f);
             }
         }
     // TODO : D'autres évènement sur frames ?
+}
+
+
+void Player::SmashParticle()
+{
+    AssetManager* assets = m_scene->GetAssetManager();
+    SpriteSheet* spriteSheet = assets->GetSpriteSheet(SHEET_VFX_SMASH);
+    AssertNew(spriteSheet);
+    SpriteGroup* spriteGroup = spriteSheet->GetGroup("SmashPreparation");
+    AssertNew(spriteGroup);
+
+    b2Vec2 position = GetPosition();
+    position.x += Random::RangeF(-0.8f, 0.f);
+    position.y += Random::RangeF(0.f, 1.5f);
+
+    Particle* particle = m_scene->GetParticleSystem(LAYER_PARTICLES)
+        ->EmitParticle(spriteGroup, position, 20.f);
+
+    SpriteAnim* anim = particle->GetSpriteAnimation();
+    anim->SetFPS(30.f);
+    anim->SetCycleCount(1);
+
+    particle->SetLifetimeFromAnim();
+    particle->SetOpacity(0.8f);
 }

@@ -102,6 +102,7 @@ protected:
 
     float m_jumpImpulse;
     float m_countSmash;
+    float m_countJump;
 
     b2Fixture *m_feetFixture;
     b2Fixture *m_bodyFixture;
@@ -126,6 +127,7 @@ protected:
     void EmitSmallDust(float xShift);
     void EmitDustImpact();
     void EmitHitParticle();
+    void SmashParticle();
 
 private:
     State m_state;
