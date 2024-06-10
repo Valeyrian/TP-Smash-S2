@@ -64,6 +64,7 @@ enum SheetID : int
     SHEET_VFX_IMPACT_DUST,
     SHEET_VFX_PARTICLES,
     SHEET_VFX_DUST,
+    SHEET_VFX_SMASH,
 };
 
 enum FontID : int

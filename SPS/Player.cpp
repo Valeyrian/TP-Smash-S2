@@ -21,7 +21,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     m_ejection(b2Vec2_zero), m_hVelocity(0.f),
     m_jumpImpulse(14.f), m_ai(nullptr),
     m_attackType(AttackType::NONE),
-    m_delayAttack(-1.f), m_delaySmash(-1.f),  m_delayEarlyJump(-1.f), //m_delaySpecial(-1.f),
+    m_delayAttack(-1.f), m_delaySmash(-1.f),  m_delayEarlyJump(-1.f), m_countJump(-1), //m_delaySpecial(-1.f),
     m_delayLock(-1.f), m_delayLockAttack(-1.f),
     m_autoVelocity(0.f), m_hasAutoVelocity(false), m_externalVelocity(b2Vec2_zero),
     m_isGrounded(true), m_wasGrounded(true), m_inContact(false),
@@ -82,7 +82,6 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     m_accAir = 30.f;
     m_accGround = 60.f;
     m_maxSpeed = 15.f; // TODO : adapter
-
   
 
 }
@@ -181,7 +180,7 @@ void Player::Render()
     }
 
     // TODO : Bouclier
-    //texture = m_shieldAnimator.GetTexture();
+    texture = m_shieldAnimator.GetTexture();
     
 }
 
@@ -335,6 +334,7 @@ void Player::FixedUpdateState()
     // Etat au sol
     if (m_isGrounded)
     {
+        m_countJump = 0;
        // printf("delay roll %f et delay lock %f\n", m_delayRoll, m_delayLockRoll);
         // TODO : modifier
         if (IsAttacking() == false)
@@ -467,16 +467,17 @@ void Player::FixedUpdatePhysics()
     
 
     // Saut // TODO
-    if (m_delayEarlyJump > 0.f && m_isGrounded)
+    if (m_delayEarlyJump > 0.f )// && m_isGrounded)
     {
         // TODO : vitesse verticale et reinit m_delayEarlyJump
 
-        // TODO : décommenter
-         m_scene->GetAssetManager()->PlaySoundFX(SFX_JUMP_GROUND); 
-         velocity.y = m_jumpImpulse;
-         m_delayEarlyJump = 0;
-
-        
+        if (m_countJump < 2)
+        {
+            m_scene->GetAssetManager()->PlaySoundFX(SFX_JUMP_GROUND);
+            velocity.y = m_jumpImpulse;
+            m_delayEarlyJump = 0;
+            m_countJump++;
+        }
     }
 
     // TODO : décommenter pour le saut long (on joue directement sur la gravité
@@ -650,6 +651,8 @@ void Player::EmitHitParticle()
     particle->SetLifetimeFromAnim();
     particle->SetOpacity(0.8f);
 }
+
+
 
 void Player::OnPlayerKO()
 {
