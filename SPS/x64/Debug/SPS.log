@@ -1,16 +1,2 @@
-﻿  Damager.cpp
-  FireWarrior.cpp
-C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\SPS\FireWarrior.cpp(133,45): warning C4305: 'argument' : troncation de 'double' à 'float'
-  LightningWarrior.cpp
-  Main.cpp
-  MainCamera.cpp
-  Platform.cpp
-  Player.cpp
-  PlayerAI.cpp
-  Potion.cpp
-  StageManager.cpp
-  Terrain.cpp
-  UIPauseMenu.cpp
-  UIStageHUD.cpp
-  Génération de code en cours...
+﻿  StageManager.cpp
   SPS.vcxproj -> C:\Users\valey\OneDrive - Groupe ESIEA\Documents\Cours\Tp Smash\perso\Git\SPS24_Basecode\x64\Debug\SPS.exe

@@ -143,6 +143,7 @@
     <ClCompile Include="GameAssets.cpp" />
     <ClCompile Include="GameCommon.cpp" />
     <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="UIDefaultButton.cpp" />
     <ClCompile Include="UIDefaultCursor.cpp" />
     <ClCompile Include="UIStagePage.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="GameCommon.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="UIDefaultButton.h" />
     <ClInclude Include="UIDefaultCursor.h" />
     <ClInclude Include="UIStagePage.h" />

@@ -26,7 +26,7 @@ public:
 
     enum class State
     {
-        IDLE, RUN, JUMP, FALL, ATTACK, ATTACK2, ATTACK3, DEFEND, TAKE_DAMAGE, LAUNCHED, ATTACK_AIR, SMASH_START, SMASH_HOLD, SMASH_RELEASE, ROLLING, DASH
+        IDLE, RUN, JUMP, FALL, ATTACK, ATTACK2, ATTACK3, DEFEND, TAKE_DAMAGE, LAUNCHED, ATTACK_AIR, SMASH_START, SMASH_HOLD, SMASH_RELEASE, ROLLING, DASH, FAR_ATTACK
     };
 
     virtual void OnCollisionStay(GameCollision &collision) override;
@@ -67,6 +67,10 @@ protected:
     float m_delayLockAttack;
     float m_delayRoll;
     float m_delayLockRoll;
+    float m_delayLockFarAttack;
+    float m_askedFarAttack;
+ 
+
 
     float m_ejectionScore;
     float m_hDirection;

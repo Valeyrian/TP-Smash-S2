@@ -138,6 +138,25 @@ UIStagePage::UIStagePage(
     m_potionlevel->SetIsCycle(true);
     m_potionlevel->AddSelectableListener(this);
 
+    ////--------------------------------------------------------------------------
+   //// TODO : Ajout d'un texte et d'une liste pour la fréquence d'apparition des bombes
+
+    font = assets->GetFont(FONT_LARGE);
+
+
+    labelString.assign("Bombes level");
+    textStrings.clear();
+    textStrings.push_back("Aucune");
+    textStrings.push_back("Lente");
+    textStrings.push_back("Normale");
+    textStrings.push_back("Rapide");    
+    m_bomblevel = new UITextList( 
+        m_scene, labelString, textStrings, Colors::White, textWidth 
+    );
+    m_bomblevel->SetIsCycle(true);    
+    m_bomblevel->AddSelectableListener(this); 
+
+
     //--------------------------------------------------------------------------
     // Buttons
 
@@ -151,7 +170,7 @@ UIStagePage::UIStagePage(
     // Grid layouts
 
     // TODO : Modifier le vLayout pour ajouter un champ potion
-    UIGridLayout *vLayout = new UIGridLayout(m_scene, 7, 1); 
+    UIGridLayout *vLayout = new UIGridLayout(m_scene, 8, 1); 
     vLayout->SetParent(m_content);
     vLayout->SetAnchor(Anchor::CENTER);
 
@@ -160,8 +179,10 @@ UIStagePage::UIStagePage(
     vLayout->SetRowSpacing(2, 10.f);
     vLayout->SetRowSpacing(4, 10.f);
     vLayout->SetRowSpacing(5, 10.f); 
+    vLayout->SetRowSpacing(6, 10.f);
+
     
-    vLayout->SetRowSize(25.f);
+    vLayout->SetRowSize(20.f);
     vLayout->SetColumnSize(300.f);
 
     vLayout->AddObject(m_playerText, 0, 0);
@@ -170,11 +191,13 @@ UIStagePage::UIStagePage(
     vLayout->AddObject(m_optionText, 3, 0);
     vLayout->AddObject(m_timeList, 4, 0);
     vLayout->AddObject(m_potionlevel, 5, 0);
+    vLayout->AddObject(m_bomblevel, 6, 0);
 
-    // TODO : Ajout de l'objet potion
+
+    // TODO : Ajout de l'objet potion et bombe
 
     UIGridLayout *hLayout = new UIGridLayout(m_scene, 1, 2);
-    hLayout->SetSpacing(20.f);
+    hLayout->SetSpacing(30.f);
     hLayout->SetAnchor(Anchor::SOUTH);
     hLayout->SetColumnSize(100.f);
 
@@ -182,7 +205,7 @@ UIStagePage::UIStagePage(
     hLayout->AddObject(m_startButton, 0, 1);
 
     // TODO : Modifier pour laisser la place au champ potion
-    vLayout->AddObject(hLayout, 6, 0);
+    vLayout->AddObject(hLayout, 7, 0);
 
     vLayout->Update();
     hLayout->Update();
@@ -200,6 +223,8 @@ UIStagePage::UIStagePage(
     m_group->AddSelectable(m_player2List);
     m_group->AddSelectable(m_timeList);
     m_group->AddSelectable(m_potionlevel);
+    m_group->AddSelectable(m_bomblevel);
+
 
     m_group->AddSelectable(m_backButton);
     m_group->AddSelectable(m_startButton);
@@ -356,8 +381,13 @@ void UIStagePage::UpdateConfigs()
    case 1: m_stageConfig.potionLevel = StageConfig::Potion::LENTE; break;
    case 2: m_stageConfig.potionLevel = StageConfig::Potion::NORMALE; break;
    case 3: m_stageConfig.potionLevel = StageConfig::Potion::RAPIDE; break;
-
-
+   }
+   switch (m_bomblevel->GetSelectedItem())
+   {
+   case 0: m_stageConfig.bombLevel = StageConfig::Bomb::AUCUNE; break;
+   case 1: m_stageConfig.bombLevel = StageConfig::Bomb::LENTE; break;
+   case 2: m_stageConfig.bombLevel = StageConfig::Bomb::NORMALE; break;
+   case 3: m_stageConfig.bombLevel = StageConfig::Bomb::RAPIDE; break;
    }
 
 }

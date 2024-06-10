@@ -119,7 +119,7 @@ void LightningWarrior::Start()
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &box;
-    fixtureDef.density = 1.f;
+    fixtureDef.density = 1.f; //1
     fixtureDef.friction = 0.f;
     fixtureDef.restitution = 0.f;
     fixtureDef.filter.categoryBits = m_config->teamMask;
@@ -133,8 +133,8 @@ void LightningWarrior::Start()
     circle.m_radius = 0.5f;
 
     fixtureDef.shape = &circle;
-    fixtureDef.density = 2.f;
-    fixtureDef.friction = 0.2f;
+    fixtureDef.density = 2.f;//2
+    fixtureDef.friction = 0.2f; //0.2
     fixtureDef.restitution = 0.f;
     fixtureDef.filter.categoryBits = m_config->teamMask;
     fixtureDef.filter.maskBits = CATEGORY_TERRAIN;
@@ -248,15 +248,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             Damage damage;
             damage.amount = 3.f;
-            damage.hasEjection = true;
-
-            damage.ejection = b2Vec2(s * 5.0f, 1.0f); // TODO : param?tres suppl?mentaire // TODO : angle d'éjection fonction de la position du joueur
-
-
-
             // TODO : Verrouillage pour la victime
-
-            damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
+     //       damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
 
             // TODO : adapter la zone d'attaque
             bool hit = AttackBox(damage, filter, position, 1.3f, 0.3f, 0.f); 

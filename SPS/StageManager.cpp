@@ -15,6 +15,8 @@
 #include "Background.h"
 
 #include "Potion.h"
+#include "Bomb.h"
+
 
 StageManager::StageManager(
     InputManager *inputManager,
@@ -23,7 +25,8 @@ StageManager::StageManager(
     BaseSceneManager(inputManager), m_configs(),
     m_players(), m_paused(false),
     m_pauseMenu(nullptr), m_stageConfig(stageConfig),
-    m_delayStage(0.f), m_playerStats(), m_delayPotion(Random::RangeF(250.f, 50.f * 30)),m_MaxDelayPotion(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
+    m_delayStage(0.f), m_playerStats(), m_delayPotion(Random::RangeF(250.f, 60.f * 30)),m_MaxDelayPotion(-1),
+    m_delayBomb(Random::RangeF(250.f, 60.f * 30)), m_MaxDelayBomb(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
 {
     Scene *scene = GetScene();
     AssetManager *assets = scene->GetAssetManager();
@@ -103,6 +106,14 @@ StageManager::StageManager(
     case StageConfig::Potion::NORMALE: m_MaxDelayPotion = 30; break;
     case StageConfig::Potion::RAPIDE: m_MaxDelayPotion = 15; break;
     }
+    switch (m_stageConfig.bombLevel)
+    {
+    case StageConfig::Bomb::AUCUNE:m_MaxDelayBomb = -1; break;
+    case StageConfig::Bomb::LENTE:m_MaxDelayBomb = 75; break;
+    case StageConfig::Bomb::NORMALE:m_MaxDelayBomb = 60; break;
+    case StageConfig::Bomb::RAPIDE:m_MaxDelayBomb = 45; break;
+
+    }
 
     
 }
@@ -166,7 +177,17 @@ void StageManager::OnSceneFixedUpdate()
         AddPotion();
 
     }
-    // TODO : mettre a jour le délai + ajout si délai<0
+    // TODO : mettre a jour le délai + ajout si délai potion et bombe
+    //printf("delayBomb : %f et maxdealayBomb %f\n", m_delayBomb, m_MaxDelayBomb);
+    if (m_delayBomb > 0.f)
+    {
+        m_delayBomb--;
+    }
+    else if (m_delayBomb <= 0 && m_MaxDelayBomb != -1)
+    {
+                    AddBomb();
+
+    }
 
 }
 
@@ -198,10 +219,24 @@ void StageManager::AddPotion()
    // b2Vec2 position(10.f, 10.f);
     potion->SetStartPosition(position);  
     if (m_MaxDelayPotion >= 0)
-        m_delayPotion = Random::RangeF(250.f, 50.f *m_MaxDelayPotion);
+        m_delayPotion = Random::RangeF(250.f, 60.f *m_MaxDelayPotion);
     else
         m_delayPotion = -1;
     printf("add potion \n");
+}
+
+void StageManager::AddBomb()
+{
+    Scene* scene = GetScene();
+    Bomb* bomb = new Bomb(scene);
+    b2Vec2 position(Random::RangeF(-7.f, 7.f), 10.f);
+    // b2Vec2 position(10.f, 10.f);
+    bomb->SetStartPosition(position);
+    if (m_MaxDelayBomb >= 0)
+        m_delayBomb = Random::RangeF(250.f, 60.f * m_MaxDelayBomb);
+    else
+        m_delayBomb = -1;
+    printf("add bomb \n");
 }
 
 void StageManager::InitRockyPass()

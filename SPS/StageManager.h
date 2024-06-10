@@ -47,6 +47,8 @@ public:
 private:
     void InitRockyPass();
     void AddPotion();
+    void AddBomb();
+
 
     int m_playerCount;
     std::vector<Player *> m_players;
@@ -62,6 +64,9 @@ private:
     float m_delayStage;
     float m_delayPotion; // ADD
     float m_MaxDelayPotion;
+    
+    float m_delayBomb; // ADD
+    float m_MaxDelayBomb;
 };
 
 inline Player *StageManager::GetPlayer(int playerID)
