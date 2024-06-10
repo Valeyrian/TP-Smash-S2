@@ -56,6 +56,9 @@ enum SheetID : int
     SHEET_TILESET_ROCKY,
     SHEET_UI,
     SHEET_ITEM_POTION,
+    SHEET_ITEM_BOMB,
+    
+
 
     SHEET_VFX_HIT,
     SHEET_VFX_IMPACT_DUST,

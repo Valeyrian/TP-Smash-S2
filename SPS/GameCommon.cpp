@@ -32,6 +32,7 @@ void PlayerConfig::SetTeamID(int teamIDIn)
 StageConfig::StageConfig() :
     type(Type::ROCKY_PASS), mode(Mode::LIMITED_TIME),
     duration(3), lifeCount(3)
+
     // TODO : initialiser le membre de fréquence d'apparition des potions
 {
 }
