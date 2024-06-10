@@ -26,7 +26,7 @@ StageManager::StageManager(
     m_players(), m_paused(false),
     m_pauseMenu(nullptr), m_stageConfig(stageConfig),
     m_delayStage(0.f), m_playerStats(), m_delayPotion(Random::RangeF(250.f, 60.f * 30)),m_MaxDelayPotion(-1),
-    m_delayBomb(Random::RangeF(250.f, 60.f * 30)), m_MaxDelayBomb(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
+    m_delayBomb(Random::RangeF(1,  30)), m_MaxDelayBomb(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
 {
     Scene *scene = GetScene();
     AssetManager *assets = scene->GetAssetManager();
@@ -111,10 +111,10 @@ StageManager::StageManager(
     case StageConfig::Bomb::AUCUNE:m_MaxDelayBomb = -1; break;
     case StageConfig::Bomb::LENTE:m_MaxDelayBomb = 75; break;
     case StageConfig::Bomb::NORMALE:m_MaxDelayBomb = 60; break;
-    case StageConfig::Bomb::RAPIDE:m_MaxDelayBomb = 45; break;
+    case StageConfig::Bomb::RAPIDE:m_MaxDelayBomb = 15; break;
 
     }
-
+   
     
 }
 
@@ -130,7 +130,13 @@ void StageManager::OnSceneUpdate()
     InputManager *inputManager = scene->GetInputManager();
     ApplicationInput *applicationInput = ApplicationInput::GetFromManager(inputManager);
 
+  
     m_delayStage -= scene->GetDelta();
+    m_delayBomb -= scene->GetDelta(); 
+    m_delayPotion -= scene->GetDelta();
+    printf("mdelayBombde : %f \n", m_delayBomb);
+
+
     if (m_delayStage < 0.f)
     {
         QuitScene();
@@ -168,22 +174,16 @@ void StageManager::OnSceneFixedUpdate()
 
     //printf("delayPotion : %f \n",m_delayPotion);
 
-    if (m_delayPotion > 0.f)
-    {
-        m_delayPotion--;
-    }
-    else if (m_delayPotion <= 0 && m_MaxDelayPotion != -1)
+   
+    if (m_delayPotion <= 0 && m_MaxDelayPotion != -1)
     {
         AddPotion();
 
     }
     // TODO : mettre a jour le délai + ajout si délai potion et bombe
     //printf("delayBomb : %f et maxdealayBomb %f\n", m_delayBomb, m_MaxDelayBomb);
-    if (m_delayBomb > 0.f)
-    {
-        m_delayBomb--;
-    }
-    else if (m_delayBomb <= 0 && m_MaxDelayBomb != -1)
+    
+   if (m_delayBomb <= 0 && m_MaxDelayBomb != -1)
     {
         AddBomb();
 
@@ -219,7 +219,7 @@ void StageManager::AddPotion()
    // b2Vec2 position(10.f, 10.f);
     potion->SetStartPosition(position);  
     if (m_MaxDelayPotion >= 0)
-        m_delayPotion = Random::RangeF(250.f, 60.f *m_MaxDelayPotion);
+        m_delayPotion = Random::RangeF(1, m_MaxDelayPotion);
     else
         m_delayPotion = -1;
     printf("add potion \n");
@@ -233,7 +233,7 @@ void StageManager::AddBomb()
     // b2Vec2 position(10.f, 10.f);
     bomb->SetStartPosition(position);
     if (m_MaxDelayBomb >= 0)
-        m_delayBomb = Random::RangeF(250.f, 60.f * m_MaxDelayBomb);
+        m_delayBomb = Random::RangeF(1.f, m_MaxDelayBomb);
     else
         m_delayBomb = -1;
     printf("add bomb \n");
