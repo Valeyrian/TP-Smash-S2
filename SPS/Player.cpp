@@ -21,7 +21,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     m_ejection(b2Vec2_zero), m_hVelocity(0.f),
     m_jumpImpulse(14.f), m_ai(nullptr),
     m_attackType(AttackType::NONE),
-    m_delayAttack(-1.f), m_delayEarlyJump(-1.f),
+    m_delayAttack(-1.f), m_delaySmash(-1.f),  m_delayEarlyJump(-1.f), //m_delaySpecial(-1.f),
     m_delayLock(-1.f), m_delayLockAttack(-1.f),
     m_autoVelocity(0.f), m_hasAutoVelocity(false), m_externalVelocity(b2Vec2_zero),
     m_isGrounded(true), m_wasGrounded(true), m_inContact(false),
@@ -52,9 +52,12 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     AddFixedUpdateDelay(&m_delayLockAttack);
     AddFixedUpdateDelay(&m_delayLockRoll);
     AddFixedUpdateDelay(&m_delayRoll);
+    AddFixedUpdateDelay(&m_delaySmash);
+    //AddFixedUpdateDelay(&m_delaySpecial);
     AddFixedUpdateDelay(&m_delayLockFarAttack);
     AddFixedUpdateDelay(&m_askedFarAttack);
     
+
 
 
 
@@ -116,7 +119,7 @@ void Player::Update()
     if (stageManager == nullptr) return;
     if (stageManager->IsPaused()) return;
 
-    if (input.jumpPressed) // TODO : décommenter pour récupérer l'information de saut
+    if (input.jumpPressed) // TODO : dÃ©commenter pour rÃ©cupÃ©rer l'information de saut
     {
         m_delayEarlyJump = 0.5f;
     }
@@ -129,13 +132,26 @@ void Player::Update()
     {
         m_delayRoll = 0.5f;
     }
+
+    //else  if (input.smashDown)
+    //{
+    //    m_attackType = AttackType::SPECIAL;
+    //    m_delaySpecial = 0.5;
+    //    //input.smashDown = (false);
+    //}
+    else  if (input.smashPressed)
+    {
+        m_attackType = AttackType::SMASH; 
+        m_delaySmash = 0.5;
+    }
+
     else if (input.specialDown)
     {
         m_askedFarAttack = 0.5;
         printf("in here c down\n");
     }
 
-    // TODO : membre m_defend à modifier
+    // TODO : membre m_defend Ã  modifier
 }
 
 void Player::Render()
@@ -157,7 +173,7 @@ void Player::Render()
         spritePosition.y += m_renderShift.y;
         camera->WorldToView(spritePosition, src, 22.f, rect);
 
-        RenderCopyExF( // TODO : C'est cadeau, les paramètres sont bons
+        RenderCopyExF( // TODO : C'est cadeau, les paramÃ¨tres sont bons
             g_renderer, texture, src, &rect, 
             Anchor::SOUTH, 0.f, b2Vec2(0.5f, 0.5f), flip
         );
@@ -192,7 +208,7 @@ void Player::FixedUpdate()
         return;
     }
 
-    // Détection du sol
+    // DÃ©tection du sol
     FixedUpdateIsGrounded();
 
     if (m_wasGrounded == false && m_isGrounded)
@@ -201,7 +217,7 @@ void Player::FixedUpdate()
         EmitDustImpact();
     }
 
-    // Met à jour l'état du joueur
+    // Met Ã  jour l'Ã©tat du joueur
     FixedUpdateState();
     FixedUpdateAutoVelocity();
 
@@ -221,7 +237,7 @@ void Player::FixedUpdate()
         }
     }
 
-    // Met à jour la physique
+    // Met Ã  jour la physique
     FixedUpdatePhysics();
 
   
@@ -277,10 +293,20 @@ void Player::FixedUpdateState()
         return;
     if (GetState() == State::ATTACK_AIR)
         return;
+    if (GetState() == State::SMASH_START)
+        return;
+    if (GetState() == State::SMASH_HOLD)
+        return;
+    if (GetState() == State::SMASH_RELEASE)
+        return;
+    //if (GetState() == State::SPECIAL)
+    //    return;
+
    //// if (velocity.y > -4 && velocity.Length() > -1)
    // {
    //     return;
    // }
+
 
     if (m_state == State::LAUNCHED)
     {
@@ -288,9 +314,9 @@ void Player::FixedUpdateState()
         if (velocity.y > -4.f && velocity.Length() > 1.f)
             return;
     }
- 
+    
 
-    // TODO : état DEFEND
+    // TODO : Ã©tat DEFEND
  
     if (m_askedFarAttack > 0 && m_delayLockFarAttack <0)
     {
@@ -318,6 +344,20 @@ void Player::FixedUpdateState()
                 SetState(State::ATTACK);
                 
             }
+            else if (CanAttack() && m_delaySmash > 0)
+            {
+                SetState(State::SMASH_START);
+                if (input.smashDown)
+                {
+                    SetState(State::SMASH_HOLD);
+                }
+
+            }
+           /* else if (CanAttack() && m_delaySpecial > 0)
+            {
+                SetState(State::SPECIAL);
+
+            }*/
             else 
             {
                 if (velocity.x != 0)
@@ -330,6 +370,7 @@ void Player::FixedUpdateState()
                     SetState(State::ROLLING);   
                 else
                 {
+
                     SetState(State::IDLE);      
                 }
             }
@@ -374,6 +415,9 @@ void Player::FixedUpdateAutoVelocity()
     case State::ATTACK_AIR:
         m_hasAutoVelocity = true;
         break;
+    case State::SMASH_RELEASE:
+        m_hasAutoVelocity = true;
+        break;
     default:
         m_hasAutoVelocity = false;
         m_autoVelocity = 0.f;
@@ -405,14 +449,14 @@ void Player::FixedUpdatePhysics()
 
 
 
-    // TODO : jouer sur la gravité 
+    // TODO : jouer sur la gravitÃ© 
     if (m_state == State::LAUNCHED) 
     {
     
         return;
     }
 
-    // TODO : jouer sur la gravité (0) et annuler la vitesse
+    // TODO : jouer sur la gravitÃ© (0) et annuler la vitesse
     //if (m_state == State::TAKE_DAMAGE)
     //{
     //
@@ -427,7 +471,7 @@ void Player::FixedUpdatePhysics()
     {
         // TODO : vitesse verticale et reinit m_delayEarlyJump
 
-        // TODO : décommenter
+        // TODO : dÃ©commenter
          m_scene->GetAssetManager()->PlaySoundFX(SFX_JUMP_GROUND); 
          velocity.y = m_jumpImpulse;
          m_delayEarlyJump = 0;
@@ -435,12 +479,12 @@ void Player::FixedUpdatePhysics()
         
     }
 
-    // TODO : décommenter pour le saut long (on joue directement sur la gravité
-    //if ((m_isGrounded == false)) 
-    //{
-    //    float scale = input.jumpDown ? 0.5f : 1.0f;
-    //    body->SetGravityScale(scale);
-    //}
+    // TODO : dÃ©commenter pour le saut long (on joue directement sur la gravitÃ©
+    if ((m_isGrounded == false)) 
+    {
+        float scale = input.jumpDown ? 0.5f : 1.0f;
+        body->SetGravityScale(scale);
+    }
 
     // TODO : Mise a jour de la vitesse
 
@@ -452,7 +496,7 @@ void Player::FixedUpdatePhysics()
     }
     velocity.x = m_hVelocity;
 
-    if (m_hasAutoVelocity) // TODO : décommenter pour gérer la vitesse automatique
+    if (m_hasAutoVelocity) // TODO : dÃ©commenter pour gÃ©rer la vitesse automatique
     {
         velocity.x = m_autoVelocity;
         
@@ -615,7 +659,7 @@ void Player::OnPlayerKO()
     m_hVelocity = 0.f;
     m_ejectionScore = 0.f;
 
-    // TODO : Décommenter une fois les délais utilisés
+    // TODO : DÃ©commenter une fois les dÃ©lais utilisÃ©s
     m_delayAttack = -1.f;
     m_delayEarlyJump = -1.f;
     m_delayLock = -1.f;
@@ -659,7 +703,7 @@ void Player::OnStateChanged(Player::State state, Player::State prevState)
     if (m_ai) m_ai->OnStateChanged(state, prevState);
 }
 
-void Player::Heal(float amount) // TODO : compléter pour soigner
+void Player::Heal(float amount) // TODO : complÃ©ter pour soigner
 {
     if (m_ejectionScore - amount < 0)
         m_ejectionScore = 0;
@@ -669,7 +713,7 @@ void Player::Heal(float amount) // TODO : compléter pour soigner
 
 bool Player::TakeDamage(const Damage &damage, Damager *damager)
 {
-    // TODO : Pendre en compte l'état DEFEND
+    // TODO : Pendre en compte l'Ã©tat DEFEND
     if (m_lastDamager == damager)
     {
         return false;
@@ -697,7 +741,7 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
     }
 
  
-    // TODO : Dans le cas d'une attaque avec éjection, MAJ m_ejection et m_launchBegin
+    // TODO : Dans le cas d'une attaque avec Ã©jection, MAJ m_ejection et m_launchBegin
   
     return true;
 }
