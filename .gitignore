@@ -1,6 +1,2 @@
 # Visual studio 
 .vs/
-#Log
-logs/
-#Debug
-Debug/
