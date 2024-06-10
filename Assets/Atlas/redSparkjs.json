@@ -1,0 +1,12 @@
+{
+    "texture": "redsparks.dat",
+    "geometry": {
+        "rowCount": 5,
+        "colCount": 8,
+        "width": 225,
+        "height": 215
+    },
+    "parts": [
+        {"name": "SmashPreparation", "frames": [9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]}
+    ]
+}

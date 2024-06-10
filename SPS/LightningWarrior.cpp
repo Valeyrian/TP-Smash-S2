@@ -293,20 +293,21 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         {
             m_animator.PlayAnimation("SmashHold");
             m_countSmash += 0.05f;
-
+            m_delayLock = 1;
         }
         else
         {
             m_animator.PlayAnimation("SmashRelease");
+            m_delayLock = 1;
         }
     }
     else if (name == "SmashRelease")
     {
 
         SetState(Player::State::IDLE);
-        LockAttack(0.25f);
+        LockAttack(0.5f);
         m_countSmash = 1;
-
+        m_delayLock = 0.5;
     }
 }
 
@@ -353,9 +354,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
             Damage damage;
             damage.amount = 3.f;
 
-            /*damage.hasEjection = true;
+            damage.hasEjection = true;
 
-            damage.ejection = b2Vec2(s * 5.0f, 1.0f);*/ // TODO : param?tres suppl?mentaire // TODO : angle d'éjection fonction de la position du joueur
+            damage.ejection = b2Vec2(s * 2.0f, 1.0f); // TODO : param?tres suppl?mentaire // TODO : angle d'éjection fonction de la position du joueur
 
 
 
@@ -385,7 +386,7 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
             damage.lockTime = lockTime;
             // TODO : paramètres supplémentaires ?
 
-            b2Vec2 vertices[] = { // C'est cadeau
+            b2Vec2 vertices[] = { 
                 position + b2Vec2(s * 0.7f, 2.2f), //1
                 position + b2Vec2(s * 1.15f, 1.5f),//
                 position + b2Vec2(s * 1.3f, 0.1f), //5
@@ -464,7 +465,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
             Damage damage;
             damage.amount = 2.f;
 
+            damage.hasEjection = true;
 
+            damage.ejection = b2Vec2(s * 2.0f, 1.0f);
 
             // TODO : Zone de collision adapt?e
             bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
@@ -480,7 +483,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
             Damage damage;
             damage.amount = 2.f;
 
+            damage.hasEjection = true;
 
+            damage.ejection = b2Vec2(s * 2.0f, 1.0f);
 
             // TODO : Zone de collision adapt?e
             bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
@@ -495,7 +500,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
             Damage damage;
             damage.amount = 1.f;
 
+            damage.hasEjection = true;
 
+            damage.ejection = b2Vec2(s * 2.0f, 1.0f);
 
             // TODO : Zone de collision adapt?e
             bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
@@ -509,9 +516,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             Damage damage;
             damage.amount = 1.f;
-            /*damage.hasEjection = true;
+            damage.hasEjection = true;
 
-            damage.ejection = b2Vec2(s * 5.0f, 1.0f); */
+            damage.ejection = b2Vec2(s * 4.0f, 1.0f);
 
 
 
@@ -555,6 +562,9 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
             Damage damage;
             damage.amount = 5.f;
 
+            damage.hasEjection = true;
+
+            damage.ejection = b2Vec2(s * 4.0f, 5.0f);
 
             // TODO : Verrouillage pour la victime
 
@@ -619,7 +629,13 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
         {
             PlaySFXAttack(SFX_WHOOSH);
             position -= b2Vec2(0.f, 0.2f);
+            damage.hasEjection = true;
+
+            damage.ejection = b2Vec2(s * 8.0f, 5.f);
+
             bool hit = AttackBox(damage, filter, position, 1.2f, 1.8f, 0.f);
+
+            
         }
 
     }
