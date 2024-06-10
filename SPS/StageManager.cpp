@@ -28,7 +28,7 @@ StageManager::StageManager(
     m_players(), m_paused(false),
     m_pauseMenu(nullptr), m_stageConfig(stageConfig),
     m_delayStage(0.f), m_playerStats(), m_delayPotion(Random::RangeF(1.f, 30.f)),m_MaxDelayPotion(-1),
-    m_delayBomb(Random::RangeF(1,  30.f)), m_MaxDelayBomb(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
+    m_delayBomb(Random::RangeF(1,  30.f)), m_MaxDelayBomb(-1) // TODO : ajouter un membre pour le dÃ©lai de la potion (init -1)
 {
     Scene *scene = GetScene();
     AssetManager *assets = scene->GetAssetManager();
@@ -46,7 +46,7 @@ StageManager::StageManager(
         InitPlatformD();
     }
 
-    // Crée la caméra
+    // CrÃ©e la camÃ©ra
     SetMainCamera(new MainCamera(scene));
 
 
@@ -75,7 +75,7 @@ StageManager::StageManager(
     }
     m_playerCount = playerID;
 
-    // Crée les joueurs
+    // CrÃ©e les joueurs
     for (int i = 0; i < m_playerCount; i++)
     {
         PlayerConfig *config = &m_configs[i];
@@ -99,7 +99,7 @@ StageManager::StageManager(
         m_players.push_back(player);
     }
 
-    // Crée l'interface utilisateur
+    // CrÃ©e l'interface utilisateur
     m_stageHUD = new UIStageHUD(scene);
 
     // TODO : Initialiser les potions en fonction du m_stageConfig
@@ -140,6 +140,8 @@ void StageManager::OnSceneUpdate()
     m_delayPotion -= scene->GetDelta();
    // printf("mdelaypotion : %f \n", m_delayPotion);
      // mouvement de la platform
+  //  printf("mdelayBombde : %f \n", m_delayBomb);
+
 
     
 
@@ -186,7 +188,7 @@ void StageManager::OnSceneFixedUpdate()
         AddPotion();
 
     }
-    // TODO : mettre a jour le délai + ajout si délai potion et bombe
+    // TODO : mettre a jour le dÃ©lai + ajout si dÃ©lai potion et bombe
     //printf("delayBomb : %f et maxdealayBomb %f\n", m_delayBomb, m_MaxDelayBomb);
     
    if (m_delayBomb <= 0 && m_MaxDelayBomb != -1)
