@@ -21,7 +21,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     m_ejection(b2Vec2_zero), m_hVelocity(0.f),
     m_jumpImpulse(14.f), m_ai(nullptr),
     m_attackType(AttackType::NONE),
-    m_delayAttack(-1.f), m_delaySmash(-1.f), m_delayEarlyJump(-1.f),
+    m_delayAttack(-1.f), m_delaySmash(-1.f),  m_delayEarlyJump(-1.f), //m_delaySpecial(-1.f),
     m_delayLock(-1.f), m_delayLockAttack(-1.f),
     m_autoVelocity(0.f), m_hasAutoVelocity(false), m_externalVelocity(b2Vec2_zero),
     m_isGrounded(true), m_wasGrounded(true), m_inContact(false),
@@ -53,6 +53,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     AddFixedUpdateDelay(&m_delayLockRoll);
     AddFixedUpdateDelay(&m_delayRoll);
     AddFixedUpdateDelay(&m_delaySmash);
+    //AddFixedUpdateDelay(&m_delaySpecial);
 
     if (m_delayLock >0)
     {
@@ -124,11 +125,18 @@ void Player::Update()
     {
         m_delayRoll = 0.5f;
     }
+    //else  if (input.smashDown)
+    //{
+    //    m_attackType = AttackType::SPECIAL;
+    //    m_delaySpecial = 0.5;
+    //    //input.smashDown = (false);
+    //}
     else  if (input.smashPressed)
     {
         m_attackType = AttackType::SMASH; 
         m_delaySmash = 0.5;
     }
+    
     // TODO : membre m_defend à modifier
 }
 
@@ -271,6 +279,15 @@ void Player::FixedUpdateState()
         return;
     if (GetState() == State::ATTACK_AIR)
         return;
+    if (GetState() == State::SMASH_START)
+        return;
+    if (GetState() == State::SMASH_HOLD)
+        return;
+    if (GetState() == State::SMASH_RELEASE)
+        return;
+    //if (GetState() == State::SPECIAL)
+    //    return;
+
 
     if (m_state == State::LAUNCHED)
     {
@@ -278,7 +295,7 @@ void Player::FixedUpdateState()
         if (velocity.y > -4.f && velocity.Length() > 1.f)
             return;
     }
- 
+    
 
     // TODO : état DEFEND
  
@@ -298,8 +315,17 @@ void Player::FixedUpdateState()
             else if (CanAttack() && m_delaySmash > 0)
             {
                 SetState(State::SMASH_START);
+                if (input.smashDown)
+                {
+                    SetState(State::SMASH_HOLD);
+                }
 
             }
+           /* else if (CanAttack() && m_delaySpecial > 0)
+            {
+                SetState(State::SPECIAL);
+
+            }*/
             else 
             {
                 if (velocity.x != 0)
@@ -312,6 +338,7 @@ void Player::FixedUpdateState()
                     SetState(State::ROLLING);
                 else
                 {
+                    if (IsAttacking() == false)
                     SetState(State::IDLE);
                 }
             }
@@ -420,11 +447,11 @@ void Player::FixedUpdatePhysics()
     }
 
     // TODO : décommenter pour le saut long (on joue directement sur la gravité
-    //if ((m_isGrounded == false)) 
-    //{
-    //    float scale = input.jumpDown ? 0.5f : 1.0f;
-    //    body->SetGravityScale(scale);
-    //}
+    if ((m_isGrounded == false)) 
+    {
+        float scale = input.jumpDown ? 0.5f : 1.0f;
+        body->SetGravityScale(scale);
+    }
 
     // TODO : Mise a jour de la vitesse
     m_hVelocity = 0.f;

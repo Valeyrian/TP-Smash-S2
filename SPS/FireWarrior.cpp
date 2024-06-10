@@ -118,6 +118,13 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim = m_animator.CreateAnimation("SmashRelease", spriteGroup);
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
+
+    /*spriteGroup = spriteSheet->GetGroup("Special");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Special", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);*/
+
     // TODO : Anmisation "Defend"
 
     // TODO : Anmisation "TakeHit"
@@ -129,7 +136,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     m_accAir = 30.f;
     m_accGround = 60.f;
     m_maxSpeed = 10; // TODO : adapter
-
+    m_countSmash = 1;
     // Render
     m_renderShift.Set(0.7f, 0.f);
 }
@@ -189,13 +196,14 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     {
     case State::IDLE:           m_animator.PlayAnimation("Idle");  printf("Is Idle\n");                     break;
     case State::RUN:            m_animator.PlayAnimation("Run");   printf("Is Running\n");                  break;
-    case State::ATTACK:         m_animator.PlayAnimation("Attack"); printf("Is Attacking\n");               break;
+    case State::ATTACK:         m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");              break;
     case State::JUMP:           m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");              break;
     case State::ROLLING:        m_animator.PlayAnimation("Roll");   printf("Is  Rolling\n");                break;
     case State::ATTACK_AIR:     m_animator.PlayAnimation("AttackAir");   printf("Is  Attacking in Air\n");  break;
     case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
     case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
-    case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing\n");           break;
+    case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
+    //case State::SPECIAL:        m_animator.PlayAnimation("Special"); printf("smashiiing pressed\n");        break;
 
     // TODO : Gérer d'autres animations
     default:
@@ -265,15 +273,14 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
     }
     else if (name == "SmashStart")
     {
-        if (GetPlayerInput().attackDown)
+        if (GetPlayerInput().smashDown)
         {
-            m_animator.PlayAnimation("Attack2");
+            m_animator.PlayAnimation("SmashHold");
 
         }
         else
         {
-            SetState(Player::State::IDLE);
-            LockAttack(0.1f);
+            m_animator.PlayAnimation("SmashHold");
         }
     }
 
@@ -281,16 +288,31 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
     {
         if (GetPlayerInput().smashDown)
         {
-            m_animator.PlayAnimation("Smashrelease");
+            m_animator.PlayAnimation("SmashHold");
+            m_countSmash+= 0.05f;
 
         }
         else
         {
-            SetState(Player::State::IDLE);
-            LockAttack(0.1f);
+            m_animator.PlayAnimation("SmashRelease");
         }
     }
-    
+    else if (name == "SmashRelease")
+    {
+
+        SetState(Player::State::IDLE); 
+        LockAttack(0.25f); 
+        m_countSmash = 1;
+
+    }
+    /*else if (name == "Special")
+    {
+
+        SetState(Player::State::IDLE);
+        LockAttack(0.25f);
+
+    }*/
+
 }
 
 void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int frameID)
@@ -449,6 +471,74 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
                 PlaySFXHit(hit, SFX_HIT);
             }
+        }
+        else if (name == "SmashRelease" )
+        {
+            b2Vec2 position = GetPosition();
+            position += b2Vec2(s * 2.2f, 1.4f);
+
+            Damage damage;
+            damage.amount = 1.f * m_countSmash;
+
+            // TODO : Verrouillage pour la victime
+
+            damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
+
+            if (frameID == 1)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+                position -= b2Vec2(s * 0.f, 0.2f);
+
+
+                bool hit = AttackBox(damage, filter, position, 0.8f, 0.5f, 0.f);
             }
+            if (frameID == 2)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+                position -= b2Vec2(s * 0.f, 0.15f);
+
+
+                bool hit = AttackBox(damage, filter, position, 1.f, 0.8f, 0.f);
+            }if (frameID == 3)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+
+                bool hit = AttackBox(damage, filter, position, 1.1f, 0.8f, 0.f);
+            }if (frameID == 4)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+
+                bool hit = AttackBox(damage, filter, position, 1.0f, 0.8f, 0.f);
+            }if (frameID == 5)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+                position -= b2Vec2(0.f, 0.15f);
+
+                bool hit = AttackBox(damage, filter, position, 1.0f, 0.8f, 0.f);
+            }if (frameID == 6)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+
+                bool hit = AttackBox(damage, filter, position, 1.0f, 0.65f, 0.f);
+            }if (frameID == 7)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+                position += b2Vec2(s * 0.1f,0.f);
+
+                bool hit = AttackBox(damage, filter, position, 1.f, 0.8f, 0.f);
+            }if (frameID == 8)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+
+                bool hit = AttackBox(damage, filter, position, 1.0f, 0.8f, 0.f);
+            }if (frameID == 9)
+            {
+                PlaySFXAttack(SFX_WHOOSH);
+                position -= b2Vec2(0.f, 0.15f);
+
+
+                bool hit = AttackBox(damage, filter, position, 1.0f, 0.5f, 0.f);
+            }
+        }
     // TODO : D'autres évènement sur frames ?
 }

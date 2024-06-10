@@ -100,6 +100,24 @@ LightningWarrior::LightningWarrior(Scene *scene, const PlayerConfig *config, Pla
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
+    // Smash
+    spriteGroup = spriteSheet->GetGroup("SmashStart");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("SmashStart", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
+
+    spriteGroup = spriteSheet->GetGroup("SmashHold");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("SmashHold", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
+
+    spriteGroup = spriteSheet->GetGroup("SmashRelease");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("SmashRelease", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
 
      m_animator.PlayAnimation("Idle");
 
@@ -166,12 +184,15 @@ void LightningWarrior::OnStateChanged(Player::State state, Player::State prevSta
 
     switch (state)
     {
-    case State::IDLE:        m_animator.PlayAnimation("Idle");  printf("Is Idle\n");                    break;
-    case State::RUN:         m_animator.PlayAnimation("Run");   printf("Is Running\n");                 break;
-    case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");             break;
-    case State::JUMP:        m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");             break;
-    case State::ROLLING:     m_animator.PlayAnimation("Slide");   printf("Is  Sliding (=rolling)\n");   break;
-    case State::ATTACK_AIR:  m_animator.PlayAnimation("AttackAir");   printf("Is  Attacking in Air\n"); break;
+    case State::IDLE:        m_animator.PlayAnimation("Idle");  printf("Is Idle\n");                        break;
+    case State::RUN:         m_animator.PlayAnimation("Run");   printf("Is Running\n");                     break;
+    case State::ATTACK:      m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");                 break;
+    case State::JUMP:        m_animator.PlayAnimation("JumpUp");   printf("Is  Jumping\n");                 break;
+    case State::ROLLING:     m_animator.PlayAnimation("Slide");   printf("Is  Sliding (=rolling)\n");       break;
+    case State::ATTACK_AIR:  m_animator.PlayAnimation("AttackAir");   printf("Is  Attacking in Air\n");     break;
+    case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
+    case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
+    case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
     default:
         break;
     }
@@ -250,6 +271,40 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
 
         SetState(Player::State::IDLE);
         LockAttack(0.1f);
+
+    }
+    else if (name == "SmashStart")
+    {
+        if (GetPlayerInput().smashDown)
+        {
+            m_animator.PlayAnimation("SmashHold");
+
+        }
+        else
+        {
+            m_animator.PlayAnimation("SmashHold");
+        }
+    }
+
+    else if (name == "SmashHold")
+    {
+        if (GetPlayerInput().smashDown)
+        {
+            m_animator.PlayAnimation("SmashHold");
+            m_countSmash += 0.05f;
+
+        }
+        else
+        {
+            m_animator.PlayAnimation("SmashRelease");
+        }
+    }
+    else if (name == "SmashRelease")
+    {
+
+        SetState(Player::State::IDLE);
+        LockAttack(0.25f);
+        m_countSmash = 1;
 
     }
 }
@@ -508,8 +563,65 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             PlaySFXHit(hit, SFX_HIT);
         }
-        }
     }
+    else if (name == "SmashRelease")
+    {
+        b2Vec2 position = GetPosition();
+        position += b2Vec2(s * 0.2f, 2.f);
+
+        Damage damage;
+        damage.amount = 1.5f;
+
+        // TODO : Verrouillage pour la victime
+
+        damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
+
+        if (frameID == 1)
+        {
+           
+        }
+        if (frameID == 2)
+        {
+            
+        }if (frameID == 3)
+        {
+            
+        }if (frameID == 4)
+        {
+            
+        }if (frameID == 5)
+        {
+            
+        }if (frameID == 6)
+        {
+            
+        }if (frameID == 7)
+        {
+            
+        }if (frameID == 8)
+        {
+            
+        }if (frameID == 9)
+        {
+            
+        }
+        if (frameID == 10)
+        {
+            PlaySFXAttack(SFX_WHOOSH);
+            position -= b2Vec2(0.f, 0.15f);
+
+
+            bool hit = AttackBox(damage, filter, position, 1.2f, 1.8f, 0.f);
+        }
+        if (frameID == 11)
+        {
+            PlaySFXAttack(SFX_WHOOSH);
+            position -= b2Vec2(0.f, 0.2f);
+            bool hit = AttackBox(damage, filter, position, 1.2f, 1.8f, 0.f);
+        }
+
+    }
+}
 
 
 
