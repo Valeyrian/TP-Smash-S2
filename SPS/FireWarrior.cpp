@@ -133,6 +133,12 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetFPS(attackFPS);*/
 
     // TODO : Anmisation "Defend"
+    spriteGroup = spriteSheet->GetGroup("Defend");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Defend", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(15.f);
+
 
     // TODO : Anmisation "TakeHit"
 
@@ -233,6 +239,8 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
     case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
     case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
+    case State::DEFEND:         m_animator.PlayAnimation("Defend"); printf("Defend\n");                     break;
+
     //case State::FAR_ATTACK:  m_animator.PlayAnimation("CastSpell");   printf("Is  fireBalling\n");   break;
     //case State::LAUNCHED:    m_animator.PlayAnimation("Roll");   printf("Is  launched\n");   break;
 
@@ -247,6 +255,9 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
 
 void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
 {
+    Player::OnAnimationEnd(which, name);
+
+
     if (m_scene->GetUpdateMode() == Scene::UpdateMode::STEP_BY_STEP && GetPlayerID() == 0)
     {
         std::cout << "[OnAnimationEnd] "
@@ -351,7 +362,19 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         LockAttack(0.25f);
 
     }*/
-
+    else if (name == "Defend")
+    {
+        if (m_delayDefend > 0)
+        {
+            m_animator.PlayAnimation("Defend");
+            //m_shieldAnimator.PlayAnimation("Shield");
+        }
+        SetState(Player::State::IDLE);
+        LockAttack(0.25f);
+        m_delayLock = 0.25f;
+        if (m_delayDefend <= 0)
+            m_delayLockDefend = 5.f;
+    }
 
 }
 

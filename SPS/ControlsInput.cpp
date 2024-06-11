@@ -117,6 +117,7 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
 
         case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
             players[playerID].defendDown = false;
+            players[playerID].defendPressed = false;
             break;
 
         case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
@@ -184,6 +185,7 @@ void ControlsInput::OnEventProcess(SDL_Event evt)
         case SDL_SCANCODE_Z:
             // Défence
             players[0].defendDown = true;
+            players[0].defendPressed = true;
             break;
 
         case SDL_SCANCODE_C:
@@ -324,7 +326,7 @@ void PlayerInput::SetTriggerLeft(Sint16 value)
 {
     if (value > m_deadZone)
     {
-        if (defendDown == false) smashPressed = true;
+        if (defendDown == false) defendPressed = true;
             defendDown = true;
     }
     else

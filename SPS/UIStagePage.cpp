@@ -66,14 +66,14 @@ UIStagePage::UIStagePage(
     // Player text
 
     font = assets->GetFont(FONT_LARGE);
-    m_playerText = new UIText(scene, "Fighter selection", font, Colors::Black);
+    m_playerText = new UIText(scene, "Fighter selection", font, Colors::DarkBlue);
     m_playerText->SetAnchor(Anchor::WEST);
 
     //--------------------------------------------------------------------------
     // Options text
 
     font = assets->GetFont(FONT_LARGE);
-    m_optionText = new UIText(scene, "Options", font, Colors::Black);
+    m_optionText = new UIText(scene, "Options", font, Colors::DarkBlue);
     m_optionText->SetAnchor(Anchor::WEST);
 
     //--------------------------------------------------------------------------

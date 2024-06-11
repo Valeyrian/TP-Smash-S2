@@ -29,7 +29,7 @@ public:
     virtual void Update();
     virtual void OnDelete();
 
-    bool IsEnabled();
+    bool IsEnabled() const;
     int GetLayer() const;
     void SetLayer(int layer);
     void SetVisible(bool isVisible, bool applyToChildren = false);
@@ -52,10 +52,10 @@ public:
 
     void AddFixedUpdateDelay(float *delay);
     void RemoveFixedUpdateDelay(float *delay);
-
-protected:
-    Scene *m_scene;
+    Scene* m_scene;
     std::string m_name;
+protected:
+    
 
 private:
     friend class ObjectManager;
@@ -111,7 +111,7 @@ constexpr enum GameObject::Flag operator ~(
     return (enum GameObject::Flag)(~uint32_t(selfValue));
 }
 
-inline bool GameObject::IsEnabled()
+inline bool GameObject::IsEnabled() const
 {
     return m_enabled;
 }
