@@ -294,7 +294,7 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
     
     if (name == "Roll")
     {
-        m_delayLockRoll = 2;
+        m_delayLockRoll = 1;
         SetState(Player::State::IDLE);
 
     }
@@ -475,10 +475,15 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
             printf("ici \n");
             switch (frameID)
             {
-            case 0: m_autoVelocity = s *  2.0f; break;
+            case 0: m_autoVelocity = s *  4.0f; break;
+            case 1: m_autoVelocity = s * 4.0f; break;
             case 2: m_autoVelocity = s * 6.0f; break;
-            case 4: m_autoVelocity = s * 4.0f; break;
-            case 6: m_autoVelocity = s * 2.0f; break;
+            case 3: m_autoVelocity = s * 8.0f; break;
+            case 4: m_autoVelocity = s * 8.0f; break;
+            case 5: m_autoVelocity = s * 6.0f; break;
+            case 6: m_autoVelocity = s * 4.0f; break;
+            case 7: m_autoVelocity = s * 4.0f; break;
+
             default:
                 break;
             }
@@ -486,7 +491,6 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
         }
         else if (name == "AttackAir")
         {
-
 
             if (frameID == 1)
             {
@@ -506,7 +510,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
                 damage.ejection = b2Vec2(s * 3.0f, 5.f);
                 // TODO : Verrouillage pour la victime
 
-                damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
+                damage.lockAttackTime = 5.5f * ATTACK_FRAME_TIME;
 
                 // TODO : adapter la zone d'attaque
                 bool hit = AttackCircle(damage, filter, position, 1.f);

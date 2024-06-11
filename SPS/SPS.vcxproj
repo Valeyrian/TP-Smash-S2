@@ -136,6 +136,7 @@
     <ClCompile Include="ApplicationInput.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="BaseSceneManager.cpp" />
+    <ClCompile Include="JumpPotion.cpp" />
     <ClCompile Include="LightningWarrior.cpp" />
     <ClCompile Include="PlatformD.cpp" />
     <ClCompile Include="platformG.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="ApplicationInput.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="BaseSceneManager.h" />
+    <ClInclude Include="JumpPotion.h" />
     <ClInclude Include="LightningWarrior.h" />
     <ClInclude Include="platformG.h" />
     <ClInclude Include="platformD.h" />

@@ -36,16 +36,24 @@ public:
 
     virtual void OnStateChanged(Player::State state, Player::State prevState);
     void Heal(float amount); // TODO : decommenter
+    void GetDownJumpCount(int ckeck);
+
 
     const PlayerConfig *GetConfig() const;
     Player::State GetState() const;
     float GetEjectionScore() const;
     const PlayerStats *GetStats() const;
 
+
     void AddExternalVelocity(b2Vec2 externalVelocity);
 
     void PlaySFXAttack(int soundID);
     void PlaySFXHit(bool hit, int soundID);
+
+    
+
+    float m_countJump;
+
 
 protected:
     const PlayerConfig *m_config;
@@ -73,6 +81,8 @@ protected:
     float m_delayLockRoll;
     float m_delayLockFarAttack;
     float m_askedFarAttack;
+    float m_delayJumpPotionleft;
+    float m_hasToucjedFloor;
  
 
 
@@ -102,7 +112,6 @@ protected:
 
     float m_jumpImpulse;
     float m_countSmash;
-    float m_countJump;
     int m_delayAnimation;
     int m_delayAnimationLight;
 
@@ -156,6 +165,7 @@ inline Player::State Player::GetState() const
 {
     return m_state;
 }
+
 
 inline float Player::GetEjectionScore() const
 {

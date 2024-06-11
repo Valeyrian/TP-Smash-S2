@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     InitInputConfig(inputManager);
     ApplicationInput *appInput = ApplicationInput::GetFromManager(inputManager);
 
-    inputManager->SetKeyboardIsPlayer(false); //clavier
+    inputManager->SetKeyboardIsPlayer(true); //clavier
 
     // Config du jeu par défaut
 

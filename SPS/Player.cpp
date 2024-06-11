@@ -26,7 +26,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     m_autoVelocity(0.f), m_hasAutoVelocity(false), m_externalVelocity(b2Vec2_zero),
     m_isGrounded(true), m_wasGrounded(true), m_inContact(false),
     m_bodyFixture(nullptr), m_feetFixture(nullptr), m_lastDamager(nullptr),
-    m_renderShift(b2Vec2_zero), m_delayRoll(), m_delayLockRoll(1)
+    m_renderShift(b2Vec2_zero), m_delayRoll(), m_delayLockRoll(1), m_delayJumpPotionleft(-1), m_hasToucjedFloor(-1)
 {
     SetName("Player");
     SetStartPosition(0.f, 3.f);
@@ -56,6 +56,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     //AddFixedUpdateDelay(&m_delaySpecial);
     AddFixedUpdateDelay(&m_delayLockFarAttack);
     AddFixedUpdateDelay(&m_askedFarAttack);
+    AddFixedUpdateDelay(&m_delayJumpPotionleft);
     
 
     if (m_delayLock >0)
@@ -145,6 +146,10 @@ void Player::Update()
         m_askedFarAttack = 0.5;
         printf("in here c down\n");
     }
+
+    GetDownJumpCount(0);
+    printf("time left %f \n", m_delayJumpPotionleft);
+
 
     // TODO : membre m_defend à modifier
 }
@@ -331,6 +336,7 @@ void Player::FixedUpdateState()
     if (m_isGrounded)
     {
         m_countJump = 0;
+        m_hasToucjedFloor =0;
        // printf("delay roll %f et delay lock %f\n", m_delayRoll, m_delayLockRoll);
         // TODO : modifier
         if (IsAttacking() == false)
@@ -357,18 +363,14 @@ void Player::FixedUpdateState()
             else 
             {
                 if (velocity.x != 0)
-                {
-                    SetState(State::RUN);
-                }
-                else if (m_delayEarlyJump)
-                    SetState(State::JUMP);
+                    SetState(State::RUN);            
                 else if (m_delayRoll >0 && m_delayLockRoll <0 )
-                    SetState(State::ROLLING);   
+                    SetState(State::ROLLING);               
+                else if (m_delayEarlyJump)
+                     SetState(State::JUMP);
                 else
-                {
+                     SetState(State::IDLE); 
 
-                    SetState(State::IDLE);      
-                }
             }
         }
        
@@ -812,4 +814,21 @@ void Player::PlaySFXHit(bool hit, int soundID)
 
     assets->SetSoundVolume(soundID, volume);
     assets->PlaySoundFX(soundID);
+}
+
+void Player::GetDownJumpCount(int check)
+{
+    
+    if (check == 1) {
+        m_delayJumpPotionleft = 10 ;
+        check == 0;
+    }
+    if ((m_delayJumpPotionleft > 1 && m_countJump == 2))
+    {
+      if (m_hasToucjedFloor == 0)
+      {
+          m_countJump--;
+          m_hasToucjedFloor++;
+      }
+    }
 }

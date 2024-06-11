@@ -44,11 +44,15 @@ public:
 
     static StageManager *GetFromScene(Scene *scene);
 
+
+
+
 private:
     void InitRockyPass();
     void InitPlatformG();
     void InitPlatformD();
     void AddPotion();
+    void AddJumpPotion();
     void AddBomb();
 
 
@@ -65,10 +69,13 @@ private:
 
     float m_delayStage;
     float m_delayPotion; // ADD
+    float m_delayJumpPotion; // ADD
     float m_MaxDelayPotion;
     
     float m_delayBomb; // ADD
     float m_MaxDelayBomb;
+   
+
 };
 
 inline Player *StageManager::GetPlayer(int playerID)

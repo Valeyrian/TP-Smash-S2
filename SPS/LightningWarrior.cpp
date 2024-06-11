@@ -264,7 +264,7 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
 
     if (name == "Slide")
     {
-        m_delayLockRoll = 2;
+        m_delayLockRoll = 1;
         SetState(Player::State::IDLE);
 
     }
@@ -540,11 +540,14 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
         printf("ici \n");
         switch (frameID)
         {
-        case 0: m_autoVelocity = s * 2.0f; break;
-        case 1: m_autoVelocity = s * 3.0f; break;
+        case 0: m_autoVelocity = s * 4.0f; break;
+        case 1: m_autoVelocity = s * 4.0f; break;
         case 2: m_autoVelocity = s * 6.0f; break;
-        case 4: m_autoVelocity = s * 4.0f; break;
-        case 6: m_autoVelocity = s * 2.0f; break;
+        case 3: m_autoVelocity = s * 8.0f; break;
+        case 4: m_autoVelocity = s * 8.0f; break;
+        case 5: m_autoVelocity = s * 6.0f; break;
+        case 6: m_autoVelocity = s * 4.0f; break;
+        case 7: m_autoVelocity = s * 4.0f; break;
         default:
             break;
         }

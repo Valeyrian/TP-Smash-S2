@@ -155,6 +155,9 @@
     <ClCompile Include="PlatformD.cpp">
       <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="JumpPotion.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationInput.h">
@@ -255,6 +258,9 @@
     </ClInclude>
     <ClInclude Include="platformD.h">
       <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="JumpPotion.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

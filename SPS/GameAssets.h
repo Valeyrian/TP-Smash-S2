@@ -57,6 +57,7 @@ enum SheetID : int
     SHEET_UI,
     SHEET_ITEM_POTION,
     SHEET_ITEM_BOMB,
+    SHEET_ITEM_JUMPPOTION,
     
 
 

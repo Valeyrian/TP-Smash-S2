@@ -50,6 +50,9 @@ void InitAssets(AssetManager *assets)
     assets->AddSpriteSheet(
         SHEET_ITEM_BOMB,
         "../Assets/Atlas/bomb.json");
+    assets->AddSpriteSheet(
+        SHEET_ITEM_JUMPPOTION,
+        "../Assets/Atlas/JumpPotion.json");
 
     // Effects
     assets->AddSpriteSheet(

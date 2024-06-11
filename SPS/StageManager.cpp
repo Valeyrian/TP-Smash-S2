@@ -18,6 +18,8 @@
 
 #include "Potion.h"
 #include "Bomb.h"
+#include "JumpPotion.h"
+
 
 
 StageManager::StageManager(
@@ -28,7 +30,8 @@ StageManager::StageManager(
     m_players(), m_paused(false),
     m_pauseMenu(nullptr), m_stageConfig(stageConfig),
     m_delayStage(0.f), m_playerStats(), m_delayPotion(Random::RangeF(1.f, 30.f)),m_MaxDelayPotion(-1),
-    m_delayBomb(Random::RangeF(1,  30.f)), m_MaxDelayBomb(-1) // TODO : ajouter un membre pour le délai de la potion (init -1)
+    m_delayBomb(Random::RangeF(1,  30.f)), m_MaxDelayBomb(-1),m_delayJumpPotion(Random::RangeF(1.f, 10.f))//a modif pourjumpPotion
+    // TODO : ajouter un membre pour le délai de la potion (init -1)
 {
     Scene *scene = GetScene();
     AssetManager *assets = scene->GetAssetManager();
@@ -138,7 +141,9 @@ void StageManager::OnSceneUpdate()
     m_delayStage -= scene->GetDelta();
     m_delayBomb -= scene->GetDelta(); 
     m_delayPotion -= scene->GetDelta();
-   // printf("mdelaypotion : %f \n", m_delayPotion);
+    m_delayJumpPotion -= scene->GetDelta();
+
+  //  printf("mdelayJumpPotion : %f \n", m_delayJumpPotion);
      // mouvement de la platform
   //  printf("mdelayBombde : %f \n", m_delayBomb);
 
@@ -196,6 +201,10 @@ void StageManager::OnSceneFixedUpdate()
         AddBomb();
 
     }
+   if (m_delayJumpPotion <= 0 && m_MaxDelayPotion != -1)
+   {
+       AddJumpPotion();
+   }
 
 }
 
@@ -230,7 +239,22 @@ void StageManager::AddPotion()
         m_delayPotion = Random::RangeF(1, m_MaxDelayPotion);
     else
         m_delayPotion = -1;
-    printf("add potion \n");
+    printf("add Heal potion \n");
+}
+
+void StageManager::AddJumpPotion()
+{
+    Scene* scene = GetScene();
+    JumpPotion * potion = new JumpPotion(scene); 
+    b2Vec2 position(Random::RangeF(-7.f, 7.f), 10.f);
+    // b2Vec2 position(10.f, 10.f);
+    potion->SetStartPosition(position);
+
+    if (m_MaxDelayPotion >= 0)
+        m_delayJumpPotion = Random::RangeF(1, 15); //m_MaxDelayPotion * 4.f );
+    else
+        m_delayPotion = -1;
+    printf("add Jump potion \n");
 }
 
 void StageManager::AddBomb()
@@ -246,6 +270,21 @@ void StageManager::AddBomb()
         m_delayBomb = -1;
     printf("add bomb \n");
 }
+
+//void StageManager::HasJumpPotion(Damager* damager)
+//{
+//    Player* player = dynamic_cast<Player*>(damager);
+//    if (player)
+//    {
+//        m_delayJumpPotionLeft = 10;
+//        float playerJumpCount = player->GetJumpCount();
+//
+//        if (m_delayJumpPotionLeft > 0 && playerJumpCount == 2)
+//        {
+//            
+//        }
+//    }
+//}
 
 void StageManager::InitRockyPass()
 {
