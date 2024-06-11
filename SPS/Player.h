@@ -83,7 +83,8 @@ protected:
     float m_askedFarAttack;
     float m_delayJumpPotionleft;
     float m_hasToucjedFloor;
- 
+    float m_delayShield;
+
 
 
     float m_ejectionScore;

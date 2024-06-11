@@ -57,6 +57,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     AddFixedUpdateDelay(&m_delayLockFarAttack);
     AddFixedUpdateDelay(&m_askedFarAttack);
     AddFixedUpdateDelay(&m_delayJumpPotionleft);
+
     
 
     if (m_delayLock >0)
@@ -146,9 +147,13 @@ void Player::Update()
         m_askedFarAttack = 0.5;
         printf("in here c down\n");
     }
+    else if (input.defendPressed)
+    {
+        m_delayShield = 1;
+    }
 
     GetDownJumpCount(0);
-    printf("time left %f \n", m_delayJumpPotionleft);
+    //printf("time left %f \n", m_delayJumpPotionleft);
 
 
     // TODO : membre m_defend à modifier
