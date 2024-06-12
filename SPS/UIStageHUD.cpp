@@ -20,7 +20,7 @@ UIStageHUD::UIStageHUD(Scene *scene) :
 
     StageManager *stageManager = StageManager::GetFromScene(m_scene);
     int playerCount = stageManager->GetPlayerCount();
-
+    
     //--------------------------------------------------------------------------
     // Grid layout
 

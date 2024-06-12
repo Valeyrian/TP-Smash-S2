@@ -55,6 +55,7 @@ public:
 
     
 
+    virtual void OnAnimationEnd(Animation* which, const std::string& name) override;
     float m_countJump;
 
 
@@ -86,8 +87,8 @@ protected:
     float m_askedFarAttack;
     float m_delayJumpPotionleft;
     float m_hasToucjedFloor;
- 
-
+    float m_delayDefend;
+    float m_delayLockDefend;
 
     float m_ejectionScore;
     float m_hDirection;

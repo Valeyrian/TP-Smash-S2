@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
     playerConfig.SetTeamID(1);
     playerConfig.playerID = 1;
     playerConfig.skinID = 0;
-    playerConfig.isCPU = false;
+    playerConfig.isCPU = true;
     configs[1] = playerConfig;
 
     playerConfig.type = PlayerConfig::Type::FIRE_WARRIOR;

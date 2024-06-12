@@ -30,6 +30,7 @@ void PlayerAI::FixedUpdate()
     m_input.jumpPressed = false;
     m_input.attackPressed = false;
     m_input.attackDown = false;
+    bool atk = Random::RangeI(0, 1);
 
     if (IsInDanger())
     {
@@ -51,14 +52,18 @@ void PlayerAI::FixedUpdate()
     {
         m_input.axisX = +1.0f;
     }
-
     // Attaque
-    //float targetDist = b2Distance(targetPosition, position);
-    //if (targetDist < 3.0f)
-    //{
-    //    m_input.attackPressed = true;
-    //    m_input.attackDown = true;
-    //}
+    float targetDist = b2Distance(targetPosition, position);
+    if (targetDist < Random::RangeF(0.3, 0.15))
+    {
+        if (atk == 0) {
+            m_input.attackPressed = true;
+            m_input.attackDown = true;
+        }
+        if (atk == 1) {
+            m_input.smashPressed = true;
+        }
+    }
 }
 
 

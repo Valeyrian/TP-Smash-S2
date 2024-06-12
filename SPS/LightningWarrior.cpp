@@ -119,6 +119,12 @@ LightningWarrior::LightningWarrior(Scene *scene, const PlayerConfig *config, Pla
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
+    spriteGroup = spriteSheet->GetGroup("Defend");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Defend", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
+
      m_animator.PlayAnimation("Idle");
 
 
@@ -195,6 +201,8 @@ void LightningWarrior::OnStateChanged(Player::State state, Player::State prevSta
     case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
     case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
     case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
+    case State::DEFEND:  m_animator.PlayAnimation("Defend"); printf("Defend\n");      break;
+
     default:
         break;
     }
@@ -202,6 +210,8 @@ void LightningWarrior::OnStateChanged(Player::State state, Player::State prevSta
 
 void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
 {
+    Player::OnAnimationEnd(which, name);
+
     if (m_scene->GetUpdateMode() == Scene::UpdateMode::STEP_BY_STEP && GetPlayerID() == 0)
     {
         std::cout << "[OnAnimationEnd] "
@@ -296,7 +306,7 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
             m_countSmash += 0.05f;
             m_delayLock = 1;
             m_delayAnimationLight++;
-            if (m_delayAnimationLight % 34 == 2)
+            if (m_delayAnimationLight % 36 == 2)
                 SmashParticleLight();
         }
         else
@@ -313,6 +323,15 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         m_countSmash = 1;
         m_delayLock = 0.5;
         m_delayAnimationLight = 1;
+    }
+    else if (name == "Defend")
+    {
+        if (m_delayDefend > 0)
+        {
+            m_animator.PlayAnimation("Defend");
+        }
+        SetState(Player::State::IDLE);
+        LockAttack(0.25f);
     }
 }
 

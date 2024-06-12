@@ -21,6 +21,7 @@ public:
     bool attackPressed;
     bool attackDown;
     bool defendDown;
+    bool defendPressed;
     bool smashPressed;
     bool smashDown;
     bool specialPressed;

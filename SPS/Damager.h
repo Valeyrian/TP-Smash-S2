@@ -51,7 +51,6 @@ public:
         const Damage &damage, const QueryFilter &filter,
         b2Vec2 center, float hx, float hy, float angleDeg
     );
-
 protected:
     void SetPlayerID(int playerID);
 
