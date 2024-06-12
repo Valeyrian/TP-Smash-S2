@@ -30,6 +30,10 @@ public:
     // Game colors
     static const Color Gold;
     static const Color DarkBlue;
+    static const Color Orange;
+    static const Color Brown;
+    static const Color Purple;
+
 };
 
 enum SoundID : int

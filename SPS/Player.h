@@ -46,9 +46,12 @@ public:
 
 
     void AddExternalVelocity(b2Vec2 externalVelocity);
+    
+    void AddDamageGive(float DamageAmount);
 
     void PlaySFXAttack(int soundID);
     void PlaySFXHit(bool hit, int soundID);
+    Color getDamageColor();
 
     
 
@@ -142,6 +145,7 @@ protected:
     void SmashParticle();
     void SmashParticleLight();
 
+
 private:
     State m_state;
 };
@@ -181,4 +185,27 @@ inline void Player::AddExternalVelocity(b2Vec2 externalVelocity)
 {
     if (m_isGrounded)
         m_externalVelocity += externalVelocity;
+}
+    
+inline void Player::AddDamageGive(float DamageAmount) 
+{
+    m_stats->damageGiven += DamageAmount;
+}
+
+inline Color Player::getDamageColor()
+{
+    if (m_ejectionScore >= 0 && m_ejectionScore <= 15)
+        return Colors::White;
+    else if (m_ejectionScore > 15 && m_ejectionScore <= 30)
+        return Colors::Yellow;
+    else if (m_ejectionScore > 30 && m_ejectionScore <= 45)
+        return Colors::Orange;
+    else if (m_ejectionScore > 45 && m_ejectionScore <= 70)
+        return Colors::Magenta;
+    else if (m_ejectionScore > 70 && m_ejectionScore <= 85)
+        return Colors::Purple;
+    else if (m_ejectionScore > 85 && m_ejectionScore <= 99)
+        return Colors::Brown;
+    else if (m_ejectionScore > 99)
+        return Colors::Red;
 }

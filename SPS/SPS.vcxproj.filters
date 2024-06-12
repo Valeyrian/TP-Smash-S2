@@ -128,7 +128,7 @@
     <ClCompile Include="Damager.cpp">
       <Filter>Fichiers sources\GameObject\GameBody</Filter>
     </ClCompile>
-    <ClCompile Include="Platform.cpp">
+    <ClCompile Include="PlatformD.cpp">
       <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
     </ClCompile>
     <ClCompile Include="BaseSceneManager.cpp">
@@ -149,14 +149,14 @@
     <ClCompile Include="Bomb.cpp">
       <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
     </ClCompile>
-    <ClCompile Include="platformG.cpp">
-      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="PlatformD.cpp">
-      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="JumpPotion.cpp">
       <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformG.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="UIEndMenu.cpp">
+      <Filter>Fichiers sources\GameObject\UI\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,7 +232,7 @@
     <ClInclude Include="Damager.h">
       <Filter>Fichiers sources\GameObject\GameBody</Filter>
     </ClInclude>
-    <ClInclude Include="Platform.h">
+    <ClInclude Include="PlatformD.h">
       <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
     </ClInclude>
     <ClInclude Include="BaseSceneManager.h">
@@ -253,14 +253,17 @@
     <ClInclude Include="Bomb.h">
       <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
     </ClInclude>
-    <ClInclude Include="platformG.h">
-      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="platformD.h">
-      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="JumpPotion.h">
       <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
     </ClInclude>
+    <ClInclude Include="PlatformG.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEndMenu.h">
+      <Filter>Fichiers sources\GameObject\UI\Stage</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MoovingPlatformG.d" />
   </ItemGroup>
 </Project>

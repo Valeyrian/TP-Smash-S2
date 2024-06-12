@@ -24,7 +24,7 @@ UIStageHUD::UIStageHUD(Scene *scene) :
     //--------------------------------------------------------------------------
     // Grid layout
 
-    UIGridLayout *hLayout = new UIGridLayout(m_scene, 1, playerCount);
+    hLayout = new UIGridLayout(m_scene, 1, playerCount);
     hLayout->SetParent(this);
     hLayout->SetAnchor(Anchor::SOUTH);
     hLayout->SetPadding(10.f);
@@ -51,6 +51,8 @@ UIStageHUD::UIStageHUD(Scene *scene) :
         hLayout->AddObject(fillImage, 0, i);
 
         // Compteur des dégats
+        
+
         font = assets->GetFont(FONT_DAMAGE);
         UIText *text = new UIText(scene, "0%", font, Colors::White);
         text->SetAnchor(Anchor::CENTER);
@@ -58,6 +60,7 @@ UIStageHUD::UIStageHUD(Scene *scene) :
         hLayout->AddObject(text, 0, i);
 
         m_damageTexts.push_back(text);
+
 
 
         // Compteur de fall
@@ -72,7 +75,7 @@ UIStageHUD::UIStageHUD(Scene *scene) :
 
     // Compteur du temps restant
     font = assets->GetFont(FONT_TIME);
-    m_timeText = new UIText(scene, "0:00", font, Colors::White);
+    m_timeText = new UIText(scene, "0:00:00", font, Colors::White);
     m_timeText->SetParent(this);
     m_timeText->SetAnchor(Anchor::NORTH_EAST);
     m_timeText->GetLocalRect().offsetMax.Set(-10.f, -10.f);
@@ -87,18 +90,34 @@ void UIStageHUD::Update()
 
     int minutes = (int)stageManager->GetRemainingTime() / 60;
     int seconds = (int)stageManager->GetRemainingTime() % 60;
+    int centiseconds = (int)stageManager->GetRemainingCentiseconds() % 100;
     char buffer[128] = { 0 };
 
-    sprintf_s(buffer, "%d:%02d", minutes, seconds);
+    sprintf_s(buffer, "%d:%02d:%2d", minutes, seconds,centiseconds);
     m_timeText->SetString(buffer);
 
     for (int i = 0; i < playerCount; i++)
     {
+
         Player *player = stageManager->GetPlayer(i);
         int score = (int)player->GetEjectionScore();
-        PlayerStats const * stat = player->GetStats();
+        PlayerStats const* stat = player->GetStats(); 
+        Color damageColor = player->getDamageColor();
 
+        bool isEnded = stageManager->IsEnded();
         m_damageTexts[i]->SetString(std::to_string(score) + "%");
+        if (isEnded)
+        {
+           // m_damageTexts[i]->SetOpacity(0);
+          //  m_fallTexts[i]->SetOpacity(0);
+            hLayout->SetOpacity(0.f); 
+            m_timeText->SetOpacity(0.f);
+            
+        }
+       
+        m_damageTexts[i]->SetColor(damageColor);
         m_fallTexts[i]->SetString(std::to_string(stat->fallCount));
+
+        
     }
 }

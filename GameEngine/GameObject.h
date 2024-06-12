@@ -149,9 +149,9 @@ inline void GameObject::SetEnabled(bool isEnabled, bool applyToChildren)
 
 inline void GameObject::Delete()
 {
-    m_scene->m_objectManager.DeleteObject(this);
+     m_scene->m_objectManager.DeleteObject(this);
 }
-
+    
 inline GameObject *GameObject::GetParent() const
 {
     return m_parent;
