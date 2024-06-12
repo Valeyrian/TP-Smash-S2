@@ -1,0 +1,12 @@
+{
+    "texture": "potionVidange.dat",
+    "geometry": {
+        "rowCount": 2,
+        "colCount": 4,
+        "width": 150,
+        "height": 189
+    },
+    "parts": [
+        {"name": "PotionVidange", "frames": [0,1,2,3]}
+    ]
+}

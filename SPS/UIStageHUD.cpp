@@ -18,6 +18,9 @@ UIStageHUD::UIStageHUD(Scene *scene) :
     SpriteGroup *spriteGroup = nullptr;
     TTF_Font *font = nullptr;
 
+
+    
+
     StageManager *stageManager = StageManager::GetFromScene(m_scene);
     int playerCount = stageManager->GetPlayerCount();
     
@@ -32,6 +35,9 @@ UIStageHUD::UIStageHUD(Scene *scene) :
     hLayout->SetRowSize(30.f);
     hLayout->SetColumnSize(80.f);
 
+
+  
+
     //--------------------------------------------------------------------------
     // Informations sur les joueurs
 
@@ -42,6 +48,8 @@ UIStageHUD::UIStageHUD(Scene *scene) :
         SpriteGroup *spriteGroup = spriteSheet->GetGroup("PlayerBorder");
         AssertNew(spriteGroup);
 
+        
+
         UIImage *fillImage = new UIImage(m_scene, spriteGroup, 1);
         fillImage->SetBorders(6, 6, 6, 6, 4.f);
         fillImage->SetOpacity(0.5f);
@@ -49,6 +57,7 @@ UIStageHUD::UIStageHUD(Scene *scene) :
         fillImage->SetParent(this);
 
         hLayout->AddObject(fillImage, 0, i);
+
 
         // Compteur des dégats
         
@@ -71,6 +80,7 @@ UIStageHUD::UIStageHUD(Scene *scene) :
         hLayout->AddObject(text, 0, i); 
         m_fallTexts.push_back(text);  
 
+
     }
 
     // Compteur du temps restant
@@ -79,10 +89,13 @@ UIStageHUD::UIStageHUD(Scene *scene) :
     m_timeText->SetParent(this);
     m_timeText->SetAnchor(Anchor::NORTH_EAST);
     m_timeText->GetLocalRect().offsetMax.Set(-10.f, -10.f);
+
+   
 }
 
 void UIStageHUD::Update()
 {
+
     UIObject::Update();
 
     StageManager *stageManager = StageManager::GetFromScene(m_scene);
@@ -112,9 +125,10 @@ void UIStageHUD::Update()
           //  m_fallTexts[i]->SetOpacity(0);
             hLayout->SetOpacity(0.f); 
             m_timeText->SetOpacity(0.f);
-            
         }
-       
+
+     
+
         m_damageTexts[i]->SetColor(damageColor);
         m_fallTexts[i]->SetString(std::to_string(stat->fallCount));
 

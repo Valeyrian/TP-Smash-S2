@@ -906,12 +906,39 @@ void Player::OnAnimationEnd(Animation* which, const std::string& name)
     }
 }
 
+//void Player::PlayPotionTimeAinmation()
+//{
+//    AssetManager* assets = m_scene->GetAssetManager();
+//    //Potion vidange 
+//    SpriteSheet* SpritePotionSheet = nullptr; //sprite des players  
+//    SpriteGroup* SpritePotionGroupe = nullptr;
+//    SpritePotionSheet = assets->GetSpriteSheet(SHEET_POTION_VIDANGE);
+//    SpriteAnim* potionAnim = nullptr;
+//
+//    SpritePotionGroupe = SpritePotionSheet->GetGroup("PotionVidange");
+//    AssertNew(SpritePotionGroupe);
+//    m_animator = new UIAnimator(m_scene);
+//    m_animator->SetScale(.8f);
+//    m_animator->SetAnchor(Anchor::SOUTH);
+//    m_animator->GetLocalRect().anchorMin.Set(0.22, 0.f);
+//    m_animator->GetLocalRect().anchorMax.Set(0.1, 0.1);
+//
+//    Animator* Potionrender = m_animator->GetAnimator();
+//    potionAnim = Potionrender->CreateAnimation("PotionVidange", SpritePotionGroupe);
+//    potionAnim->SetCycleCount(1);
+//    potionAnim->SetFPS(15.f);
+//    m_animator->SetEnabled(false);
+//    Potionrender->PlayAnimation("PotionVidange");
+//}
+
 void Player::GetDownJumpCount(int check)
 {
-    
+    printf("mDealy JumpBoost : %f \n", m_delayJumpPotionleft);
     if (check == 1) {
         m_delayJumpPotionleft = 10 ;
         check = 0;
+       // PlayPotionTimeAinmation();
+        
     }
     if ((m_delayJumpPotionleft > 1 && m_countJump == 2))
     {
@@ -921,6 +948,8 @@ void Player::GetDownJumpCount(int check)
           m_hasToucjedFloor++;
       }
     }
+
+
 }
 
 //Color Player::getDamageColor()

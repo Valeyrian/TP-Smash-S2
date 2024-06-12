@@ -60,6 +60,6 @@ void InitInputConfig(InputManager *inputManager)
 
 PlayerStats::PlayerStats() :
     fallCount(0), koCount(0), lifeCount(3),
-    damageGiven(0.f), damageTaken(0.f), maxSpeed(0.f)
+    damageGiven(0.f), damageTaken(0.f), maxSpeed(0.f), totalAttack(0)
 {
 }
