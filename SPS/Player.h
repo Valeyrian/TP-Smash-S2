@@ -50,6 +50,7 @@ public:
     void AddDamageGive(float DamageAmount);
     void AddAttackDone();
     void AddTotalAttack();
+    float GetTimeLeftJumpPotion();
 
     void PlaySFXAttack(int soundID);
     void PlaySFXHit(bool hit, int soundID);
@@ -59,6 +60,10 @@ public:
 
     virtual void OnAnimationEnd(Animation* which, const std::string& name) override;
     float m_countJump;
+    float m_delayJumpPotionleft;
+
+    
+
 
 
 protected:
@@ -73,6 +78,9 @@ protected:
 
 
     Animator m_animator;
+  //  UIAnimator* m_animator;
+    void PlayPotionTimeAinmation();
+
 
     Animator m_shieldAnimator;
     Damager *m_lastDamager;
@@ -87,7 +95,6 @@ protected:
     float m_delayLockRoll;
     float m_delayLockFarAttack;
     float m_askedFarAttack;
-    float m_delayJumpPotionleft;
     float m_hasToucjedFloor;
     float m_delayDefend;
     float m_delayLockDefend;
@@ -150,6 +157,7 @@ protected:
 
 
 private:
+    
     State m_state;
 };
 
@@ -204,6 +212,11 @@ inline void Player::AddAttackDone()
 inline void Player::AddTotalAttack()
 {
     m_stats->totalAttack ++;
+}
+
+inline float Player::GetTimeLeftJumpPotion()
+{
+    return m_delayJumpPotionleft;
 }
 
 inline Color Player::getDamageColor()

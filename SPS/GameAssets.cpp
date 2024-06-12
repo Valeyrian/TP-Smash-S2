@@ -83,6 +83,9 @@ void InitAssets(AssetManager *assets)
     assets->AddSpriteSheet(
         SHEET_VFX_SMASHLIGHT,
         "../Assets/Atlas/cloud.json");
+    assets->AddSpriteSheet(
+        SHEET_POTION_VIDANGE,
+        "../Assets/Atlas/PotionVidange.json");
 
 }
 

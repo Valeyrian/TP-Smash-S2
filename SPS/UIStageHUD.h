@@ -21,7 +21,7 @@ private:
     UIText *m_timeText;
     std::vector<UIText *>m_fallTexts;
     UIImage* fillImage; 
-    
+    UIAnimator* m_animator;
     UIGridLayout* hLayout;
 
 };

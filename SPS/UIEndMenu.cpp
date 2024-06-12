@@ -192,7 +192,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     m_fallCount1->SetName("Fall Count Player 1");
 
     font = assets->GetFont(FONT_NORMAL);
-    m_accuracy1 = new UIText(scene, "Accuracy Player 1", font, Colors::Gold);
+    m_accuracy1 = new UIText(scene, "N", font, Colors::Gold);
     m_accuracy1->SetName("Accuracy Player 1");
     
     //--------------------------------------------------------------------------
@@ -211,7 +211,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     m_fallCount2->SetName("Fall Count Player 2");
 
     font = assets->GetFont(FONT_NORMAL);    
-    m_accuracy2 = new UIText(scene, "Accuracy Player 2", font, Colors::Gold);
+    m_accuracy2 = new UIText(scene, "N/A", font, Colors::Gold);
     m_accuracy2->SetName("AccuracyPlayer 2");
     
 
@@ -461,9 +461,6 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     else
         m_accuracy1->SetString(std::to_string((int)accuracy1) + "%");
    
-
-    
-
 
     if (accuracy1 > accuracy2)
     {
