@@ -356,7 +356,7 @@ void StageManager::InitPlatform()
     Scene* scene = GetScene();
 
     // Stage
-    PlatformG* stageG = new PlatformG(scene, LAYER_TERRAIN, b2Vec2(-15, -2)); 
+    PlatformG* stageG = new PlatformG(scene, LAYER_TERRAIN, b2Vec2(-19, -2)); 
     PlatformD* stageD = new PlatformD(scene, LAYER_TERRAIN,b2Vec2(15, -2));
 
     // Background
