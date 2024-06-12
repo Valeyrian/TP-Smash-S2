@@ -51,7 +51,7 @@ int Animator::PlayAnimation(const std::string &name)
     {
         if (m_activeAnimation)
         {
-            m_activeAnimation->Stop();
+            m_activeAnimation->Stop(); 
         }
         SpriteAnim *anim = m_spriteAnimMap.at(name);
         anim->Play();

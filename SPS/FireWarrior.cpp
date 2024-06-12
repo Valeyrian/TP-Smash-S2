@@ -11,7 +11,6 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
 {
     SetName("FireWarrior");
     AssetManager *assets = scene->GetAssetManager();
-
     SpriteSheet *spriteSheet = nullptr;
     SpriteGroup *spriteGroup = nullptr;
     SpriteAnim *anim = nullptr;
@@ -24,7 +23,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim = m_animator.CreateAnimation("Idle", spriteGroup);
     anim->SetCycleCount(-1);
     anim->SetFPS(15.f);
-
+ 
     // TODO : Animation "Run"
     
     spriteGroup = spriteSheet->GetGroup("Run");
