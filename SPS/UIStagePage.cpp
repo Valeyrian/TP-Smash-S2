@@ -31,22 +31,22 @@ UIStagePage::UIStagePage(
     SpriteAnim* anim = nullptr; 
     TTF_Font *font = nullptr;
 
-    UIRect* first = new UIRect(b2Vec2(0.093, 0.14), b2Vec2(0.26, 0.6), b2Vec2(0.2, 0.2), b2Vec2(0.3, 0.3));
-    UIRect* Secound = new UIRect(b2Vec2(0.28, 0.14), b2Vec2(0.45, 0.6), b2Vec2(0.2, 0.2), b2Vec2(0.3, 0.3));
+    //UIRect* first = new UIRect(b2Vec2(0.093, 0.14), b2Vec2(0.26, 0.6), b2Vec2(0.2, 0.2), b2Vec2(0.3, 0.3));
+    //UIRect* Secound = new UIRect(b2Vec2(0.28, 0.14), b2Vec2(0.45, 0.6), b2Vec2(0.2, 0.2), b2Vec2(0.3, 0.3));
 
-    UIObject* cadre = new UIObject(m_scene);
-    cadre->SetLocalRect(*first);
-    cadre->SetColor(Colors::Gold);
-    UIObject* cadre2 = new UIObject(m_scene);
-    cadre2->SetLocalRect(*Secound);
-    UIFillRect* cadrebis = new UIFillRect(scene, Colors::Black);        //fond de l'anim
-    cadrebis->SetParent(cadre);                                         //fond de l'anim
-    cadrebis->SetOpacity(0.1f);                                         //fond de l'anim
-    cadrebis->SetLayer(LAYER_UI_BACKGROUND);                            //fond de l'anim
-    UIFillRect* cadrebis2 = new UIFillRect(scene, Colors::Black);        //fond de l'anim
-    cadrebis2->SetParent(cadre2);                                       //fond de l'anim
-    cadrebis2->SetOpacity(0.1f);                                        //fond de l'anim
-    cadrebis2->SetLayer(LAYER_UI_BACKGROUND);                           //fond de l'anim
+    //UIObject* cadre = new UIObject(m_scene);
+    //cadre->SetLocalRect(*first);
+    //cadre->SetColor(Colors::Gold);
+    //UIObject* cadre2 = new UIObject(m_scene);
+    //cadre2->SetLocalRect(*Secound);
+    //UIFillRect* cadrebis = new UIFillRect(scene, Colors::Black);        //fond de l'anim
+    //cadrebis->SetParent(cadre);                                         //fond de l'anim
+    //cadrebis->SetOpacity(0.1f);                                         //fond de l'anim
+    //cadrebis->SetLayer(LAYER_UI_BACKGROUND);                            //fond de l'anim
+    //UIFillRect* cadrebis2 = new UIFillRect(scene, Colors::Black);        //fond de l'anim
+    //cadrebis2->SetParent(cadre2);                                       //fond de l'anim
+    //cadrebis2->SetOpacity(0.1f);                                        //fond de l'anim
+    //cadrebis2->SetLayer(LAYER_UI_BACKGROUND);                           //fond de l'anim
 
 //    Animator n°1
 
@@ -55,12 +55,13 @@ UIStagePage::UIStagePage(
     spriteGroup = spriteSheet0->GetGroup("Idle");
     AssertNew(spriteGroup);
 
-    UIAnimator* uiAnimator0 = new UIAnimator(m_scene);
-    uiAnimator0->SetScale(10.0f);
-    uiAnimator0->GetLocalRect().anchorMin.Set(0.23, 0.3);
-    uiAnimator0->GetLocalRect().anchorMax.Set(0.3, 0.6);
-
-    animator0 = uiAnimator0->GetAnimator();
+    animator[0] = new UIAnimator(m_scene);
+    animator[0]->SetScale(10.0f);
+    animator[0]->GetLocalRect().anchorMin.Set(0.23, 0.3);
+    animator[0]->GetLocalRect().anchorMax.Set(0.3, 0.6);
+    animator[0]->SetEnabled(true);
+   
+    Animator* animator0 = animator[0]->GetAnimator();
 
     anim = animator0->CreateAnimation("Idle", spriteGroup);
     anim->SetCycleCount(-1);
@@ -75,18 +76,19 @@ UIStagePage::UIStagePage(
     spriteGroup = spriteSheet1->GetGroup("Idle");
     AssertNew(spriteGroup);
 
-    UIAnimator* uiAnimator1 = new UIAnimator(m_scene);
-    uiAnimator1->SetScale(10.0f);
-    uiAnimator1->GetLocalRect().anchorMin.Set(0.17, 0.48);
-    uiAnimator1->GetLocalRect().anchorMax.Set(0.3, 0.6);
+    animator[1] = new UIAnimator(m_scene);
+    animator[1]->SetScale(10.0f);
+    animator[1]->GetLocalRect().anchorMin.Set(0.17, 0.48);
+    animator[1]->GetLocalRect().anchorMax.Set(0.3, 0.6);
+    animator[1]->SetEnabled(false);
 
-    Animator* animator1 = uiAnimator1->GetAnimator();
+    Animator* animator1 = animator[1]->GetAnimator();
 
     anim = animator1->CreateAnimation("Idle", spriteGroup);
     anim->SetCycleCount(-1);
     anim->SetFPS(15.f);
 
-    //animator1->PlayAnimation("Idle");
+    animator1->PlayAnimation("Idle");
 
     //    Animator n°3
 
@@ -95,18 +97,19 @@ UIStagePage::UIStagePage(
     spriteGroup = spriteSheet2->GetGroup("Idle");
     AssertNew(spriteGroup);
 
-    UIAnimator* uiAnimator2 = new UIAnimator(m_scene);
-    uiAnimator2->SetScale(10.0f);
-    uiAnimator2->GetLocalRect().anchorMin.Set(0.38, 0.3);
-    uiAnimator2->GetLocalRect().anchorMax.Set(0.52, 0.6);
+    animator[2] = new UIAnimator(m_scene);
+    animator[2]->SetScale(10.0f);
+    animator[2]->GetLocalRect().anchorMin.Set(0.38, 0.3);
+    animator[2]->GetLocalRect().anchorMax.Set(0.52, 0.6);
+    animator[2]->SetEnabled(false);
 
-    Animator* animator2 = uiAnimator2->GetAnimator();
+    Animator* animator2 = animator[2]->GetAnimator();
 
     anim = animator2->CreateAnimation("Idle", spriteGroup);
     anim->SetCycleCount(-1);
     anim->SetFPS(15.f);
 
-    //animator2->PlayAnimation("Idle");
+    animator2->PlayAnimation("Idle");
 
     ///// n°4
     spriteSheet3 = assets->GetSpriteSheet(SHEET_LIGHTNING_WARRIOR);
@@ -114,12 +117,13 @@ UIStagePage::UIStagePage(
     spriteGroup = spriteSheet3->GetGroup("Idle");
     AssertNew(spriteGroup);
 
-    UIAnimator* uiAnimator3 = new UIAnimator(m_scene);
-    uiAnimator3->SetScale(10.0f);
-    uiAnimator3->GetLocalRect().anchorMin.Set(0.35, 0.48);
-    uiAnimator3->GetLocalRect().anchorMax.Set(0.52, 0.6);
+    animator[3] = new UIAnimator(m_scene);
+    animator[3]->SetScale(10.0f);
+    animator[3]->GetLocalRect().anchorMin.Set(0.35, 0.48);
+    animator[3]->GetLocalRect().anchorMax.Set(0.52, 0.6);
+    animator[3]->SetEnabled(true);
 
-    Animator* animator3 = uiAnimator3->GetAnimator();
+    Animator* animator3 = animator[3]->GetAnimator();
 
     anim = animator3->CreateAnimation("Idle", spriteGroup);
     anim->SetCycleCount(-1);
@@ -504,17 +508,17 @@ void UIStagePage::UpdateConfigs()
     {
     default:
     case 0: 
-        //animator0->StopAnimation();
-        //animator1->StopAnimation();
+        animator[1]->SetEnabled(false);
+        animator[0]->SetEnabled(true);
         m_playerConfigs[0].type = PlayerConfig::Type::FIRE_WARRIOR;
-        //animator0->PlayAnimation("hidle");
+    
         printf("cas 0\n");
         break;
     case 1: 
-        //animator0->StopAnimation();
-        //animator1->StopAnimation();
+        
+        animator[0]->SetEnabled(false);
+        animator[1]->SetEnabled(true);
         m_playerConfigs[0].type = PlayerConfig::Type::LIGHTNING_WARRIOR;
-        //animator1->PlayAnimation("hidle");
         printf("cas 1\n");
         break;
     }
@@ -524,13 +528,16 @@ void UIStagePage::UpdateConfigs()
     default:
     case 0: 
         m_playerConfigs[1].type = PlayerConfig::Type::FIRE_WARRIOR;
-        //animator2->PlayAnimation("hidle");
+        animator[2]->SetEnabled(true);
+        animator[3]->SetEnabled(false);
         printf("cas 2\n");
+        
     break;
     case 1: 
         m_playerConfigs[1].type = PlayerConfig::Type::LIGHTNING_WARRIOR;
-        //animator3->PlayAnimation("hidle");
         printf("cas 3\n");
+        animator[2]->SetEnabled(false);
+        animator[3]->SetEnabled(true);
     break;
     }
 

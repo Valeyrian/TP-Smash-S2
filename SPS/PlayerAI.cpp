@@ -30,7 +30,9 @@ void PlayerAI::FixedUpdate()
     m_input.jumpPressed = false;
     m_input.attackPressed = false;
     m_input.attackDown = false;
-    bool atk = Random::RangeI(0, 1);
+    int atk = Random::RangeI(0, 5);
+    //printf("%d\n", atk);
+    
 
     if (IsInDanger())
     {
@@ -44,25 +46,39 @@ void PlayerAI::FixedUpdate()
     // Déplacement
     m_input.axisX = 0.f;
     b2Vec2 targetPosition = m_target->GetPosition();
-    if (targetPosition.x + 2.f < position.x)
+    if (targetPosition.x + 1.f < position.x)
     {
         m_input.axisX = -1.f;
     }
-    else if (position.x < targetPosition.x - 2.f)
+    else if (position.x < targetPosition.x - 1.f)
     {
         m_input.axisX = +1.0f;
     }
+    /*m_input.axisY = 0.f;
+    if (targetPosition.y + 1.f < position.y)
+    {
+        m_input.axisY = -1.f;
+    }
+    else if (position.y < targetPosition.y - 1.f)
+    {
+        m_input.axisY = +1.0f;
+    }*/
     // Attaque
     float targetDist = b2Distance(targetPosition, position);
-    if (targetDist < Random::RangeF(0.3, 0.15))
+    targetDist = targetDist - (Random::RangeF(0.35, 0.15));
+    printf("TargetDist : %f\n", targetDist);
+    if (targetDist < 1)
     {
+        /*printf("Atk = %d\n\n\n", atk);
+
         if (atk == 0) {
-            m_input.attackPressed = true;
-            m_input.attackDown = true;
-        }
-        if (atk == 1) {
             m_input.smashPressed = true;
         }
+
+        else{*/
+            m_input.attackPressed = true;
+            m_input.attackDown = true;
+        //}
     }
 }
 
