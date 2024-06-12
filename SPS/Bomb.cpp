@@ -23,11 +23,11 @@ Bomb::Bomb(Scene* scene) :
     anim = m_animator.CreateAnimation("Bomb", spriteGroup);
     anim->SetCycleCount(1);
     anim->SetFPS(15.f);
+   
 
     timeBeforeExplode = 0;
-
-
     m_animator.PlayAnimation("Bomb");
+
     // TODO : charger l'animation et la lancer
 }
 
@@ -145,9 +145,12 @@ bool Bomb::TakeDamage(const Damage& damage, Damager* damager)
             s = 1;
         else
             s = -1;
-
         BodyBombe->SetLinearVelocity(b2Vec2(8 * s, 2));
    
+        
+
+
+
     }
    // b2Vec2 damagerposition = damager;
    // if (  )

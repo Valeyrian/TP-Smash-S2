@@ -15,6 +15,7 @@
 
 #include "UIPauseMenu.h"
 #include "UIStageHUD.h"
+#include "UIendMenu.h"
 
 class StageManager : public BaseSceneManager
 {
@@ -36,11 +37,15 @@ public:
 
     StageConfig *GetStageConfig();
     float GetRemainingTime() const;
+    float GetRemainingCentiseconds() const;
 
     void QuitPause();
+    void QuitEnd();
 
     void SetKO(int playerID);
     bool IsPaused() const;
+    bool IsEnded() const;
+
 
     static StageManager *GetFromScene(Scene *scene);
 
@@ -49,8 +54,10 @@ public:
 
 private:
     void InitRockyPass();
-    void InitPlatformG();
-    void InitPlatformD();
+    
+    
+    void InitPlatform();
+
     void AddPotion();
     void AddJumpPotion();
     void AddBomb();
@@ -64,8 +71,12 @@ private:
     StageConfig &m_stageConfig;
 
     UIPauseMenu *m_pauseMenu;
-    UIStageHUD *m_stageHUD;
+    UIEndMenu* m_endMenu ;
+  
+    UIStageHUD* m_stageHUD ;
+
     bool m_paused;
+    bool m_ended;
 
     float m_delayStage;
     float m_delayPotion; // ADD
@@ -106,6 +117,10 @@ inline float StageManager::GetRemainingTime() const
 {
     return m_delayStage;
 }
+inline float StageManager::GetRemainingCentiseconds() const
+{
+    return(m_delayStage - (int)m_delayStage)*100;
+}
 
 inline StageConfig *StageManager::GetStageConfig()
 {
@@ -115,4 +130,9 @@ inline StageConfig *StageManager::GetStageConfig()
 inline bool StageManager::IsPaused() const
 {
     return m_paused;
+}
+
+inline bool StageManager::IsEnded() const 
+{
+    return m_ended;
 }

@@ -12,8 +12,8 @@
 #include "LightningWarrior.h"
 
 #include "RockyPassStage.h"
-#include "platformG.h"
 #include "platformD.h"
+#include "platformG.h"
 #include "Background.h"
 
 #include "Potion.h"
@@ -45,8 +45,7 @@ StageManager::StageManager(
     if (true)
     {
         InitRockyPass();
-        InitPlatformG();
-        InitPlatformD();
+        InitPlatform();
     }
 
     // Crée la caméra
@@ -147,36 +146,59 @@ void StageManager::OnSceneUpdate()
      // mouvement de la platform
   //  printf("mdelayBombde : %f \n", m_delayBomb);
 
-
-    
-
     if (m_delayStage < 0.f)
     {
         QuitScene();
     }
 
-    if (applicationInput->pausePressed)
+    //if (applicationInput->pausePressed) //
+    //{
+    //    if (m_paused)
+    //    {
+    //        assert(m_pauseMenu != nullptr);
+
+    //        m_pauseMenu->PlayFadeOut();
+    //        scene->GetAssetManager()->PlaySoundFX(SFX_UI_UNPAUSE);
+    //    }
+    //    else
+    //    {
+    //        assert(m_pauseMenu == nullptr);
+
+    //        m_pauseMenu = new UIPauseMenu(scene);
+    //        m_pauseMenu->SetParent(scene->GetCanvas());
+    //        m_pauseMenu->PlayFadeIn();
+
+    //        scene->GetTime().SetTimeScale(0.0f);
+    //        m_paused = true;
+
+    //        scene->GetAssetManager()->PlaySoundFX(SFX_UI_PAUSE);
+    //    }
+    //}
+    // menue de fin
+    
+    if (m_delayStage < 57.f || applicationInput->pausePressed)
     {
-        if (m_paused)
+        if (m_ended)
         {
-            assert(m_pauseMenu != nullptr);
+            assert(m_endMenu != nullptr);
 
-            m_pauseMenu->PlayFadeOut();
-            scene->GetAssetManager()->PlaySoundFX(SFX_UI_UNPAUSE);
+            m_endMenu->PlayFadeOut();
+            scene->GetAssetManager()->PlaySoundFX(SFX_UI_UNPAUSE); //son a changer
         }
-        else
+        else if (m_endMenu == nullptr)
         {
-            assert(m_pauseMenu == nullptr);
+            assert(m_endMenu == nullptr);
 
-            m_pauseMenu = new UIPauseMenu(scene);
-            m_pauseMenu->SetParent(scene->GetCanvas());
-            m_pauseMenu->PlayFadeIn();
+            m_endMenu = new UIEndMenu(scene);
+            m_endMenu->SetParent(scene->GetCanvas());
+            m_endMenu->PlayFadeIn();
 
             scene->GetTime().SetTimeScale(0.0f);
-            m_paused = true;
+            //m_ended = true;
 
-            scene->GetAssetManager()->PlaySoundFX(SFX_UI_PAUSE);
+            scene->GetAssetManager()->PlaySoundFX(SFX_UI_PAUSE); //son a changer
         }
+
     }
 }
 
@@ -210,12 +232,23 @@ void StageManager::OnSceneFixedUpdate()
 
 void StageManager::QuitPause()
 {
-    m_pauseMenu->Delete();
-    m_pauseMenu = nullptr;
-    m_paused = false;
-    GetScene()->GetTime().SetTimeScale(1.f);
+    if (m_pauseMenu)
+    {
+        m_pauseMenu->Delete();
+        m_pauseMenu = nullptr;
+        m_paused = false;
+        GetScene()->GetTime().SetTimeScale(1.f);
+    }
+}
 
-    InputManager *inputManager = GetScene()->GetInputManager();
+void StageManager::QuitEnd()
+{
+    m_endMenu->Delete(); 
+    m_endMenu = nullptr;
+    m_ended = false;  
+
+    InputManager* inputManager = GetScene()->GetInputManager();
+
 }
 
 StageManager *StageManager::GetFromScene(Scene *scene)
@@ -316,12 +349,14 @@ void StageManager::InitRockyPass()
     scene->GetAssetManager()->FadeInMusic(MUSIC_ROCKY_PASS);
 }
 
-void StageManager::InitPlatformG()
+
+void StageManager::InitPlatform()
 {
     Scene* scene = GetScene();
 
     // Stage
-    PlatformG* stage = new PlatformG(scene);
+    PlatformG* stageG = new PlatformG(scene, LAYER_TERRAIN, b2Vec2(-15, -2)); 
+    PlatformD* stageD = new PlatformD(scene, LAYER_TERRAIN,b2Vec2(15, -2));
 
     // Background
     AssetManager* assets = scene->GetAssetManager();
@@ -332,45 +367,22 @@ void StageManager::InitPlatformG()
     Background::RenderMode modes[] = {
         Background::RenderMode::FILL_VERTICAL,
         Background::RenderMode::FILL_BELOW,
-        Background::RenderMode::FILL_BELOW
+        Background::RenderMode::FILL_BELOW 
     };
     for (int i = 0; i < 3; i++)
     {
-        background->AddLayer(m_textures[i], b2Vec2(factors[i], 0.9f * factors[i]), modes[i]);
+        background->AddLayer(m_textures[i], b2Vec2(factors[i], 0.9f * factors[i]), modes[i]); 
     }
-    background->SetPixelsPerUnit(14.f);
-    b2Vec2 worldDim = background->GetWorldDimensions();
-    background->SetWorldCenter(0.5f * worldDim + b2Vec2(0.f, -1.f)); // 0 -5 origine
+    background->SetPixelsPerUnit(14.f); 
+    b2Vec2 worldDim = background->GetWorldDimensions(); 
+    background->SetWorldCenter(0.5f * worldDim + b2Vec2(0.f, -1.f)); // 0 -5 origine 
 
     // Music
     scene->GetAssetManager()->FadeInMusic(MUSIC_ROCKY_PASS);
-}
-void StageManager::InitPlatformD()
-{
-    Scene* scene = GetScene();
 
-    // Stage
-    PlatformD* stage = new PlatformD(scene);
+    // platform 2 
+  
 
-    // Background
-    AssetManager* assets = scene->GetAssetManager();
-    Background* background = new Background(scene, LAYER_BACKGROUND);
-    const std::vector<SDL_Texture*>& m_textures = assets->GetBackgrounds();
-    assert(m_textures.size() == 3);
-    float factors[] = { 0.05f, 0.3f, 0.6f };
-    Background::RenderMode modes[] = {
-        Background::RenderMode::FILL_VERTICAL,
-        Background::RenderMode::FILL_BELOW,
-        Background::RenderMode::FILL_BELOW
-    };
-    for (int i = 0; i < 3; i++)
-    {
-        background->AddLayer(m_textures[i], b2Vec2(factors[i], 0.9f * factors[i]), modes[i]);
-    }
-    background->SetPixelsPerUnit(14.f);
-    b2Vec2 worldDim = background->GetWorldDimensions();
-    background->SetWorldCenter(0.5f * worldDim + b2Vec2(0.f, -1.f)); // 0 -5 origine
+    
 
-    // Music
-    scene->GetAssetManager()->FadeInMusic(MUSIC_ROCKY_PASS);
 }

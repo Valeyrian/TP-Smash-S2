@@ -14,11 +14,15 @@ const Color Colors::Green = Color(0, 255, 0, 255);
 const Color Colors::Blue = Color(0, 0, 255, 255);
 const Color Colors::Yellow = Color(255, 255, 0, 255);
 const Color Colors::Magenta = Color(255, 0, 255, 255);
-const Color Colors::Cyan = Color(0, 255, 255, 255);
+const Color Colors::Cyan = Color(255, 143, 0, 255);
 
 // Ajoutez vos couleurs personnalisées
 const Color Colors::Gold = Color(225, 185, 143);
 const Color Colors::DarkBlue = Color(10, 10, 25);
+const Color Colors::Orange = Color(255, 111, 0, 255);
+const Color Colors::Brown = Color(117, 82, 70, 255);
+const Color Colors::Purple = Color(74, 20, 140, 255);
+
 
 void InitAssets(AssetManager *assets)
 {

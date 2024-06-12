@@ -190,7 +190,7 @@ void FireWarrior::Start()
     // TODO : Modifer les paramètres
     b2CircleShape circle;
     circle.m_p = b2Vec2(0.0f, 0.5f); //ici pour le cercle
-    circle.m_radius = 0.5f;
+    circle.m_radius = .5f; // 0.5
 
     fixtureDef.shape = &circle;
     fixtureDef.density = 2.f;
@@ -399,7 +399,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
             // TODO : Verrouillage pour la victime
 
-            damage.ejection = GetPosition(); 
+            damage.ejection = b2Vec2(s*4,0); 
             damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
 
             // TODO : adapter la zone d'attaque

@@ -5,7 +5,8 @@
 */
 
 #include "Player.h"
-#include "Platform.h"
+#include "PlatformG.h"
+#include "PlatformD.h"
 #include "PlayerAI.h"
 #include "StageManager.h"
 
@@ -148,7 +149,7 @@ void Player::Update()
     }
 
     GetDownJumpCount(0);
-    printf("time left %f \n", m_delayJumpPotionleft);
+    //printf("time left %f \n", m_delayJumpPotionleft);
 
 
     // TODO : membre m_defend à modifier
@@ -380,7 +381,7 @@ void Player::FixedUpdateState()
     {   
         if (IsAttacking() == false)     
         {
-            if (CanAttack() && m_delayAttack > 0)
+            if (CanAttack() && m_delayAttack > 0) 
             {
                 SetState(State::ATTACK_AIR);
 
@@ -539,9 +540,18 @@ void Player::OnCollisionStay(GameCollision &collision)
 
     if (collision.IsEnabled())
     {
-        Platform *platform = dynamic_cast<Platform *>(collision.gameBody);
+        PlatformG *platformG = dynamic_cast<PlatformG *>(collision.gameBody);
         {
-            if (platform) platform->AddGameBody(this);
+            if (platformG) platformG->AddGameBody(this);
+        }
+
+        m_inContact = true;
+    }
+    if (collision.IsEnabled())
+    {
+        PlatformD* platformD = dynamic_cast<PlatformD*>(collision.gameBody);
+        {
+            if (platformD) platformD->AddGameBody(this);
         }
 
         m_inContact = true;
@@ -753,6 +763,12 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
     m_delayLock = damage.lockTime;
     m_stats->damageTaken += damage.amount;
     m_ejectionScore += damage.amount;
+    
+    Player* playerDamager = dynamic_cast<Player*>(damager);
+    if (playerDamager)
+    {
+        playerDamager->AddDamageGive(damage.amount);
+    }
    
     if (damage.hasEjection)
     {
@@ -832,3 +848,27 @@ void Player::GetDownJumpCount(int check)
       }
     }
 }
+
+//Color Player::getDamageColor()
+//{
+//    if (m_stats->lifeCount >= 0 && m_stats->lifeCount <= 15)
+//        return Colors::White;
+//    else if (m_stats->lifeCount > 15 && m_stats->lifeCount <= 30)
+//        return Colors::Yellow;
+//    else if (m_stats->lifeCount > 30 && m_stats->lifeCount <= 45)
+//        return Colors::Orange; 
+//    else if (m_stats->lifeCount > 45 && m_stats->lifeCount <= 70)
+//        return Colors::Magenta;
+//    else if (m_stats->lifeCount > 70 && m_stats->lifeCount <= 85)
+//        return Colors::Purple;
+//    else if (m_stats->lifeCount > 85 && m_stats->lifeCount <= 99)
+//        return Colors::Brown;
+//    else if (m_stats->lifeCount > 99 )
+//        return Colors::Red;
+//
+//
+//}
+
+
+
+       
