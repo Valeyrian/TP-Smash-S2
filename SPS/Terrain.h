@@ -36,7 +36,9 @@ public:
     virtual ~Terrain();
 
     void SetScale(float scale);
+    void SetScaleBis(float scale);
     float GetScale() const;
+    float GetScaleBis() const;
     void ScaleTiles(float scale);
     void SetOneWay(bool isOneWay);
     bool IsOneWay() const;
@@ -51,6 +53,7 @@ protected:
 
 private:
     float m_scale;
+    float m_scaleBis;
     bool m_isOneWay;
 };
 
@@ -58,7 +61,10 @@ inline float Terrain::GetScale() const
 {
     return m_scale;
 }
-
+inline float Terrain::GetScaleBis() const
+{
+    return m_scaleBis;
+}
 inline void Terrain::SetOneWay(bool isOneWay)
 {
     m_isOneWay = isOneWay;

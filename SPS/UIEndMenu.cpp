@@ -275,7 +275,9 @@ UIEndMenu::UIEndMenu(Scene* scene) :
         m_fallCount1->SetColor(Colors::Green); 
         m_fallCount2->SetColor(Colors::Red);
        
-        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type == PlayerConfig::Type::FIRE_WARRIOR)
+
+        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type != PlayerConfig::Type::FIRE_WARRIOR)
+
         {
             m_animator[0]->SetEnabled(true);//on fire gagnant gauche
             m_animator[5]->SetEnabled(true); //on fire perdant droite
@@ -302,6 +304,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
         }
 
         if (config1->type == PlayerConfig::Type::LIGHTNING_WARRIOR && config2->type == PlayerConfig::Type::FIRE_WARRIOR) 
+
         {
             m_animator[2]->SetEnabled(true);//on lithning gagant gauche
             m_animator[5]->SetEnabled(true); // on fire perdant droit
@@ -323,8 +326,10 @@ UIEndMenu::UIEndMenu(Scene* scene) :
             m_animator[1]->SetEnabled(false);
             m_animator[3]->SetEnabled(false);
             m_animator[4]->SetEnabled(false);
+
             m_animator[5]->SetEnabled(false);
             m_animator[6]->SetEnabled(false);
+
         }
     }
     else  if (stat1->fallCount > stat2->fallCount)
@@ -445,9 +450,21 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     // travail de l'accuracy
     float accuracy1 = (stat1->attackDone / stat1->totalAttack) * 100;
     float accuracy2 = (stat2->attackDone / stat2->totalAttack) * 100;
+   
+    if (stat2->totalAttack == 0)
+        accuracy2 = 100;
+    else 
+        m_accuracy2->SetString(std::to_string((int)accuracy2) + "%");
+   
+    if (stat1->totalAttack == 0)
+        accuracy1 = 100;
+    else
+        m_accuracy1->SetString(std::to_string((int)accuracy1) + "%");
+   
 
-    m_accuracy1->SetString(std::to_string((int)accuracy1) + "%");
-    m_accuracy2->SetString(std::to_string((int)accuracy2) + "%");
+    
+
+
     if (accuracy1 > accuracy2)
     {
         m_accuracy1->SetColor(Colors::Green);  

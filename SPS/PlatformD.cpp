@@ -15,7 +15,7 @@ PlatformD::PlatformD(Scene* scene, int layer, b2Vec2 StartPos) :
 {
     SetName("PlatformD");
     InitTiles();
-    SetScale(16.f / 24.f); //16 /24
+    SetScale(8.f / 24.f); //16 /24
     m_startPosD = StartPos;  
     SetOneWay(true);
 }
@@ -39,11 +39,11 @@ void PlatformD::Start()
     const float scale = GetScale();
     b2ChainShape chain;
     b2Vec2 vertices[12] = { };
-    vertices[0].Set(5.5f, -3.f);
-    vertices[1].Set(5.5f, 0.f);
+    vertices[0].Set(16.5f, -2.f);
+    vertices[1].Set(16.5f, 0.f);
     vertices[2].Set(0.f, 0.f);
     vertices[3].Set(-5.5f, 0.f);
-    vertices[4].Set(-5.5f, -3.f);
+    vertices[4].Set(-5.5f, -2.f);
     for (int i = 0; i < 5; i++)
         vertices[i] *= scale;
 
@@ -79,20 +79,6 @@ void PlatformD::InitTiles()
     Tile tile;
     const float pixelsPerUnit = 16.f;
 
-    // Terre
-    //for (int i = -5; i < 5; i++) //i = -10 <5
-    //{
-    //    float x = (float)(i);
-
-    //    for (int j = 0; j < 2; j++)
-    //    {
-    //        float y = (float)(-j) - 3.f;
-    //        tile.Reset(pixelsPerUnit);
-    //        tile.SetSprite(ground, 0);
-    //        tile.position.Set(x, y);
-    //        AddTile(tile);
-    //    }
-    //}
 
     // Bord gauche
     tile.Reset(pixelsPerUnit);
@@ -100,20 +86,11 @@ void PlatformD::InitTiles()
     tile.position.Set(-6.f, 0.5f); // -11
     AddTile(tile);
 
-    //tile.Reset(pixelsPerUnit);
-    //tile.SetSprite(lWall, 1);
-    //tile.position.Set(-7.f, -3.f); //-12
-    //AddTile(tile);
-
-    //tile.Reset(pixelsPerUnit);
-    //tile.SetSprite(lWall, 1);
-    //tile.position.Set(-7.f, -5.f); //-12
-    //AddTile(tile);
-
+ 
     // Sol
-    for (int i = 0; i < 5; i++) //i <10
+    for (int i = 0; i <11; i++) //i <10
     {
-        float x = (float)(-5.f + 2 * i);
+        float x = (float)(-5.f + 2* i);
 
         tile.Reset(pixelsPerUnit);
         tile.SetSprite(floor, 0);
@@ -124,18 +101,8 @@ void PlatformD::InitTiles()
     // Bord droit
     tile.Reset(pixelsPerUnit);
     tile.SetSprite(rWall, 0);
-    tile.position.Set(+5.f, 0.5f);//10
+    tile.position.Set(+17.f, 0.5f);//10
     AddTile(tile);
-
-    //tile.Reset(pixelsPerUnit);
-    //tile.SetSprite(rWall, 1);
-    //tile.position.Set(+5.f, -3.f);//10
-    //AddTile(tile);
-
-    //tile.Reset(pixelsPerUnit);
-    //tile.SetSprite(rWall, 1);
-    //tile.position.Set(+5.f, -5.f); //10
-    //AddTile(tile);
 
 
     // Décoration
@@ -175,7 +142,7 @@ void PlatformD::PlatformDeplacement()
     else if (m_DeplacementState == 2 && m_TimePhaseOne == 0) //phase 2
     {
         m_DeplacementState = 0;   
-        SetTargetPosition(b2Vec2(0 ,10.5), 10, 25);
+        SetTargetPosition(b2Vec2(-2 ,10.5), 10, 25);
         m_TimePhaseOne = 30 * 60;
         m_DeplacementState = 3;
 
@@ -183,7 +150,7 @@ void PlatformD::PlatformDeplacement()
     else if (m_DeplacementState == 3 && m_TimePhaseOne == 0) //phase 2
     {
         m_DeplacementState = 0; 
-        SetTargetPosition(b2Vec2(-15, 6), 10, 25); 
+        SetTargetPosition(b2Vec2(-19, 6), 10, 25); 
         m_TimePhaseOne = 30 * 60;   
         m_DeplacementState = 4;
 
@@ -192,7 +159,7 @@ void PlatformD::PlatformDeplacement()
     else if (m_DeplacementState == 4 && m_TimePhaseOne == 0) //phase 2
     {
         m_DeplacementState = 0;
-        SetTargetPosition(b2Vec2(-15, -2), 3, 25);
+        SetTargetPosition(b2Vec2(-19, -2), 3, 25);
         m_TimePhaseOne = 10 * 60;
         m_DeplacementState = 5;
 
@@ -201,7 +168,7 @@ void PlatformD::PlatformDeplacement()
     else if (m_DeplacementState == 5 && m_TimePhaseOne == 0) //phase 1
     {
         m_DeplacementState = 0;
-        SetTargetPosition(b2Vec2(-15, 6), 10, 15);
+        SetTargetPosition(b2Vec2(-10, 6), 10, 15);
         m_DeplacementState = 6;//rajout d'un timer
         m_TimePhaseOne = 8 * 60;
 
@@ -209,7 +176,7 @@ void PlatformD::PlatformDeplacement()
     else if (m_DeplacementState == 6 && m_TimePhaseOne == 0) //phase 2
     {
         m_DeplacementState = 0;
-        SetTargetPosition(b2Vec2(0, 5.5), 10, 25);
+        SetTargetPosition(b2Vec2(-2, 5.5), 10, 25);
         m_TimePhaseOne = 30 * 60;
         m_DeplacementState = 7;
 

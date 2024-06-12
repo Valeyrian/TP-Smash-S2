@@ -30,6 +30,16 @@ void Terrain::SetScale(float scale)
     }
 }
 
+void Terrain::SetScaleBis(float scale)
+{
+    m_scaleBis = scale;
+    for (Tile& tile : m_tiles)
+    {
+        tile.position *= m_scale;
+        tile.pixelsPerUnit /= m_scaleBis;   
+    }
+}
+
 void Terrain::ScaleTiles(float scale)
 {
     for (Tile &tile : m_tiles)
