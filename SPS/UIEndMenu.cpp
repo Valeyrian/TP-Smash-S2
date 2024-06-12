@@ -89,44 +89,44 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     // Animation
 
     m_animator[0] = new UIAnimator(m_scene);
-    m_animator[0]->SetScale(8);
-    m_animator[0]->GetLocalRect().anchorMin.Set(0.5, 0.5);
-    m_animator[0]->GetLocalRect().anchorMax.Set(0.5, 0.5);
+    m_animator[0]->SetScale(6);
+    m_animator[0]->GetLocalRect().anchorMin.Set(0.1, 0.25);
+    m_animator[0]->GetLocalRect().anchorMax.Set(0.4, 0.75);
 
     m_animator[1] = new UIAnimator(m_scene);
-    m_animator[1]->SetScale(8);
-    m_animator[1]->GetLocalRect().anchorMin.Set(0.5, 0.5);
-    m_animator[1]->GetLocalRect().anchorMax.Set(0.5, 0.5);
+    m_animator[1]->SetScale(6);
+    m_animator[1]->GetLocalRect().anchorMin.Set(0.1, 0.25);
+    m_animator[1]->GetLocalRect().anchorMax.Set(0.4, 0.75);
 
     m_animator[2] = new UIAnimator(m_scene);
-    m_animator[2]->SetScale(8);
-    m_animator[2]->GetLocalRect().anchorMin.Set(0.5, 0.5);
-    m_animator[2]->GetLocalRect().anchorMax.Set(0.5, 0.5);
+    m_animator[2]->SetScale(6);
+    m_animator[2]->GetLocalRect().anchorMin.Set(0.1, 0.25);
+    m_animator[2]->GetLocalRect().anchorMax.Set(0.4, 0.75);
 
     m_animator[3] = new UIAnimator(m_scene);
-    m_animator[3]->SetScale(8);
-    m_animator[3]->GetLocalRect().anchorMin.Set(0.5, 0.5);
-    m_animator[3]->GetLocalRect().anchorMax.Set(0.5, 0.5);
+    m_animator[3]->SetScale(6);
+    m_animator[3]->GetLocalRect().anchorMin.Set(0.1, 0.25);
+    m_animator[3]->GetLocalRect().anchorMax.Set(0.4, 0.75);
 
     m_animator[4] = new UIAnimator(m_scene);
-    m_animator[4]->SetScale(8);
-    m_animator[4]->GetLocalRect().anchorMin.Set(0.5, 0.5);
-    m_animator[4]->GetLocalRect().anchorMax.Set(0.5, 0.5);
+    m_animator[4]->SetScale(6);
+    m_animator[4]->GetLocalRect().anchorMin.Set(0.6, 0.25);
+    m_animator[4]->GetLocalRect().anchorMax.Set(0.9, 0.75);
 
     m_animator[5] = new UIAnimator(m_scene);
-    m_animator[5]->SetScale(8);
-    m_animator[5]->GetLocalRect().anchorMin.Set(0.5, 0.5);
-    m_animator[5]->GetLocalRect().anchorMax.Set(0.5, 0.5);
+    m_animator[5]->SetScale(6);
+    m_animator[5]->GetLocalRect().anchorMin.Set(0.6, 0.25);
+    m_animator[5]->GetLocalRect().anchorMax.Set(0.9, 0.75);
 
     m_animator[6] = new UIAnimator(m_scene);
-    m_animator[6]->SetScale(8);
-    m_animator[6]->GetLocalRect().anchorMin.Set(0.5, 0.5);
-    m_animator[6]->GetLocalRect().anchorMax.Set(0.5, 0.5);
+    m_animator[6]->SetScale(6);
+    m_animator[6]->GetLocalRect().anchorMin.Set(0.6, 0.25);
+    m_animator[6]->GetLocalRect().anchorMax.Set(0.9, 0.75);
 
     m_animator[7] = new UIAnimator(m_scene);
-    m_animator[7]->SetScale(8);
-    m_animator[7]->GetLocalRect().anchorMin.Set(0.5, 0.5);
-    m_animator[7]->GetLocalRect().anchorMax.Set(0.5, 0.5);
+    m_animator[7]->SetScale(6);
+    m_animator[7]->GetLocalRect().anchorMin.Set(0.6, 0.25);
+    m_animator[7]->GetLocalRect().anchorMax.Set(0.9, 0.75);
 
     Animator* animEnd0 = m_animator[0]->GetAnimator(); //fire gagnant gauche
     playerAnim = animEnd0->CreateAnimation("Idle", SpriteGrpanimEnd1);
@@ -275,36 +275,39 @@ UIEndMenu::UIEndMenu(Scene* scene) :
         m_fallCount1->SetColor(Colors::Green); 
         m_fallCount2->SetColor(Colors::Red);
        
+
         if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type != PlayerConfig::Type::FIRE_WARRIOR)
+
         {
-            m_animator[0]->SetEnabled(true);//on fire ganant droite
-            m_animator[7]->SetEnabled(true); //on lightning perdant gauche
+            m_animator[0]->SetEnabled(true);//on fire gagnant gauche
+            m_animator[5]->SetEnabled(true); //on fire perdant droite
             
             m_animator[1]->SetEnabled(false);
             m_animator[2]->SetEnabled(false);
             m_animator[3]->SetEnabled(false);
             m_animator[4]->SetEnabled(false);
-            m_animator[5]->SetEnabled(false);
-            m_animator[6]->SetEnabled(false);
-        }
-      
-        if (config1->type == PlayerConfig::Type::LIGHTNING_WARRIOR && config2->type != PlayerConfig::Type::LIGHTNING_WARRIOR)
-        {
-            m_animator[2]->SetEnabled(true);//on lithning gagant droite
-            m_animator[5]->SetEnabled(true); // on
-
-                m_animator[0]->SetEnabled(false);
-            m_animator[1]->SetEnabled(false);
-            m_animator[3]->SetEnabled(false);
-            m_animator[4]->SetEnabled(false);
             m_animator[6]->SetEnabled(false);
             m_animator[7]->SetEnabled(false);
         }
-
-        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type == PlayerConfig::Type::FIRE_WARRIOR)
+      
+        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type == PlayerConfig::Type::LIGHTNING_WARRIOR)
         {
-            m_animator[2]->SetEnabled(true);//on lithning gagant droite
-            m_animator[5]->SetEnabled(true); // on
+            m_animator[0]->SetEnabled(true);//on fire gagant gauche
+            m_animator[7]->SetEnabled(true); // on light perdant droite
+
+            m_animator[0]->SetEnabled(false);
+            m_animator[1]->SetEnabled(false);
+            m_animator[3]->SetEnabled(false);
+            m_animator[4]->SetEnabled(false);
+            m_animator[5]->SetEnabled(false);
+            m_animator[6]->SetEnabled(false);
+        }
+
+        if (config1->type == PlayerConfig::Type::LIGHTNING_WARRIOR && config2->type == PlayerConfig::Type::FIRE_WARRIOR) 
+
+        {
+            m_animator[2]->SetEnabled(true);//on lithning gagant gauche
+            m_animator[5]->SetEnabled(true); // on fire perdant droit
 
             m_animator[0]->SetEnabled(false);
             m_animator[1]->SetEnabled(false);
@@ -316,15 +319,17 @@ UIEndMenu::UIEndMenu(Scene* scene) :
 
         if (config1->type == PlayerConfig::Type::LIGHTNING_WARRIOR && config2->type == PlayerConfig::Type::LIGHTNING_WARRIOR)
         {
-            m_animator[2]->SetEnabled(true);//on lithning gagant droite
-            m_animator[5]->SetEnabled(true); // on
+            m_animator[2]->SetEnabled(true);//on lithning gagant gauche
+            m_animator[7]->SetEnabled(true); // on light perdant droite
 
             m_animator[0]->SetEnabled(false);
             m_animator[1]->SetEnabled(false);
             m_animator[3]->SetEnabled(false);
             m_animator[4]->SetEnabled(false);
+
+            m_animator[5]->SetEnabled(false);
             m_animator[6]->SetEnabled(false);
-            m_animator[7]->SetEnabled(false);
+
         }
     }
     else  if (stat1->fallCount > stat2->fallCount)
@@ -332,11 +337,114 @@ UIEndMenu::UIEndMenu(Scene* scene) :
         m_fallCount1->SetColor(Colors::Red);
         m_fallCount2->SetColor(Colors::Green);
 
+        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type == PlayerConfig::Type::FIRE_WARRIOR)
+        {
+            m_animator[1]->SetEnabled(true);//on fire perdant gauche
+            m_animator[4]->SetEnabled(true); //on fire gagnant droite
+
+            m_animator[0]->SetEnabled(false);
+            m_animator[2]->SetEnabled(false);
+            m_animator[3]->SetEnabled(false);
+            m_animator[5]->SetEnabled(false);
+            m_animator[6]->SetEnabled(false);
+            m_animator[7]->SetEnabled(false);
+        }
+
+        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type == PlayerConfig::Type::LIGHTNING_WARRIOR)
+        {
+            m_animator[1]->SetEnabled(true);//on fire perdant gauche
+            m_animator[6]->SetEnabled(true); // on light gagnant droite
+
+            m_animator[0]->SetEnabled(false);
+            m_animator[2]->SetEnabled(false);
+            m_animator[3]->SetEnabled(false);
+            m_animator[4]->SetEnabled(false);
+            m_animator[5]->SetEnabled(false);
+            m_animator[7]->SetEnabled(false);
+        }
+
+        if (config1->type == PlayerConfig::Type::LIGHTNING_WARRIOR && config2->type == PlayerConfig::Type::FIRE_WARRIOR)
+        {
+            m_animator[3]->SetEnabled(true);//on lithning perdant gauche
+            m_animator[4]->SetEnabled(true); // on fire gagnant droit
+
+            m_animator[0]->SetEnabled(false);
+            m_animator[1]->SetEnabled(false);
+            m_animator[2]->SetEnabled(false);
+            m_animator[5]->SetEnabled(false);
+            m_animator[6]->SetEnabled(false);
+            m_animator[7]->SetEnabled(false);
+        }
+
+        if (config1->type == PlayerConfig::Type::LIGHTNING_WARRIOR && config2->type == PlayerConfig::Type::LIGHTNING_WARRIOR)
+        {
+            m_animator[3]->SetEnabled(true);//on lithning perdant gauche
+            m_animator[6]->SetEnabled(true); // on light gagnant droite
+
+            m_animator[0]->SetEnabled(false);
+            m_animator[1]->SetEnabled(false);
+            m_animator[2]->SetEnabled(false);
+            m_animator[4]->SetEnabled(false);
+            m_animator[5]->SetEnabled(false);
+            m_animator[7]->SetEnabled(false);
+        }
     }
     else
     {
         m_fallCount1->SetColor(Colors::Gold);
         m_fallCount2->SetColor(Colors::Gold);
+
+        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type == PlayerConfig::Type::FIRE_WARRIOR)
+        {
+            m_animator[0]->SetEnabled(true);//on fire gagnant gauche
+            m_animator[4]->SetEnabled(true); //on fire gagnant droite
+
+            m_animator[1]->SetEnabled(false);
+            m_animator[2]->SetEnabled(false);
+            m_animator[3]->SetEnabled(false);
+            m_animator[5]->SetEnabled(false);
+            m_animator[6]->SetEnabled(false);
+            m_animator[7]->SetEnabled(false);
+        }
+
+        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type == PlayerConfig::Type::LIGHTNING_WARRIOR)
+        {
+            m_animator[0]->SetEnabled(true);//on fire gagnant gauche
+            m_animator[6]->SetEnabled(true); // on light gagnant droite
+
+            m_animator[1]->SetEnabled(false);
+            m_animator[2]->SetEnabled(false);
+            m_animator[3]->SetEnabled(false);
+            m_animator[4]->SetEnabled(false);
+            m_animator[5]->SetEnabled(false);
+            m_animator[7]->SetEnabled(false);
+        }
+
+        if (config1->type == PlayerConfig::Type::LIGHTNING_WARRIOR && config2->type == PlayerConfig::Type::FIRE_WARRIOR)
+        {
+            m_animator[2]->SetEnabled(true);//on lithning gagnant gauche
+            m_animator[4]->SetEnabled(true); // on fire gagnant droit
+
+            m_animator[0]->SetEnabled(false);
+            m_animator[1]->SetEnabled(false);
+            m_animator[3]->SetEnabled(false);
+            m_animator[5]->SetEnabled(false);
+            m_animator[6]->SetEnabled(false);
+            m_animator[7]->SetEnabled(false);
+        }
+
+        if (config1->type == PlayerConfig::Type::LIGHTNING_WARRIOR && config2->type == PlayerConfig::Type::LIGHTNING_WARRIOR)
+        {
+            m_animator[2]->SetEnabled(true);//on lithning gagnant gauche
+            m_animator[6]->SetEnabled(true); // on light gagnant droite
+
+            m_animator[0]->SetEnabled(false);
+            m_animator[1]->SetEnabled(false);
+            m_animator[3]->SetEnabled(false);
+            m_animator[4]->SetEnabled(false);
+            m_animator[5]->SetEnabled(false);
+            m_animator[7]->SetEnabled(false);
+        }
     }
 
     // travail de l'accuracy
