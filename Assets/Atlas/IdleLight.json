@@ -1,0 +1,15 @@
+{
+    "texture": "Lightning_warrior_boost.dat",
+    "geometry": {
+        "rowCount": 1,
+        "colCount": 8,
+        "width": 127,
+        "height": 81,
+    },
+    "parts": [
+      {
+        "name": "Fire",
+        "frames": [ 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8 ]
+      }
+    ]
+}

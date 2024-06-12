@@ -11,7 +11,6 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
 {
     SetName("FireWarrior");
     AssetManager *assets = scene->GetAssetManager();
-
     SpriteSheet *spriteSheet = nullptr;
     SpriteGroup *spriteGroup = nullptr;
     SpriteAnim *anim = nullptr;
@@ -24,7 +23,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim = m_animator.CreateAnimation("Idle", spriteGroup);
     anim->SetCycleCount(-1);
     anim->SetFPS(15.f);
-
+ 
     // TODO : Animation "Run"
     
     spriteGroup = spriteSheet->GetGroup("Run");
@@ -133,6 +132,12 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetFPS(attackFPS);*/
 
     // TODO : Anmisation "Defend"
+    spriteGroup = spriteSheet->GetGroup("Defend");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Defend", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(15.f);
+
 
     // TODO : Anmisation "TakeHit"
 
@@ -233,6 +238,8 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
     case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
     case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
+    case State::DEFEND:         m_animator.PlayAnimation("Defend"); printf("Defend\n");                     break;
+
     //case State::FAR_ATTACK:  m_animator.PlayAnimation("CastSpell");   printf("Is  fireBalling\n");   break;
     //case State::LAUNCHED:    m_animator.PlayAnimation("Roll");   printf("Is  launched\n");   break;
 
@@ -247,6 +254,9 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
 
 void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
 {
+    Player::OnAnimationEnd(which, name);
+
+
     if (m_scene->GetUpdateMode() == Scene::UpdateMode::STEP_BY_STEP && GetPlayerID() == 0)
     {
         std::cout << "[OnAnimationEnd] "
@@ -351,7 +361,19 @@ void FireWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         LockAttack(0.25f);
 
     }*/
-
+    else if (name == "Defend")
+    {
+        if (m_delayDefend > 0)
+        {
+            m_animator.PlayAnimation("Defend");
+            //m_shieldAnimator.PlayAnimation("Shield");
+        }
+        SetState(Player::State::IDLE);
+        LockAttack(0.25f);
+        m_delayLock = 0.25f;
+        if (m_delayDefend <= 0)
+            m_delayLockDefend = 5.f;
+    }
 
 }
 
@@ -403,6 +425,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
             damage.lockAttackTime = 10.5f * ATTACK_FRAME_TIME;
 
             // TODO : adapter la zone d'attaque
+            AddTotalAttack();
             bool hit = AttackCircle(damage, filter, position, 1.f) ;
 
             PlaySFXHit(hit, SFX_HIT);   
@@ -433,6 +456,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
                 position + b2Vec2(s * 0.9f, 2.3f)
             };
             bool hit = AttackPolygon(damage, filter, vertices, 6);
+            AddTotalAttack();
             PlaySFXHit(hit, SFX_HIT);
         }
     }
@@ -466,6 +490,7 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
             // TODO : Zone de collision adapt�e
             bool hit = AttackBox(damage, filter, position, 0.8f, 0.1f, 0.f);
+            AddTotalAttack();
 
         }
         
@@ -514,6 +539,8 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
                 // TODO : adapter la zone d'attaque
                 bool hit = AttackCircle(damage, filter, position, 1.f);
+                AddTotalAttack();
+
 
                 PlaySFXHit(hit, SFX_HIT);
             }
@@ -537,6 +564,8 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
 
                 bool hit = AttackBox(damage, filter, position, 0.8f, 0.5f, 0.f);
+                AddTotalAttack();
+
             }
             if (frameID == 2)
             {
@@ -545,38 +574,52 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
 
 
                 bool hit = AttackBox(damage, filter, position, 1.f, 0.8f, 0.f);
+                AddTotalAttack();
+
             }if (frameID == 3)
             {
                 PlaySFXAttack(SFX_WHOOSH);
 
                 bool hit = AttackBox(damage, filter, position, 1.1f, 0.8f, 0.f);
+                AddTotalAttack();
+
             }if (frameID == 4)
             {
                 PlaySFXAttack(SFX_WHOOSH);
 
                 bool hit = AttackBox(damage, filter, position, 1.0f, 0.8f, 0.f);
+                AddTotalAttack();
+
             }if (frameID == 5)
             {
                 PlaySFXAttack(SFX_WHOOSH);
                 position -= b2Vec2(0.f, 0.15f);
 
                 bool hit = AttackBox(damage, filter, position, 1.0f, 0.8f, 0.f);
+                AddTotalAttack();
+
             }if (frameID == 6)
             {
                 PlaySFXAttack(SFX_WHOOSH);
 
                 bool hit = AttackBox(damage, filter, position, 1.0f, 0.65f, 0.f);
+                AddTotalAttack();
+
             }if (frameID == 7)
             {
                 PlaySFXAttack(SFX_WHOOSH);
                 position += b2Vec2(s * 0.1f,0.f);
 
                 bool hit = AttackBox(damage, filter, position, 1.f, 0.8f, 0.f);
+                AddTotalAttack();
+
             }if (frameID == 8)
             {
                 PlaySFXAttack(SFX_WHOOSH);
 
                 bool hit = AttackBox(damage, filter, position, 1.0f, 0.8f, 0.f);
+                AddTotalAttack();
+
             }if (frameID == 9)
             {
                 PlaySFXAttack(SFX_WHOOSH);
@@ -588,6 +631,8 @@ void FireWarrior::OnFrameChanged(Animation *which, const std::string &name, int 
                 damage.ejection = b2Vec2(s * 8.0f, 5.f);
 
                 bool hit = AttackBox(damage, filter, position, 1.0f, 0.5f, 0.f);
+                AddTotalAttack();
+
             }
         }
     // TODO : D'autres évènement sur frames ?

@@ -194,7 +194,8 @@ void StageManager::OnSceneUpdate()
             m_endMenu->PlayFadeIn();
 
             scene->GetTime().SetTimeScale(0.0f);
-            //m_ended = true;
+
+            m_IsOnEnd = true;
 
             scene->GetAssetManager()->PlaySoundFX(SFX_UI_PAUSE); //son a changer
         }

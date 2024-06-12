@@ -1,0 +1,19 @@
+{
+    "texture": "fireLight.dat",
+    "geometry": {
+        "rowCount": 1,
+        "colCount": 2,
+        "width": 51,
+        "height": 57,
+    },
+    "parts": [
+      {
+        "name": "Fire",
+        "frames": [ 0 ]
+      }
+      {
+        "name": "Light",
+        "frames": [ 0 ]
+      }
+    ]
+}

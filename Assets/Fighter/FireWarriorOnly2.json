@@ -1,0 +1,13 @@
+{
+  "texture": "fireWarriorOnly2.dat",
+    "geometry": {
+        "rowCount": 2,
+        "colCount": 15,
+        "width": 131,
+        "height": 54
+        
+    },
+    "parts": [
+        {"name": "ShowTime",  "frames": [10,11,12,13,14,15,16,17,18,1,2,3,4,5,6,7,8]}
+       ]
+}

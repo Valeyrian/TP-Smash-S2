@@ -20,7 +20,7 @@ UIStageHUD::UIStageHUD(Scene *scene) :
 
     StageManager *stageManager = StageManager::GetFromScene(m_scene);
     int playerCount = stageManager->GetPlayerCount();
-
+    
     //--------------------------------------------------------------------------
     // Grid layout
 
@@ -104,9 +104,9 @@ void UIStageHUD::Update()
         PlayerStats const* stat = player->GetStats(); 
         Color damageColor = player->getDamageColor();
 
-        bool isEnded = stageManager->IsEnded();
+        bool isOnEnd = stageManager->IsOnEnd();
         m_damageTexts[i]->SetString(std::to_string(score) + "%");
-        if (isEnded)
+        if (isOnEnd)
         {
            // m_damageTexts[i]->SetOpacity(0);
           //  m_fallTexts[i]->SetOpacity(0);

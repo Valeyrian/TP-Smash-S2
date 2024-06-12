@@ -96,4 +96,6 @@ public:
     float damageGiven;
     float damageTaken;
     float maxSpeed;
+    float attackDone;
+    float totalAttack;
 };

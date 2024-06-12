@@ -11,6 +11,7 @@
 #include "GameCommon.h"
 #include "UIDefaultButton.h"
 
+
 class UIEndMenu : public UIObject, public UISelectableListener
 {
 public:
@@ -37,24 +38,21 @@ private:
     UIText* m_fallCount1;
     UIText* m_fallCount2;
 
-    UIText* m_koCount1;
-    UIText* m_koCount2;
+    UIText* m_accuracy1;
+    UIText* m_accuracy2;
     
     UIText* m_DamageGivedTitle;
     UIText* m_DamageTakeTitle;
     UIText* m_FallCountTitle;
-    UIText* m_KoCountTitle;
-
-
-
-
-
+    UIText* m_AccuracyTitle;
 
     UIFillRect* m_endFill;
     UISelectableGroup* m_group;
 
     UIDefaultButton* m_mainMenuButton;
     UIDefaultButton* m_continueButton;
+
+    UIAnimator* m_animator[8];
 
     void InitFadeAnim();
 };

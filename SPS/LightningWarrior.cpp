@@ -119,6 +119,12 @@ LightningWarrior::LightningWarrior(Scene *scene, const PlayerConfig *config, Pla
     anim->SetCycleCount(1);
     anim->SetFPS(attackFPS);
 
+    spriteGroup = spriteSheet->GetGroup("Defend");
+    AssertNew(spriteGroup);
+    anim = m_animator.CreateAnimation("Defend", spriteGroup);
+    anim->SetCycleCount(1);
+    anim->SetFPS(attackFPS);
+
      m_animator.PlayAnimation("Idle");
 
 
@@ -195,6 +201,8 @@ void LightningWarrior::OnStateChanged(Player::State state, Player::State prevSta
     case State::SMASH_START:    m_animator.PlayAnimation("SmashStart"); printf("start smash\n");            break;
     case State::SMASH_HOLD:     m_animator.PlayAnimation("SmashHold"); printf("hold smash\n");              break;
     case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
+    case State::DEFEND:  m_animator.PlayAnimation("Defend"); printf("Defend\n");      break;
+
     default:
         break;
     }
@@ -202,6 +210,8 @@ void LightningWarrior::OnStateChanged(Player::State state, Player::State prevSta
 
 void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
 {
+    Player::OnAnimationEnd(which, name);
+
     if (m_scene->GetUpdateMode() == Scene::UpdateMode::STEP_BY_STEP && GetPlayerID() == 0)
     {
         std::cout << "[OnAnimationEnd] "
@@ -296,7 +306,7 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
             m_countSmash += 0.05f;
             m_delayLock = 1;
             m_delayAnimationLight++;
-            if (m_delayAnimationLight % 34 == 2)
+            if (m_delayAnimationLight % 36 == 2)
                 SmashParticleLight();
         }
         else
@@ -313,6 +323,15 @@ void LightningWarrior::OnAnimationEnd(Animation *which, const std::string &name)
         m_countSmash = 1;
         m_delayLock = 0.5;
         m_delayAnimationLight = 1;
+    }
+    else if (name == "Defend")
+    {
+        if (m_delayDefend > 0)
+        {
+            m_animator.PlayAnimation("Defend");
+        }
+        SetState(Player::State::IDLE);
+        LockAttack(0.25f);
     }
 }
 
@@ -371,7 +390,7 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             // TODO : adapter la zone d'attaque
             bool hit = AttackBox(damage, filter, position, 1.3f, 0.3f, 0.f); 
-
+            AddTotalAttack();
             PlaySFXHit(hit, SFX_HIT);
         }
     }
@@ -401,6 +420,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
                 
             };
             bool hit = AttackPolygon(damage, filter, vertices, 6);
+            AddTotalAttack();
+
             PlaySFXHit(hit, SFX_HIT);
         }
     }
@@ -435,6 +456,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             // TODO : Zone de collision adapt?e
             bool hit = AttackBox(damage, filter, position, 1.85f, 0.7f, 0.f);
+            AddTotalAttack();
+
 
         }
 
@@ -476,6 +499,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             // TODO : Zone de collision adapt?e
             bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
+            AddTotalAttack();
+
         }
 
         if (frameID == 6)
@@ -494,6 +519,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             // TODO : Zone de collision adapt?e
             bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
+            AddTotalAttack();
+
         }
         if (frameID == 9)
         {
@@ -511,6 +538,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             // TODO : Zone de collision adapt?e
             bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
+            AddTotalAttack();
+
         }
         if (frameID == 10)
         {
@@ -529,6 +558,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             // TODO : Zone de collision adapt?e
             bool hit = AttackBox(damage, filter, position, 1.2f, 0.4f, 0.f);
+            AddTotalAttack();
+
         }
         
 
@@ -580,6 +611,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             // TODO : adapter la zone d'attaque
             bool hit = AttackBox(damage, filter, position, 1.8f, 0.6f, 0.f);
+            AddTotalAttack();
+
 
             PlaySFXHit(hit, SFX_HIT);
         }
@@ -632,6 +665,8 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
 
             bool hit = AttackBox(damage, filter, position, 1.2f, 1.8f, 0.f);
+            AddTotalAttack();
+
         }
         if (frameID == 11)
         {
@@ -641,6 +676,7 @@ void LightningWarrior::OnFrameChanged(Animation *which, const std::string &name,
 
             damage.ejection = b2Vec2(s * 8.0f, 5.f);
 
+            AddTotalAttack();
             bool hit = AttackBox(damage, filter, position, 1.2f, 1.8f, 0.f);
 
             

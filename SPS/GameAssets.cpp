@@ -46,6 +46,12 @@ void InitAssets(AssetManager *assets)
     assets->AddSpriteSheet(
         SHEET_SHIELD,
         "../Assets/Atlas/Shield.json");
+    assets->AddSpriteSheet( 
+        SHEET_SHOWTIME_WARRIOR, 
+        "../Assets/Fighter/FireWarriorOnly2.json");
+    assets->AddSpriteSheet( 
+        SHEET_SHOWTIME_LIGHTNING, 
+        "../Assets/Fighter/LightningOnly2.json");
 
     // Item
     assets->AddSpriteSheet(

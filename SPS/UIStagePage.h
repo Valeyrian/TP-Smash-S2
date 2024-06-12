@@ -10,6 +10,10 @@
 #include "GameCommon.h"
 #include "UITextList.h"
 #include "UIDefaultButton.h"
+#include "GameAssets.h"
+#include "GameCommon.h"
+
+
 
 class UIStagePage : public UIObject, public UISelectableListener
 {
@@ -22,6 +26,12 @@ public:
     virtual void OnClick(UISelectable *which) override;
     virtual void OnItemChanged(
         UISelectable *which, int itemIdx, int prevItemIdx, bool increase);
+    Animator animator;
+    Animator *animator0;
+    Animator *animator1;
+    Animator *animator2;
+    Animator *animator3;
+
 
 protected:
     virtual void OnFadeOutEnd(UIObject *which) override;

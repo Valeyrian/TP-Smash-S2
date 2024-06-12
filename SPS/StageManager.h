@@ -44,7 +44,8 @@ public:
 
     void SetKO(int playerID);
     bool IsPaused() const;
-    bool IsEnded() const;
+    bool IsOnEnd() const;
+    
 
 
     static StageManager *GetFromScene(Scene *scene);
@@ -77,6 +78,7 @@ private:
 
     bool m_paused;
     bool m_ended;
+    bool m_IsOnEnd;
 
     float m_delayStage;
     float m_delayPotion; // ADD
@@ -132,7 +134,7 @@ inline bool StageManager::IsPaused() const
     return m_paused;
 }
 
-inline bool StageManager::IsEnded() const 
+inline bool StageManager::IsOnEnd() const 
 {
-    return m_ended;
+    return m_IsOnEnd;
 }

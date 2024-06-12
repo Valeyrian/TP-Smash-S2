@@ -23,7 +23,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     m_jumpImpulse(14.f), m_ai(nullptr),
     m_attackType(AttackType::NONE),
     m_delayAttack(-1.f), m_delaySmash(-1.f),  m_delayEarlyJump(-1.f), m_countJump(-1), //m_delaySpecial(-1.f),
-    m_delayLock(-1.f), m_delayLockAttack(-1.f),
+    m_delayLock(-1.f), m_delayLockAttack(-1.f), m_delayDefend(-1.f), m_delayLockDefend(-1.f),
     m_autoVelocity(0.f), m_hasAutoVelocity(false), m_externalVelocity(b2Vec2_zero),
     m_isGrounded(true), m_wasGrounded(true), m_inContact(false),
     m_bodyFixture(nullptr), m_feetFixture(nullptr), m_lastDamager(nullptr),
@@ -38,14 +38,16 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     SpriteAnim *anim = nullptr;
 
     // Bouclier
+
     spriteSheet = assets->GetSpriteSheet(SHEET_SHIELD);
     AssertNew(spriteSheet);
     spriteGroup = spriteSheet->GetGroup("Shield");
     AssertNew(spriteGroup);
 
     anim = m_shieldAnimator.CreateAnimation("Shield", spriteGroup);
-    anim->SetCycleCount(-1);
+    anim->SetCycleCount(1);
     anim->SetFPS(20.f);
+
 
 
     AddFixedUpdateDelay(&m_delayLock);
@@ -58,6 +60,8 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     AddFixedUpdateDelay(&m_delayLockFarAttack);
     AddFixedUpdateDelay(&m_askedFarAttack);
     AddFixedUpdateDelay(&m_delayJumpPotionleft);
+    AddFixedUpdateDelay(&m_delayDefend);
+    AddFixedUpdateDelay(&m_delayLockDefend);
     
 
     if (m_delayLock >0)
@@ -72,6 +76,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     }
 
     m_animator.AddListener(this);
+    m_shieldAnimator.AddListener(this);
 
     // ID
     SetPlayerID(config->playerID);
@@ -147,6 +152,18 @@ void Player::Update()
         m_askedFarAttack = 0.5;
         printf("in here c down\n");
     }
+    if (input.defendPressed && m_delayDefend <= 0)
+    {
+        m_delayDefend = 0.8f;        
+        //printf("input : %f", m_delayDefend);
+
+    }
+    /*if (input.defendDown)
+    {
+        m_delayDefend = 0.8f;
+        printf("input bis : %f", m_delayDefend);
+
+    }*/
 
     GetDownJumpCount(0);
     //printf("time left %f \n", m_delayJumpPotionleft);
@@ -183,6 +200,19 @@ void Player::Render()
 
     // TODO : Bouclier
     texture = m_shieldAnimator.GetTexture();
+    const SDL_Rect* src = m_shieldAnimator.GetSourceRect();
+    SDL_FRect rect = { 0 };
+
+    b2Vec2 spritePosition = position;
+    //spritePosition.x += s * m_renderShift.x;
+    spritePosition.y += 2.5;
+    camera->WorldToView(spritePosition, src, 22.f, rect);
+
+    RenderCopyExF( // TODO : C'est cadeau, les paramètres sont bons
+        g_renderer, texture, src, &rect,
+        Anchor::NORTH, 0.f, b2Vec2(0.f, 0.f), flip);
+
+    //printf("render : %d %f\n", GetPlayerID(), m_delayDefend);
     
 }
 
@@ -195,6 +225,7 @@ void Player::FixedUpdate()
         m_ai->FixedUpdate();
         Update();
     }
+    //printf("FU : %d %f\n", GetPlayerID(), m_delayDefend);
 
     b2Body *body = GetBody();
     b2Vec2 position = body->GetPosition();
@@ -287,7 +318,7 @@ void Player::FixedUpdateState()
     if (m_launchBegins)
     {
         SetState(State::LAUNCHED); 
-        printf("state launched\n");
+        //printf("state launched\n");
         return;
     }
     if (GetState() == State::ROLLING)
@@ -300,7 +331,9 @@ void Player::FixedUpdateState()
         return;
     if (GetState() == State::SMASH_RELEASE)
         return;
-    //if (GetState() == State::SPECIAL)
+    if (GetState() == State::DEFEND)
+        return;
+        //if (GetState() == State::SPECIAL)
     //    return;
 
    //// if (velocity.y > -4 && velocity.Length() > -1)
@@ -322,7 +355,7 @@ void Player::FixedUpdateState()
     if (m_askedFarAttack > 0 && m_delayLockFarAttack <0)
     {
         SetState(State::FAR_ATTACK); 
-        printf("on y go\n");
+        //printf("on y go\n");
     }
 
     if (m_launchBegins)
@@ -331,11 +364,11 @@ void Player::FixedUpdateState()
         return;
     }
     
-    
-
+  
     // Etat au sol
     if (m_isGrounded)
     {
+        //printf("icxiiiiiii %f\n", m_delayDefend);
         m_countJump = 0;
         m_hasToucjedFloor =0;
        // printf("delay roll %f et delay lock %f\n", m_delayRoll, m_delayLockRoll);
@@ -355,6 +388,14 @@ void Player::FixedUpdateState()
                     SetState(State::SMASH_HOLD);
                 }*/
 
+            }
+            
+            else if (m_delayDefend > 0 && m_delayLockDefend <= 0)
+            {
+                //printf("lets goooooooo");
+                SetState(State::DEFEND);
+                //m_delayLockDefend = 5;
+                //m_shieldAnimator.PlayAnimation("Shield");
             }
            /* else if (CanAttack() && m_delaySpecial > 0)
             {
@@ -395,6 +436,12 @@ void Player::FixedUpdateState()
             {
                 SetState(State::FALL);
             }
+           /* if (m_delayDefend > 0)
+            {
+                printf("laaa %f\n", m_delayDefend);
+                SetState(State::DEFEND);
+                m_shieldAnimator.PlayAnimation("Shield");
+            }*/
             else if (m_state == State::FALL && velocity.y > 6.f && IsAttacking() == false)
             {
                 SetState(State::JUMP);
@@ -750,7 +797,11 @@ void Player::Heal(float amount) // TODO : compléter pour soigner
 bool Player::TakeDamage(const Damage &damage, Damager *damager)
 {
     // TODO : Pendre en compte l'état DEFEND
-
+    if (m_state == State::DEFEND) {
+        m_shieldAnimator.PlayAnimation("Shield");
+        //printf("Anim\n");
+        return false;
+    }
         
     b2Vec2 playerposition = GetPosition();
     
@@ -768,6 +819,8 @@ bool Player::TakeDamage(const Damage &damage, Damager *damager)
     if (playerDamager)
     {
         playerDamager->AddDamageGive(damage.amount);
+        playerDamager->AddAttackDone();
+
     }
    
     if (damage.hasEjection)
@@ -832,12 +885,33 @@ void Player::PlaySFXHit(bool hit, int soundID)
     assets->PlaySoundFX(soundID);
 }
 
+void Player::OnAnimationEnd(Animation* which, const std::string& name)
+{
+    printf("end player");
+    if (m_scene->GetUpdateMode() == Scene::UpdateMode::STEP_BY_STEP && GetPlayerID() == 0)
+    {
+        std::cout << "[OnAnimationEnd] "
+            << "Animation = " << name << std::endl;
+    }
+    if (name == "Shield") {                         //lent
+        m_shieldAnimator.StopAnimation();
+        printf("stopppp");
+        m_delayLockDefend = 5.f;
+
+    }
+    if (name == "Defend") {                         //rapide
+        m_shieldAnimator.StopAnimation();
+        printf("stopppp");
+        
+    }
+}
+
 void Player::GetDownJumpCount(int check)
 {
     
     if (check == 1) {
         m_delayJumpPotionleft = 10 ;
-        check == 0;
+        check = 0;
     }
     if ((m_delayJumpPotionleft > 1 && m_countJump == 2))
     {

@@ -48,6 +48,8 @@ public:
     void AddExternalVelocity(b2Vec2 externalVelocity);
     
     void AddDamageGive(float DamageAmount);
+    void AddAttackDone();
+    void AddTotalAttack();
 
     void PlaySFXAttack(int soundID);
     void PlaySFXHit(bool hit, int soundID);
@@ -55,6 +57,7 @@ public:
 
     
 
+    virtual void OnAnimationEnd(Animation* which, const std::string& name) override;
     float m_countJump;
 
 
@@ -86,8 +89,8 @@ protected:
     float m_askedFarAttack;
     float m_delayJumpPotionleft;
     float m_hasToucjedFloor;
- 
-
+    float m_delayDefend;
+    float m_delayLockDefend;
 
     float m_ejectionScore;
     float m_hDirection;
@@ -190,6 +193,17 @@ inline void Player::AddExternalVelocity(b2Vec2 externalVelocity)
 inline void Player::AddDamageGive(float DamageAmount) 
 {
     m_stats->damageGiven += DamageAmount;
+}
+
+inline void Player::AddAttackDone()
+{
+    m_stats->attackDone ++;
+}
+
+
+inline void Player::AddTotalAttack()
+{
+    m_stats->totalAttack ++;
 }
 
 inline Color Player::getDamageColor()
