@@ -88,45 +88,45 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     //--------------------------------------------------------------------------
     // Animation
 
-    m_animator[0] = new UIAnimator(m_scene);
-    m_animator[0]->SetScale(6);
+    m_animator[0] = new UIAnimator(m_scene);                //fire
+    m_animator[0]->SetScale(10);
     m_animator[0]->GetLocalRect().anchorMin.Set(0.1, 0.25);
     m_animator[0]->GetLocalRect().anchorMax.Set(0.4, 0.75);
 
     m_animator[1] = new UIAnimator(m_scene);
-    m_animator[1]->SetScale(6);
-    m_animator[1]->GetLocalRect().anchorMin.Set(0.1, 0.25);
-    m_animator[1]->GetLocalRect().anchorMax.Set(0.4, 0.75);
+    m_animator[1]->SetScale(10);
+    m_animator[1]->GetLocalRect().anchorMin.Set(0.1, 0.42);
+    m_animator[1]->GetLocalRect().anchorMax.Set(0.35, 0.75);
 
-    m_animator[2] = new UIAnimator(m_scene);
-    m_animator[2]->SetScale(6);
-    m_animator[2]->GetLocalRect().anchorMin.Set(0.1, 0.25);
-    m_animator[2]->GetLocalRect().anchorMax.Set(0.4, 0.75);
+    m_animator[2] = new UIAnimator(m_scene);                //light
+    m_animator[2]->SetScale(8.5);
+    m_animator[2]->GetLocalRect().anchorMin.Set(0.1, 0.6);
+    m_animator[2]->GetLocalRect().anchorMax.Set(0.35, 0.75);
 
     m_animator[3] = new UIAnimator(m_scene);
-    m_animator[3]->SetScale(6);
-    m_animator[3]->GetLocalRect().anchorMin.Set(0.1, 0.25);
-    m_animator[3]->GetLocalRect().anchorMax.Set(0.4, 0.75);
+    m_animator[3]->SetScale(8.5);
+    m_animator[3]->GetLocalRect().anchorMin.Set(0.15, 0.48);
+    m_animator[3]->GetLocalRect().anchorMax.Set(0.45, 0.75);
 
-    m_animator[4] = new UIAnimator(m_scene);
-    m_animator[4]->SetScale(6);
-    m_animator[4]->GetLocalRect().anchorMin.Set(0.6, 0.25);
-    m_animator[4]->GetLocalRect().anchorMax.Set(0.9, 0.75);
+    m_animator[4] = new UIAnimator(m_scene);                //fire
+    m_animator[4]->SetScale(10);
+    m_animator[4]->GetLocalRect().anchorMin.Set(0.7, 0.25);
+    m_animator[4]->GetLocalRect().anchorMax.Set(1, 0.75);
 
     m_animator[5] = new UIAnimator(m_scene);
-    m_animator[5]->SetScale(6);
-    m_animator[5]->GetLocalRect().anchorMin.Set(0.6, 0.25);
-    m_animator[5]->GetLocalRect().anchorMax.Set(0.9, 0.75);
+    m_animator[5]->SetScale(10);
+    m_animator[5]->GetLocalRect().anchorMin.Set(0.7, 0.42);
+    m_animator[5]->GetLocalRect().anchorMax.Set(1, 0.75);
 
-    m_animator[6] = new UIAnimator(m_scene);
-    m_animator[6]->SetScale(6);
-    m_animator[6]->GetLocalRect().anchorMin.Set(0.6, 0.25);
-    m_animator[6]->GetLocalRect().anchorMax.Set(0.9, 0.75);
+    m_animator[6] = new UIAnimator(m_scene);                //light
+    m_animator[6]->SetScale(8.5);
+    m_animator[6]->GetLocalRect().anchorMin.Set(0.6, 0.6);
+    m_animator[6]->GetLocalRect().anchorMax.Set(1, 0.75);
 
     m_animator[7] = new UIAnimator(m_scene);
-    m_animator[7]->SetScale(6);
-    m_animator[7]->GetLocalRect().anchorMin.Set(0.6, 0.25);
-    m_animator[7]->GetLocalRect().anchorMax.Set(0.9, 0.75);
+    m_animator[7]->SetScale(8.5);
+    m_animator[7]->GetLocalRect().anchorMin.Set(0.8, 0.48);
+    m_animator[7]->GetLocalRect().anchorMax.Set(1, 0.75);
 
     Animator* animEnd0 = m_animator[0]->GetAnimator(); //fire gagnant gauche
     playerAnim = animEnd0->CreateAnimation("Idle", SpriteGrpanimEnd1);
@@ -136,7 +136,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
 
     Animator* animEnd1 = m_animator[1]->GetAnimator(); // fire gauche perdant
     playerAnim = animEnd1->CreateAnimation("Idle", SpriteGrpanimEnd2);
-    playerAnim->SetCycleCount(-1);
+    playerAnim->SetCycleCount(1);
     playerAnim->SetFPS(15.f);
     animEnd1->PlayAnimation("Idle");
 
@@ -148,7 +148,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
 
     Animator* animEnd3 = m_animator[3]->GetAnimator(); // ligthning gauche perdant
     playerAnim = animEnd3->CreateAnimation("Idle", SpriteGrpanimEnd4);
-    playerAnim->SetCycleCount(-1);
+    playerAnim->SetCycleCount(1);
     playerAnim->SetFPS(15.f);
     animEnd3->PlayAnimation("Idle");
 
@@ -160,7 +160,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
 
     Animator* animEnd5 = m_animator[5]->GetAnimator(); // fire droite perdant
     playerAnim = animEnd5->CreateAnimation("Idle", SpriteGrpanimEnd2);
-    playerAnim->SetCycleCount(-1);
+    playerAnim->SetCycleCount(11);
     playerAnim->SetFPS(15.f);
     animEnd5->PlayAnimation("Idle");
 
@@ -172,7 +172,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
 
     Animator* animEnd7 = m_animator[7]->GetAnimator(); // lightning droite perdant
     playerAnim = animEnd7->CreateAnimation("Idle", SpriteGrpanimEnd4);
-    playerAnim->SetCycleCount(-1);
+    playerAnim->SetCycleCount(1);
     playerAnim->SetFPS(15.f);
     animEnd7->PlayAnimation("Idle");
 
@@ -401,7 +401,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
 
             m_animator[1]->SetEnabled(false);
             m_animator[2]->SetEnabled(false);
-            m_animator[3]->SetEnabled(false);
+            m_animator[3]->SetEnabled(false); 
             m_animator[5]->SetEnabled(false);
             m_animator[6]->SetEnabled(false);
             m_animator[7]->SetEnabled(false);

@@ -442,6 +442,10 @@ void UIStagePage::OnClick(UISelectable *which)
         m_group->SetInteractable(false);
 
         titleManager->OpenPage(TitleManager::Page::TITLE);
+        animator[0]->SetEnabled(false);
+        animator[1]->SetEnabled(false);
+        animator[2]->SetEnabled(false);
+        animator[3]->SetEnabled(false);
     }
 }
 
