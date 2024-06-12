@@ -29,6 +29,9 @@ private:
     // Player 1 stats //damage gived taked fall count, ko count
     UIText* m_Result;
   
+    UIText* m_winState1;
+    UIText* m_winState2;
+
     UIText* m_damageGived1;
     UIText* m_damageGived2;
 

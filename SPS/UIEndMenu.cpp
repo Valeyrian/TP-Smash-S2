@@ -192,8 +192,12 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     m_fallCount1->SetName("Fall Count Player 1");
 
     font = assets->GetFont(FONT_NORMAL);
-    m_accuracy1 = new UIText(scene, "N", font, Colors::Gold);
+    m_accuracy1 = new UIText(scene, "N/A", font, Colors::Gold);
     m_accuracy1->SetName("Accuracy Player 1");
+
+    font = assets->GetFont(FONT_NORMAL);
+    m_winState1 = new UIText(scene, "Equality", font, Colors::Orange);
+    m_winState1->SetName("Win State");
     
     //--------------------------------------------------------------------------
     // Player 2 Init stats
@@ -213,6 +217,11 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     font = assets->GetFont(FONT_NORMAL);    
     m_accuracy2 = new UIText(scene, "N/A", font, Colors::Gold);
     m_accuracy2->SetName("AccuracyPlayer 2");
+
+    font = assets->GetFont(FONT_NORMAL);
+    m_winState2 = new UIText(scene, "Equality", font, Colors::Orange);
+    m_winState2->SetName("Win State");
+    
     
 
     //--------------------------------------------------------------------------
@@ -272,6 +281,11 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     m_fallCount2->SetString(std::to_string(stat2->fallCount));
     if (stat1->fallCount < stat2->fallCount)
     {
+        m_winState1->SetString("Winner");
+        m_winState1->SetColor(Colors::Green);
+        m_winState2->SetString("Looser");
+        m_winState1->SetColor(Colors::Red);
+
         m_fallCount1->SetColor(Colors::Green); 
         m_fallCount2->SetColor(Colors::Red);
        
@@ -334,6 +348,11 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     }
     else  if (stat1->fallCount > stat2->fallCount)
     {
+        m_winState1->SetString("Looser");
+        m_winState1->SetColor(Colors::Red);
+        m_winState2->SetString("Winner");
+        m_winState2->SetColor(Colors::Green);
+
         m_fallCount1->SetColor(Colors::Red);
         m_fallCount2->SetColor(Colors::Green);
 
@@ -564,6 +583,20 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     TitleStatLayout->AddObject(m_DamageTakeTitle, 1, 0);
     TitleStatLayout->AddObject(m_FallCountTitle, 2, 0);
     TitleStatLayout->AddObject(m_AccuracyTitle, 3, 0);
+
+    //--------------------------------------------------------------------------
+   // Winner/Looser layout Stat Title
+
+    UIGridLayout* WinStatLayout = new UIGridLayout(m_scene, 5, 2);
+    WinStatLayout->SetParent(this);
+    WinStatLayout->SetAnchor(Anchor::CENTER);
+    WinStatLayout->SetRowSize(22.f);
+    WinStatLayout->SetColumnSize(100);
+    WinStatLayout->SetColumnSpacing(280.f);
+    WinStatLayout->SetRowSpacing(25.f);
+
+    WinStatLayout->AddObject(m_winState1, 4, 0);
+    WinStatLayout->AddObject(m_winState2, 4, 1);
 
 
    
