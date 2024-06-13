@@ -45,6 +45,8 @@ private:
 
     // TODO : texte pour la potion 
     UITextList* m_bomblevel;
+    UITextList* m_maplevel;
+
     UITextList* m_potionlevel;
     UITextList *m_player1List;
     UITextList *m_player2List;

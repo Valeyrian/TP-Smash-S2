@@ -1,3 +1,5 @@
+#pragma once
+#pragma once
 /*
   Copyright (c) Arnaud BANNIER and Nicolas BODIN.
   Licensed under the MIT License.
@@ -8,27 +10,27 @@
 
 #include "Terrain.h"
 
-
-class PlatformD : public Terrain
+class CityG : public Terrain
 {
 public:
-    PlatformD(Scene *scene, int layer, b2Vec2 StartPos);
-    virtual ~PlatformD();
+    CityG(Scene* scene, int layer, b2Vec2 StartPos);
+    virtual ~CityG();
     virtual void FixedUpdate() override;
-    
+
     void SetTargetPosition(b2Vec2 position, float smoothTime, float maxSpeed);
     void SetTargetAngle(float angle, float smoothTime, float maxSpeed);
     void ApplyExternalVelocity();
     void PlatformDeplacement();
-  
-    const std::set<GameBody *> &GetBodies() const;
-    void AddGameBody(GameBody *gameBody);
-    b2Vec2 m_startPosD;
+
+    const std::set<GameBody*>& GetBodies() const;
+    void AddGameBody(GameBody* gameBody);
+    b2Vec2 m_InitPosG;
+    b2Vec2 m_startPosG;
 
     virtual void Start() override;
 
 protected:
-    std::set<GameBody *>m_bodies;
+    std::set<GameBody*>m_bodies;
 
     b2Vec2 m_positionTarget;
     float m_positionSmoothTime;
@@ -39,11 +41,10 @@ protected:
     float m_angleMaxSpeed;
     int m_DeplacementState;
     float m_TimePhaseOne;
-    b2Vec2 m_initPosD;
     void InitTiles();
 };
 
-inline void PlatformD::AddGameBody(GameBody *gameBody)
+inline void CityG::AddGameBody(GameBody* gameBody)
 {
     m_bodies.insert(gameBody);
 }

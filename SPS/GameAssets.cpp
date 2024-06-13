@@ -29,7 +29,11 @@ void InitAssets(AssetManager *assets)
     // Stage
     assets->AddSpriteSheet(
         SHEET_TILESET_ROCKY,
-        "../Assets/Background/Tileset_rocky.json");
+        "../Assets/Background/Tileset_rocky.json"); 
+    
+    assets->AddSpriteSheet(
+        SHHET_TILESET_CITY,
+        "../Assets/Background/Tileset_city.json");
 
     // UI
     assets->AddSpriteSheet(
@@ -91,7 +95,7 @@ void InitAssets(AssetManager *assets)
 
 void InitBackground(AssetManager * assets, int type)
 {
-    if (true)// Ajoutez des conditions si vous avez plusieurs fonds
+    if (type == 0)// Ajoutez des conditions si vous avez plusieurs fonds
     {
         const int layerCount = 3;
         for (int i = 0; i < layerCount; ++i)
@@ -101,7 +105,20 @@ void InitBackground(AssetManager * assets, int type)
             assets->AddBackgroundLayer(path);
         }
     }
+    else if (type == 1)
+    {
+        const int layerCount = 3;
+        for (int i = 0; i < layerCount; ++i)
+        {
+            std::string path = "../Assets/Background/city"
+                + std::to_string(i) + ".dat";
+            assets->AddBackgroundLayer(path);
+            
+        }
+    }
 }
+
+
 
 void InitFonts(AssetManager * assets)
 {

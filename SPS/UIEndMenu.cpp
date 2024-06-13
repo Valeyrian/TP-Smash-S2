@@ -284,7 +284,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
         m_winState1->SetString("Winner");
         m_winState1->SetColor(Colors::Green);
         m_winState2->SetString("Looser");
-        m_winState1->SetColor(Colors::Red);
+        m_winState2->SetColor(Colors::Red);
 
         m_fallCount1->SetColor(Colors::Green); 
         m_fallCount2->SetColor(Colors::Red);
@@ -349,7 +349,8 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     else  if (stat1->fallCount > stat2->fallCount)
     {
         m_winState1->SetString("Looser");
-        m_winState1->SetColor(Colors::Red);
+        m_winState1->SetColor(Colors::Red); 
+      
         m_winState2->SetString("Winner");
         m_winState2->SetColor(Colors::Green);
 

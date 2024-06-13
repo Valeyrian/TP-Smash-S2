@@ -158,6 +158,15 @@
     <ClCompile Include="UIEndMenu.cpp">
       <Filter>Fichiers sources\GameObject\UI\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="City.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformGBis.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformDBis.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationInput.h">
@@ -261,6 +270,15 @@
     </ClInclude>
     <ClInclude Include="UIEndMenu.h">
       <Filter>Fichiers sources\GameObject\UI\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="City.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformGBis.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformDBis.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
