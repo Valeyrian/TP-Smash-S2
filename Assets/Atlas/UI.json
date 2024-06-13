@@ -14,6 +14,7 @@
         {"name": "Button", "frames": [0,1,2]},
         {"name": "PlayerBorder", "frames": [3]},
         {"name": "Arrows",  "frames": [4,5]},
-        {"name": "Cursor",   "frames": [6]}
+        {"name": "Cursor", "frames": [ 6 ]},
+      {"name": "back",   "frames": [0]}
     ]
 }
