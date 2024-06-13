@@ -117,6 +117,8 @@ StageManager::StageManager(
         m_players.push_back(player);
     }
 
+   
+
     // Crée l'interface utilisateur
     m_stageHUD = new UIStageHUD(scene);
 
@@ -162,43 +164,43 @@ void StageManager::OnSceneUpdate()
      // mouvement de la platform
   //  printf("mdelayBombde : %f \n", m_delayBomb);
 
-    if (m_delayStage < 0.f)
+   /* if (m_delayStage < 0.f)
     {
         QuitScene();
+    }*/
+
+    if (applicationInput->pausePressed) //
+    {
+        if (m_paused)
+        {
+            assert(m_pauseMenu != nullptr);
+
+            m_pauseMenu->PlayFadeOut();
+            scene->GetAssetManager()->PlaySoundFX(SFX_UI_UNPAUSE);
+        }
+        else
+        {
+            assert(m_pauseMenu == nullptr);
+
+            m_pauseMenu = new UIPauseMenu(scene);
+            m_pauseMenu->SetParent(scene->GetCanvas());
+            m_pauseMenu->PlayFadeIn();
+
+            scene->GetTime().SetTimeScale(0.0f);
+            m_paused = true;
+
+            scene->GetAssetManager()->PlaySoundFX(SFX_UI_PAUSE);
+        }
     }
-
-    //if (applicationInput->pausePressed) //
-    //{
-    //    if (m_paused)
-    //    {
-    //        assert(m_pauseMenu != nullptr);
-
-    //        m_pauseMenu->PlayFadeOut();
-    //        scene->GetAssetManager()->PlaySoundFX(SFX_UI_UNPAUSE);
-    //    }
-    //    else
-    //    {
-    //        assert(m_pauseMenu == nullptr);
-
-    //        m_pauseMenu = new UIPauseMenu(scene);
-    //        m_pauseMenu->SetParent(scene->GetCanvas());
-    //        m_pauseMenu->PlayFadeIn();
-
-    //        scene->GetTime().SetTimeScale(0.0f);
-    //        m_paused = true;
-
-    //        scene->GetAssetManager()->PlaySoundFX(SFX_UI_PAUSE);
-    //    }
-    //}
     // menue de fin
     
-    if (m_delayStage < 0.f || applicationInput->pausePressed)
+    if (m_delayStage < 0.f )
     {
         if (m_ended)
         {
             assert(m_endMenu != nullptr);
 
-            m_endMenu->PlayFadeOut();
+          //  m_endMenu->PlayFadeOut();
             scene->GetAssetManager()->PlaySoundFX(SFX_UI_UNPAUSE); //son a changer
         }
         else if (m_endMenu == nullptr)

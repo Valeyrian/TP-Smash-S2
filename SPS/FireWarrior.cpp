@@ -15,7 +15,9 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     SpriteGroup *spriteGroup = nullptr;
     SpriteAnim *anim = nullptr;
 
-    spriteSheet = assets->GetSpriteSheet(SHEET_FIRE_WARRIOR);
+    spriteSheet = assets->GetSpriteSheet(SHEET_FIRE_WARRIOR);\
+
+   
 
     // Animation "Idle"
     spriteGroup = spriteSheet->GetGroup("Idle");
@@ -23,7 +25,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim = m_animator.CreateAnimation("Idle", spriteGroup);
     anim->SetCycleCount(-1);
     anim->SetFPS(15.f);
- 
+   
     // TODO : Animation "Run"
     
     spriteGroup = spriteSheet->GetGroup("Run");
@@ -101,7 +103,7 @@ FireWarrior::FireWarrior(Scene *scene, const PlayerConfig *config, PlayerStats *
     anim->SetCycleCount(1);
     anim->SetFPS(15.f);
 
-
+    
 
 
 
@@ -226,9 +228,10 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
 {
     Player::OnStateChanged(state, prevState);
 
+
     switch (state) // TODO : décommenter, compléter
     {
-
+    
     case State::IDLE:           m_animator.PlayAnimation("Idle");  printf("Is Idle\n");                     break;
     case State::RUN:            m_animator.PlayAnimation("Run");   printf("Is Running\n");                  break;
     case State::ATTACK:         m_animator.PlayAnimation("Attack1"); printf("Is Attacking\n");              break;
@@ -240,6 +243,7 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     case State::SMASH_RELEASE:  m_animator.PlayAnimation("SmashRelease"); printf("smashiiing hold\n");      break;
     case State::DEFEND:         m_animator.PlayAnimation("Defend"); printf("Defend\n");                     break;
 
+       
     //case State::FAR_ATTACK:  m_animator.PlayAnimation("CastSpell");   printf("Is  fireBalling\n");   break;
     //case State::LAUNCHED:    m_animator.PlayAnimation("Roll");   printf("Is  launched\n");   break;
 
@@ -249,6 +253,8 @@ void FireWarrior::OnStateChanged(Player::State state, Player::State prevState)
     // TODO : Gérer d'autres animations
     default:
         break;
+
+        
     }
 }
 

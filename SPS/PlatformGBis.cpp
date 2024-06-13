@@ -14,9 +14,12 @@ CityG::CityG(Scene* scene, int layer, b2Vec2 StartPos) :
 {
     SetName("CityG");
     InitTiles();
-    SetScale(8.f / 24.f); //16 /24
+    SetScale(16.f / 24.f); //16 /24
+    
     m_startPosG = StartPos;
     SetOneWay(true);
+
+    
 
 }
 
@@ -29,6 +32,7 @@ void CityG::Start()
 {
     b2BodyDef bodyDef;
     bodyDef.type = b2_kinematicBody;
+    
 
     bodyDef.position.Set(m_startPosG.x, m_startPosG.y);
     bodyDef.angle = 0.f;
@@ -39,11 +43,11 @@ void CityG::Start()
     const float scale = GetScale();
     b2ChainShape chain;
     b2Vec2 vertices[12] = { };
-    vertices[0].Set(16.5f, -3.f);
-    vertices[1].Set(16.5f, 0.f);
+    vertices[0].Set(6.5f, -1.f);
+    vertices[1].Set(6.5f, 0.f);
     vertices[2].Set(0.f, 0.f);
     vertices[3].Set(-5.5f, 0.f);
-    vertices[4].Set(-5.5f, -3.f);
+    vertices[4].Set(-5.5f, -1.f);
     for (int i = 0; i < 5; i++)
         vertices[i] *= scale;
 
@@ -53,7 +57,7 @@ void CityG::Start()
     fixtureDef.shape = &chain;
     fixtureDef.density = 1.f;
     fixtureDef.friction = 0.5f;
-    fixtureDef.restitution = 0.f;
+    fixtureDef.restitution = .95f;
     fixtureDef.filter.categoryBits = CATEGORY_TERRAIN;
 
     b2Fixture* fixture = CreateFixture(&fixtureDef);
@@ -64,7 +68,7 @@ void CityG::Start()
 void CityG::InitTiles()
 {
     AssetManager* assets = m_scene->GetAssetManager();
-    SpriteSheet* spriteSheet = assets->GetSpriteSheet(SHHET_TILESET_CITY);
+    SpriteSheet* spriteSheet = assets->GetSpriteSheet(SHHET_TILESET_CITY_BLANK);
     AssertNew(spriteSheet);
 
     SpriteGroup* floor = spriteSheet->GetGroup("Floor");
@@ -91,7 +95,7 @@ void CityG::InitTiles()
     // Sol
     for (int i = 0; i < 11; i++) //i <10
     {
-        float x = (float)(-5.f + 2 * i);
+        float x = (float)(-5.f + 1 * i);
 
         tile.Reset(pixelsPerUnit);
         tile.SetSprite(floor, 0);
@@ -102,9 +106,11 @@ void CityG::InitTiles()
     // Bord droit
     tile.Reset(pixelsPerUnit);
     tile.SetSprite(rWall, 0);
-    tile.position.Set(+18.f, 0.5f);//10
+    tile.position.Set(+6.f, 0.5f);//10
     AddTile(tile);
 
+     spriteSheet = assets->GetSpriteSheet(SHHET_TILESET_CITY);
+    AssertNew(spriteSheet);
 
 
    SpriteGroup* BougieB = spriteSheet->GetGroup("Bougie1");

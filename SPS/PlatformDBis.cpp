@@ -14,7 +14,7 @@ CityD::CityD(Scene* scene, int layer, b2Vec2 StartPos) :
 {
     SetName("CityD");
     InitTiles();
-    SetScale(8.f / 24.f); //16 /24
+    SetScale(16 / 24.f); //16 /24
     m_startPosG = StartPos;
     SetOneWay(true);
 
@@ -39,11 +39,11 @@ void CityD::Start()
     const float scale = GetScale();
     b2ChainShape chain;
     b2Vec2 vertices[12] = { };
-    vertices[0].Set(16.5f, -3.f);
-    vertices[1].Set(16.5f, 0.f);
+    vertices[0].Set(6.5f, -1.f);
+    vertices[1].Set(6.5f, 0.f);
     vertices[2].Set(0.f, 0.f);
     vertices[3].Set(-5.5f, 0.f);
-    vertices[4].Set(-5.5f, -3.f);
+    vertices[4].Set(-5.5f, -1.f);
     for (int i = 0; i < 5; i++)
         vertices[i] *= scale;
 
@@ -53,7 +53,7 @@ void CityD::Start()
     fixtureDef.shape = &chain;
     fixtureDef.density = 1.f;
     fixtureDef.friction = 0.5f;
-    fixtureDef.restitution = 0.f;
+    fixtureDef.restitution = .8f;
     fixtureDef.filter.categoryBits = CATEGORY_TERRAIN;
 
     b2Fixture* fixture = CreateFixture(&fixtureDef);
@@ -64,15 +64,15 @@ void CityD::Start()
 void CityD::InitTiles()
 {
     AssetManager* assets = m_scene->GetAssetManager();
-    SpriteSheet* spriteSheet = assets->GetSpriteSheet(SHHET_TILESET_CITY);
+    SpriteSheet* spriteSheet = assets->GetSpriteSheet(SHHET_TILESET_CITY_BLANK);
     AssertNew(spriteSheet);
 
-    SpriteGroup* floor = spriteSheet->GetGroup("Floor");
-    AssertNew(floor);
-    SpriteGroup* lWall = spriteSheet->GetGroup("LWall");
-    AssertNew(lWall);
-    SpriteGroup* rWall = spriteSheet->GetGroup("RWall");
-    AssertNew(rWall);
+    SpriteGroup* floor1 = spriteSheet->GetGroup("Floor");
+    AssertNew(floor1);
+    SpriteGroup* lWall1 = spriteSheet->GetGroup("LWall");
+    AssertNew(lWall1);
+    SpriteGroup* rWall1 = spriteSheet->GetGroup("RWall");
+    AssertNew(rWall1);
     //SpriteGroup* ground = spriteSheet->GetGroup("Ground");
     //AssertNew(ground);
 
@@ -82,7 +82,7 @@ void CityD::InitTiles()
 
     // Bord gauche
     tile.Reset(pixelsPerUnit);
-    tile.SetSprite(lWall, 0);
+    tile.SetSprite(lWall1, 0);
     tile.position.Set(-6.f, 0.5f); // -11
     AddTile(tile);
 
@@ -91,26 +91,27 @@ void CityD::InitTiles()
     // Sol
     for (int i = 0; i < 11; i++) //i <10
     {
-        float x = (float)(-5.f + 2 * i);
+        float x = (float)(-5.f + 1 * i);
 
         tile.Reset(pixelsPerUnit);
-        tile.SetSprite(floor, 0);
+        tile.SetSprite(floor1, 0);
         tile.position.Set(x, 0.5f);
         AddTile(tile);
     }
 
     // Bord droit
     tile.Reset(pixelsPerUnit);
-    tile.SetSprite(rWall, 0);
-    tile.position.Set(+18.f, 0.5f);//10
+    tile.SetSprite(rWall1, 0);
+    tile.position.Set(+6.f, 0.5f);//10
     AddTile(tile);
 
-
+   spriteSheet = assets->GetSpriteSheet(SHHET_TILESET_CITY);
+    AssertNew(spriteSheet);
 
     SpriteGroup* BougieB = spriteSheet->GetGroup("Bougie1");
-    AssertNew(floor);
+    AssertNew(floor1);
     SpriteGroup* Bouteille = spriteSheet->GetGroup("Bouteille");
-    AssertNew(floor);
+    AssertNew(floor1);
 
     tile.Reset(pixelsPerUnit);
     tile.SetSprite(BougieB, 0);

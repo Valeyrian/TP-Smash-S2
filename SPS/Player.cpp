@@ -20,7 +20,7 @@ Player::Player(Scene* scene, const PlayerConfig* config, PlayerStats* stats) :
     m_state(State::IDLE), m_animator(),
     m_shieldAnimator(), m_ejectionScore(0.f), m_defend(false), m_launchBegins(false),
     m_ejection(b2Vec2_zero), m_hVelocity(0.f),
-    m_jumpImpulse(14.f), m_ai(nullptr),
+    m_jumpImpulse(18.f), m_ai(nullptr),
     m_attackType(AttackType::NONE),
     m_delayAttack(-1.f), m_delaySmash(-1.f),  m_delayEarlyJump(-1.f), m_countJump(-1), //m_delaySpecial(-1.f),
     m_delayLock(-1.f), m_delayLockAttack(-1.f), m_delayDefend(-1.f), m_delayLockDefend(-1.f),
@@ -312,7 +312,7 @@ void Player::FixedUpdateState()
     const PlayerInput &input = GetPlayerInput();
     b2Body *body = GetBody();
     b2Vec2 velocity = body->GetLinearVelocity() - m_externalVelocity;
-
+    b2Vec2 position = body->GetPosition();
     // Conditions de sortie
 
     if (m_launchBegins)
@@ -406,7 +406,7 @@ void Player::FixedUpdateState()
             {
                 if (velocity.x != 0)
                     SetState(State::RUN);            
-                else if (m_delayRoll >0 && m_delayLockRoll <0 )
+                else if (m_delayRoll >0 && m_delayLockRoll <0 && position.y < 3)
                     SetState(State::ROLLING);               
                 else if (m_delayEarlyJump)
                      SetState(State::JUMP);
@@ -576,6 +576,16 @@ void Player::OnCollisionStay(GameCollision &collision)
     Terrain *terrain = dynamic_cast<Terrain *>(collision.gameBody);
     if (terrain && terrain->IsOneWay())
     {
+        if (m_delayRoll > 0.4)
+        {
+            collision.SetEnabled(false);
+        }
+        else if (m_delayRoll < 0)
+        {
+            collision.SetEnabled(true);
+
+        }
+
         if (Math::AngleDeg(collision.manifold.normal, b2Vec2(0, 1)) < 110.f)
         {
             collision.SetEnabled(false);
@@ -933,7 +943,7 @@ void Player::OnAnimationEnd(Animation* which, const std::string& name)
 
 void Player::GetDownJumpCount(int check)
 {
-    printf("mDealy JumpBoost : %f \n", m_delayJumpPotionleft);
+    //printf("mDealy JumpBoost : %f \n", m_delayJumpPotionleft);
     if (check == 1) {
         m_delayJumpPotionleft = 10 ;
         check = 0;

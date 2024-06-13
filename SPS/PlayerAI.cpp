@@ -9,9 +9,10 @@
 
 
 PlayerAI::PlayerAI(Player *player) :
-    m_player(player), m_input(), m_target(nullptr)
+    m_player(player), m_input(), m_target(nullptr), m_delayBeforeCheck(0)
 {
     m_scene = m_player->m_scene;
+    m_player->m_maxSpeed = 6.f;
 
     m_stageBox.lowerBound = b2Vec2(-8.0f, 0.0f);
     m_stageBox.upperBound = b2Vec2(+8.0f, 2.0f);
@@ -26,66 +27,79 @@ void PlayerAI::FixedUpdate()
     b2Body *body = m_player->GetBody();
     b2Vec2 position = m_player->GetPosition();
     b2Vec2 velocity = m_player->GetVelocity();
-
+   
     m_input.jumpPressed = false;
     m_input.attackPressed = false;
     m_input.attackDown = false;
-    int atk = Random::RangeI(0, 5);
-    //printf("%d\n", atk);
-    
-
-    if (IsInDanger())
-    {
-        ComeBack();
-        return;
-    }
+    m_input.goDownDown = false;
 
     ChooseTarget();
     if (m_target == nullptr) return;
 
-    // Déplacement
-    m_input.axisX = 0.f;
+    
+
+    m_player->AddFixedUpdateDelay(&m_delayBeforeCheck); 
+    if (m_delayBeforeCheck > 0)
+        return;
+
+    
     b2Vec2 targetPosition = m_target->GetPosition();
-    if (targetPosition.x + 1.f < position.x)
-    {
-        m_input.axisX = -1.f;
-    }
-    else if (position.x < targetPosition.x - 1.f)
-    {
-        m_input.axisX = +1.0f;
-    }
-    /*m_input.axisY = 0.f;
-    if (targetPosition.y + 1.f < position.y)
-    {
-        m_input.axisY = -1.f;
-    }
-    else if (position.y < targetPosition.y - 1.f)
-    {
-        m_input.axisY = +1.0f;
-    }*/
-    // Attaque
-    float targetDist = b2Distance(targetPosition, position);
-    targetDist = targetDist - (Random::RangeF(0.35, 0.15));
-    printf("TargetDist : %f\n", targetDist);
-    if (targetDist < 1)
-    {
-        /*printf("Atk = %d\n\n\n", atk);
-
-        if (atk == 0) {
-            m_input.smashPressed = true;
+    b2Vec2 dist = ((targetPosition ) - position);
+    
+    if (dist.y > 0.3f  && velocity.y <= 4.f)
+        {
+            m_input.jumpPressed = true;
+            m_input.goDownDown = false; 
         }
-
-        else{*/
-            m_input.attackPressed = true;
-            m_input.attackDown = true;
-        //}
+    if (dist.y < .8f && IsOverVoid() == true && m_player->m_isGrounded == true)
+    {
+        m_input.jumpPressed = false;
+        m_input.goDownDown = true;
     }
+
+    printf("dist x %f  et is grounded %d\n ", dist.x, m_player->m_isGrounded);
+
+    if (dist.x > 0.5 || dist.x <0.5)
+    {
+        if (dist.x > 0.5)
+        {
+            m_input.axisX = 1.f;
+        }
+        else if (dist.x < 0.5)
+        {
+            m_input.axisX = -1.f;
+
+        }
+        
+    }
+   
+   
+    m_delayBeforeCheck = 0.2;
+   
+    
+    
+
+    
 }
 
 
 void PlayerAI::OnStateChanged(Player::State state, Player::State prevState)
 {
+    
+
 }
+
+bool PlayerAI::IsOverVoid()
+{
+    b2Vec2 position = m_player->GetPosition();
+
+    if (position.x > -8 && position.x < 8)
+        return true;
+    else
+        return false;
+
+}
+
 
 bool PlayerAI::IsInDanger() const
 {
@@ -110,31 +124,31 @@ void PlayerAI::ChooseTarget()
     m_target = stageManager->GetPlayer(0);
 }
 
-void PlayerAI::ComeBack()
-{
-    b2Vec2 position = m_player->GetPosition();
-    b2Vec2 velocity = m_player->GetVelocity();
-
-    if (position.x > m_stageBox.upperBound.x)
-    {
-        m_input.axisX = -1.0f;
-    }
-    else if (position.x < m_stageBox.lowerBound.x)
-    {
-        m_input.axisX = 1.0f;
-    }
-    else
-    {
-        m_input.axisX = 0.0f;
-    }
-
-    if (velocity.y < 0.0f && position.y < m_stageBox.lowerBound.y + 1.0f)
-    {
-        m_input.jumpPressed = true;
-    }
-
-    if (velocity.y > 0.0f)
-    {
-        m_input.jumpDown = true;
-    }
-}
+//void PlayerAI::ComeBack()
+//{
+//    b2Vec2 position = m_player->GetPosition();
+//    b2Vec2 velocity = m_player->GetVelocity();
+//
+//    if (position.x > m_stageBox.upperBound.x)
+//    {
+//        m_input.axisX = -1.0f;
+//    }
+//    else if (position.x < m_stageBox.lowerBound.x)
+//    {
+//        m_input.axisX = 1.0f;
+//    }
+//    else
+//    {
+//        m_input.axisX = 0.0f;
+//    }
+//
+//    if (velocity.y < 0.0f && position.y < m_stageBox.lowerBound.y + 1.0f)
+//    {
+//        m_input.jumpPressed = true;
+//    }
+//
+//    if (velocity.y > 0.0f)
+//    {
+//        m_input.jumpDown = true;
+//    }
+//}

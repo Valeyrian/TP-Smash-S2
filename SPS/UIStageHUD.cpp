@@ -106,7 +106,7 @@ void UIStageHUD::Update()
     int centiseconds = (int)stageManager->GetRemainingCentiseconds() % 100;
     char buffer[128] = { 0 };
 
-    sprintf_s(buffer, "%d:%02d:%2d", minutes, seconds,centiseconds);
+    sprintf_s(buffer, "%d:%02d:%02d", minutes, seconds,centiseconds);
     m_timeText->SetString(buffer);
 
     for (int i = 0; i < playerCount; i++)
@@ -121,7 +121,7 @@ void UIStageHUD::Update()
         m_damageTexts[i]->SetString(std::to_string(score) + "%");
         if (isOnEnd)
         {
-           // m_damageTexts[i]->SetOpacity(0);
+           // m_damageTexts[i]->SetOpacity(0); 
           //  m_fallTexts[i]->SetOpacity(0);
             hLayout->SetOpacity(0.f); 
             m_timeText->SetOpacity(0.f);

@@ -280,7 +280,7 @@ UIStagePage::UIStagePage(
 
     TitrelString.assign("Choix de la map");
     CorpStrings.push_back("RockyPass");
-    CorpStrings.push_back("Smash in a city");
+    CorpStrings.push_back("A Sweetie World");
     m_maplevel = new UITextList(   
         m_scene, TitrelString, CorpStrings, Colors::White, textWidth
     );

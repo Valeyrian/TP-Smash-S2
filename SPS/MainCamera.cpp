@@ -50,7 +50,7 @@ void MainCamera::Update()
         smoothTimeY, 100.f, m_scene->GetDelta()
     );
 
-    float width = (m_minWidth + m_maxWidth) / 1.5f; //pour changer fov
+    float width = (m_minWidth + m_maxWidth) / 1.25f; //pour changer fov
     ScaleViewToFitWidth(width);
 
     b2Vec2 shift = m_center - m_worldView.GetCenter();

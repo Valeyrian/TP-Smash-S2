@@ -35,6 +35,11 @@ void InitAssets(AssetManager *assets)
         SHHET_TILESET_CITY,
         "../Assets/Background/Tileset_city.json");
 
+    assets->AddSpriteSheet(
+        SHHET_TILESET_CITY_BLANK,   
+        "../Assets/Background/Tileset_cityBlank.json");
+
+
     // UI
     assets->AddSpriteSheet(
         SHEET_UI,

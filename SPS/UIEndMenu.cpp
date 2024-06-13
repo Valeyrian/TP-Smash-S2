@@ -287,7 +287,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     if (stat1->fallCount < stat2->fallCount)
     {
         m_winState1->SetString("Winner");
-        m_winState1->SetColor(Colors::DarkBlue);
+        m_winState1->SetColor(Colors::Green);
         m_winState2->SetString("Looser");
         m_winState2->SetColor(Colors::Red);
 
@@ -295,7 +295,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
         m_fallCount2->SetColor(Colors::Red);
        
 
-        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type != PlayerConfig::Type::FIRE_WARRIOR)
+        if (config1->type == PlayerConfig::Type::FIRE_WARRIOR && config2->type == PlayerConfig::Type::FIRE_WARRIOR)
 
         {
             m_animator[0]->SetEnabled(true);//on fire gagnant gauche

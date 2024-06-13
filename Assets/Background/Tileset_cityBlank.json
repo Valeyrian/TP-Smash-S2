@@ -1,0 +1,13 @@
+{
+    "texture": "Tileset_cityBlank.dat",
+    "rectangles": [
+        {"x":  266, "y": 95, "w": 18, "h": 18},
+        {"x":  247, "y":  95, "w": 18, "h": 18},
+        {"x":  285, "y":  95, "w": 18, "h": 18}
+    ],
+    "parts": [
+        { "name": "Floor", "frames": [0] },
+        { "name": "LWall", "frames": [1] },
+        { "name": "RWall", "frames": [2] }
+       ]
+}

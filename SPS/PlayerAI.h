@@ -24,6 +24,8 @@ public:
 
     void OnStateChanged(Player::State state, Player::State prevState);
 
+    bool IsOverVoid();
+
 protected:
     Scene *m_scene;
     PlayerInput m_input;
@@ -31,6 +33,8 @@ protected:
     Player *m_target;
     b2AABB m_stageBox;
 
+    float m_delayBeforeCheck;
+    bool hasjump;
 
     bool IsInDanger() const;
     void ChooseTarget();

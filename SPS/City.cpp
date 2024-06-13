@@ -30,11 +30,11 @@ void City::Start()
     const float scale = GetScale();
     b2ChainShape chain;
     b2Vec2 vertices[12] = { };
-    vertices[0].Set(10.5f, -8.f);
-    vertices[1].Set(10.5f, 0.f);
+    vertices[0].Set(9.5f, -2.5f);
+    vertices[1].Set(9.5f, 0.f);
     vertices[2].Set(0.f, 0.f);
     vertices[3].Set(-10.5f, 0.f);
-    vertices[4].Set(-10.5f, -8.f);
+    vertices[4].Set(-10.5f, -2.5f);
     for (int i = 0; i < 5; i++)
         vertices[i] *= scale;
 

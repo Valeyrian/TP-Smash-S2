@@ -56,6 +56,8 @@ public:
     void PlaySFXHit(bool hit, int soundID);
     Color getDamageColor();
 
+    void SetEarlyJump(float val);
+
     
 
     virtual void OnAnimationEnd(Animation* which, const std::string& name) override;
@@ -236,3 +238,11 @@ inline Color Player::getDamageColor()
     else if (m_ejectionScore > 99)
         return Colors::Red;
 }
+
+inline void Player::SetEarlyJump(float val) 
+{
+    m_delayEarlyJump += val;
+}
+
+
+
