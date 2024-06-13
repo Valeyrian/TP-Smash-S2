@@ -55,7 +55,7 @@ public:
 
     enum class Type : int
     {
-        ROCKY_PASS = 0
+        ROCKY_PASS = 0, city
     };
     enum class Mode : int
     {
@@ -80,9 +80,10 @@ public:
     };
     Bomb bombLevel;
 
+  
+
     int duration;
     int lifeCount;
-    
 };
 
 class PlayerStats

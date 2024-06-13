@@ -269,6 +269,25 @@ UIStagePage::UIStagePage(
     m_bomblevel->AddSelectableListener(this); 
 
 
+    ////--------------------------------------------------------------------------
+   //// TODO : Ajout d'un texte et d'une liste pour le choix de la map 
+
+
+    std::string TitrelString;
+    std::vector<std::string> CorpStrings;   
+    font = assets->GetFont(FONT_LARGE); 
+
+
+    TitrelString.assign("Choix de la map");
+    CorpStrings.push_back("RockyPass");
+    CorpStrings.push_back("Smash in a city");
+    m_maplevel = new UITextList(   
+        m_scene, TitrelString, CorpStrings, Colors::White, textWidth
+    );
+    m_maplevel->SetIsCycle(true);
+    m_maplevel->AddSelectableListener(this);   
+
+
     //--------------------------------------------------------------------------
     // Buttons
 
@@ -282,14 +301,17 @@ UIStagePage::UIStagePage(
     // Grid layouts
 
     // TODO : Modifier le vLayout pour ajouter un champ potion
-    UIGridLayout *vLayout = new UIGridLayout(m_scene, 5, 1); 
+    UIGridLayout *vLayout = new UIGridLayout(m_scene, 7, 1); 
     vLayout->SetParent(m_content); 
-    vLayout->SetAnchor(Anchor::EAST);
+    vLayout->SetAnchor(Anchor::EAST);   
+    vLayout->GetLocalRect().anchorMin.x = 0.0875;       
+    vLayout->GetLocalRect().anchorMax.y = 1.2;      
 
     vLayout->SetSpacing(2.f);
 
     vLayout->SetRowSpacing(2, 5.f);
     vLayout->SetRowSpacing(3, 5.f);
+    //vLayout->SetSpacing(5.f);
     /*vLayout->SetRowSpacing(5, 5.f);  
     vLayout->SetRowSpacing(6, 5.f);*/ 
 
@@ -304,6 +326,8 @@ UIStagePage::UIStagePage(
     vLayout->AddObject(m_timeList, 1, 0);
     vLayout->AddObject(m_potionlevel, 2, 0);
     vLayout->AddObject(m_bomblevel, 3, 0);
+    vLayout->AddObject(m_maplevel, 4, 0);
+
     
 
 
@@ -354,7 +378,7 @@ UIStagePage::UIStagePage(
     hLayout->AddObject(m_startButton, 0, 1);
 
     // TODO : Modifier pour laisser la place au champ potion
-    vLayout->AddObject(hLayout, 4, 0);
+    vLayout->AddObject(hLayout, 6, 0);
 
     //vLayout->Update();
     layoutFighter->Update();
@@ -375,6 +399,7 @@ UIStagePage::UIStagePage(
     m_group->AddSelectable(m_timeList);
     m_group->AddSelectable(m_potionlevel);
     m_group->AddSelectable(m_bomblevel);
+    m_group->AddSelectable(m_maplevel);
 
 
     m_group->AddSelectable(m_backButton);
@@ -567,6 +592,16 @@ void UIStagePage::UpdateConfigs()
    case 1: m_stageConfig.bombLevel = StageConfig::Bomb::LENTE; break;
    case 2: m_stageConfig.bombLevel = StageConfig::Bomb::NORMALE; break;
    case 3: m_stageConfig.bombLevel = StageConfig::Bomb::RAPIDE; break;
+   default: m_stageConfig.bombLevel = StageConfig::Bomb::AUCUNE; break;
    }
+
+   switch (m_maplevel->GetSelectedItem())
+   {
+   case 0:  m_stageConfig.type = StageConfig::Type::ROCKY_PASS; break;
+   case 1: m_stageConfig.type = StageConfig::Type::city; break;
+   
+   }
+
+
 
 }

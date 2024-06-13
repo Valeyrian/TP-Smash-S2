@@ -1,0 +1,27 @@
+{
+    "texture": "Tileset_city.dat",
+    "rectangles": [
+        {"x":  92, "y": 18, "w": 50, "h": 54},
+        {"x":  72, "y":  18, "w": 16, "h": 54},
+        {"x":   74, "y":  18, "w": 16, "h": 54},
+        {"x":  162, "y":  49, "w": 8, "h": 25},
+        {"x":  162, "y":  37, "w": 18, "h": 12},
+        {"x": 3, "y":  90, "w": 12, "h": 36},
+        {"x":   21, "y": 90, "w": 12, "h": 36},
+
+
+        {"x":  90, "y": 90, "w": 18, "h": 36},
+        {"x":  72, "y": 67, "w": 25, "h": 25},
+        {"x":  99, "y": 67, "w": 26, "h": 20}
+    ],
+    "parts": [
+        { "name": "Floor", "frames": [0] },
+        { "name": "LWall", "frames": [1] },
+        { "name": "RWall", "frames": [2] },
+        { "name": "Sucre1", "frames": [3] },
+        { "name": "Sucre2", "frames": [4] },
+        { "name": "Bougie1", "frames": [5] }, 
+        { "name": "Bougie2", "frames": [6] },
+        { "name": "Bouteille", "frames": [7] }
+    ]
+}

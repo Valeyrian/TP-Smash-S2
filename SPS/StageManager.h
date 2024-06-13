@@ -58,6 +58,8 @@ private:
     
     
     void InitPlatform();
+    void InitPlatformBis();
+    void InitCity();
 
     void AddPotion();
     void AddJumpPotion();
@@ -87,6 +89,7 @@ private:
     
     float m_delayBomb; // ADD
     float m_MaxDelayBomb;
+    int m_mapConfig;
    
 
 };

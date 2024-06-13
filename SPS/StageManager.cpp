@@ -15,6 +15,10 @@
 #include "platformD.h"
 #include "platformG.h"
 #include "Background.h"
+#include "City.h"
+#include "PlatformGBis.h"
+#include "PlatformDBis.h"
+
 
 #include "Potion.h"
 #include "Bomb.h"
@@ -41,11 +45,23 @@ StageManager::StageManager(
     InitMusic(assets);
     InitSFX(assets);
 
+
+    switch (m_stageConfig.type)
+    {
+    case  StageConfig::Type::ROCKY_PASS :  m_mapConfig = 1 ; break;
+    case StageConfig::Type::city :  m_mapConfig = 2 ; break;
+     }
+
     // Stage
-    if (true)
+    if (m_mapConfig ==1 )
     {
         InitRockyPass();
         InitPlatform();
+    }
+    else if (m_mapConfig == 2)
+    {
+        InitCity();
+        InitPlatformBis();
     }
 
     // Crée la caméra
@@ -115,8 +131,8 @@ StageManager::StageManager(
     switch (m_stageConfig.bombLevel)
     {
     case StageConfig::Bomb::AUCUNE:m_MaxDelayBomb = -1; break;
-    case StageConfig::Bomb::LENTE:m_MaxDelayBomb = 75; break;
-    case StageConfig::Bomb::NORMALE:m_MaxDelayBomb = 60; break;
+    case StageConfig::Bomb::LENTE:m_MaxDelayBomb = 45; break;
+    case StageConfig::Bomb::NORMALE:m_MaxDelayBomb = 30; break;
     case StageConfig::Bomb::RAPIDE:m_MaxDelayBomb = 15; break;
 
     }
@@ -176,7 +192,7 @@ void StageManager::OnSceneUpdate()
     //}
     // menue de fin
     
-    if (m_delayStage < 57.f || applicationInput->pausePressed)
+    if (m_delayStage < 0.f || applicationInput->pausePressed)
     {
         if (m_ended)
         {
@@ -285,7 +301,7 @@ void StageManager::AddJumpPotion()
     potion->SetStartPosition(position);
 
     if (m_MaxDelayPotion >= 0)
-        m_delayJumpPotion = Random::RangeF(1, 15); //m_MaxDelayPotion * 4.f );
+        m_delayJumpPotion = Random::RangeF(1, m_MaxDelayPotion); //m_MaxDelayPotion * 4.f );
     else
         m_delayPotion = -1;
     printf("add Jump potion \n");
@@ -359,6 +375,37 @@ void StageManager::InitPlatform()
     PlatformG* stageG = new PlatformG(scene, LAYER_TERRAIN, b2Vec2(-19, -2)); 
     PlatformD* stageD = new PlatformD(scene, LAYER_TERRAIN,b2Vec2(15, -2));
 
+    scene->GetAssetManager()->FadeInMusic(MUSIC_ROCKY_PASS);
+
+    // platform 2 
+}
+
+
+void StageManager::InitPlatformBis()
+{
+    Scene* scene = GetScene();
+
+    // Stage
+       CityG *stageG = new CityG(scene, LAYER_TERRAIN, b2Vec2(-19, -2));  
+       CityD *stageD = new CityD(scene, LAYER_TERRAIN, b2Vec2(15, -2));    
+
+    // Music
+    scene->GetAssetManager()->FadeInMusic(MUSIC_ROCKY_PASS);
+
+    // platform 2 
+}
+
+
+void StageManager::InitCity()
+{
+    Scene* scene = GetScene();
+
+    // Stage
+    City* stage = new City(scene);
+     
+
+
+
     // Background
     AssetManager* assets = scene->GetAssetManager();
     Background* background = new Background(scene, LAYER_BACKGROUND);
@@ -368,22 +415,16 @@ void StageManager::InitPlatform()
     Background::RenderMode modes[] = {
         Background::RenderMode::FILL_VERTICAL,
         Background::RenderMode::FILL_BELOW,
-        Background::RenderMode::FILL_BELOW 
+        Background::RenderMode::FILL_BELOW
     };
     for (int i = 0; i < 3; i++)
     {
-        background->AddLayer(m_textures[i], b2Vec2(factors[i], 0.9f * factors[i]), modes[i]); 
+        background->AddLayer(m_textures[i], b2Vec2(factors[i], 0.9f * factors[i]), modes[i]);
     }
-    background->SetPixelsPerUnit(14.f); 
-    b2Vec2 worldDim = background->GetWorldDimensions(); 
-    background->SetWorldCenter(0.5f * worldDim + b2Vec2(0.f, -1.f)); // 0 -5 origine 
+    background->SetPixelsPerUnit(14.f);
+    b2Vec2 worldDim = background->GetWorldDimensions();
+    background->SetWorldCenter(0.5f * worldDim + b2Vec2(0.f, -5.f));
 
     // Music
     scene->GetAssetManager()->FadeInMusic(MUSIC_ROCKY_PASS);
-
-    // platform 2 
-  
-
-    
-
 }

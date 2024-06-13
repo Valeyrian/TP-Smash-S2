@@ -158,8 +158,19 @@
     <ClCompile Include="UIEndMenu.cpp">
       <Filter>Fichiers sources\GameObject\UI\Stage</Filter>
     </ClCompile>
+
+    <ClCompile Include="City.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformGBis.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformDBis.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+
     <ClCompile Include="fireBall.cpp">
       <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
+
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,8 +276,19 @@
     <ClInclude Include="UIEndMenu.h">
       <Filter>Fichiers sources\GameObject\UI\Stage</Filter>
     </ClInclude>
+
+    <ClInclude Include="City.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformGBis.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformDBis.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Stage</Filter>
+
     <ClInclude Include="fireBall.h">
       <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
+      
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
