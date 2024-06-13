@@ -33,6 +33,11 @@ UIEndMenu::UIEndMenu(Scene* scene) :
 
     TTF_Font* font = nullptr;
 
+    SpriteSheet* spriteSheetback = assets->GetSpriteSheet(SHEET_UI);
+    AssertNew(spriteSheetback);
+    SpriteGroup* spriteGroupback = spriteSheetback->GetGroup("back");
+    AssertNew(spriteGroupback);
+
     m_group = new UISelectableGroup(m_scene);
     m_group->SetParent(this);
     m_group->AddInput(&(applicationInput->uiInputs[0]));
@@ -160,7 +165,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
 
     Animator* animEnd5 = m_animator[5]->GetAnimator(); // fire droite perdant
     playerAnim = animEnd5->CreateAnimation("Idle", SpriteGrpanimEnd2);
-    playerAnim->SetCycleCount(11);
+    playerAnim->SetCycleCount(1);
     playerAnim->SetFPS(15.f);
     animEnd5->PlayAnimation("Idle");
 
@@ -282,7 +287,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
     if (stat1->fallCount < stat2->fallCount)
     {
         m_winState1->SetString("Winner");
-        m_winState1->SetColor(Colors::Green);
+        m_winState1->SetColor(Colors::DarkBlue);
         m_winState2->SetString("Looser");
         m_winState2->SetColor(Colors::Red);
 
@@ -309,8 +314,8 @@ UIEndMenu::UIEndMenu(Scene* scene) :
             m_animator[0]->SetEnabled(true);//on fire gagant gauche
             m_animator[7]->SetEnabled(true); // on light perdant droite
 
-            m_animator[0]->SetEnabled(false);
             m_animator[1]->SetEnabled(false);
+            m_animator[2]->SetEnabled(false);
             m_animator[3]->SetEnabled(false);
             m_animator[4]->SetEnabled(false);
             m_animator[5]->SetEnabled(false);
@@ -524,6 +529,26 @@ UIEndMenu::UIEndMenu(Scene* scene) :
 
     m_mainMenuButton = new UIDefaultButton(scene, "Quit to menu");
     m_mainMenuButton->AddSelectableListener(this);
+
+    //--------------------------------------------------------------------------
+    // CAdre
+    UIRect *cadre = new UIRect(b2Vec2(0.4,0.4), b2Vec2(0.6, 0.6), b2Vec2(0.4, 0.4), b2Vec2(0.60, 0.6));
+    UIBorders *borders = new UIBorders(2,5,10,1);
+    borders->scale;
+
+    /*UIImage* back = new UIImage(scene, spriteGroupback, 2);
+    back->SetLayer(LAYER_UI_FOREGROUND);
+    back->SetBorders(0.2, 0.2, 0.2, 0.2, 2.f);
+    back->SetOpacity(1.f);
+    back->SetEnabled(true);
+    back->SetUIEnabled(true);
+    back->SetLocalRect(*cadre);
+    back->SetScale(50);
+    back->GetRectSize().Set(0.1,0.1);
+    */
+    
+
+    //Animator* back1 = 
 
     //--------------------------------------------------------------------------
     // Cursor

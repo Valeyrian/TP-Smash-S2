@@ -17,6 +17,7 @@ Bomb::Bomb(Scene* scene) :
     SpriteGroup* spriteGroup = nullptr;
     SpriteAnim* anim = nullptr;
 
+
     
     spriteGroup = spriteSheet->GetGroup("Bomb");
     AssertNew(spriteGroup);
@@ -165,6 +166,7 @@ void Bomb::Explode()
 
     b2Vec2 bombposition = GetPosition();
     QueryFilter filter(CATEGORY_ALL_TEAMS); 
+    PlaySFXAttak(SFX_EXPLOSION);
 
    
     damage.amount = 12.f;
@@ -176,4 +178,13 @@ void Bomb::Explode()
     
     Delete();
 
+}
+
+void Bomb::PlaySFXAttak(SoundID  sound)
+{
+    AssetManager* assets = m_scene->GetAssetManager();
+    float volume = Random::RangeF(0.5f, 0.8f);
+
+    assets->SetSoundVolume(sound, volume);
+    assets->PlaySoundFX(sound);
 }

@@ -24,6 +24,7 @@ public:
     virtual bool TakeDamage(const Damage& damage, Damager* damager);
     float timeBeforeExplode;
     virtual void Explode();
+    virtual void PlaySFXAttak(SoundID sound);
 
 protected:
     bool m_used;
