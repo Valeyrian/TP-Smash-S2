@@ -52,7 +52,9 @@ void InitAssets(AssetManager *assets)
     assets->AddSpriteSheet( 
         SHEET_SHOWTIME_LIGHTNING, 
         "../Assets/Fighter/LightningOnly2.json");
-
+    assets->AddSpriteSheet(
+        SHEET_FIREBALL,
+        "../Assets/Fighter/FireBall_Sheet.json");
     // Item
     assets->AddSpriteSheet(
         SHEET_ITEM_POTION,
@@ -149,6 +151,9 @@ void InitSFX(AssetManager * assets)
     assets->AddSound(
         SFX_JUMP_GROUND,
         "../Assets/SoundFX/Player/Dirt_Jump.dat");
+    assets->AddSound(
+        SFX_EXPLOSION,
+        "../Assets/SoundFX/Player/explosion.dat");
 
     // UI
     assets->AddSound(

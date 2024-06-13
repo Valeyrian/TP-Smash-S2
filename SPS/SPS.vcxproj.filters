@@ -158,6 +158,9 @@
     <ClCompile Include="UIEndMenu.cpp">
       <Filter>Fichiers sources\GameObject\UI\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="fireBall.cpp">
+      <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationInput.h">
@@ -261,6 +264,9 @@
     </ClInclude>
     <ClInclude Include="UIEndMenu.h">
       <Filter>Fichiers sources\GameObject\UI\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="fireBall.h">
+      <Filter>Fichiers sources\GameObject\GameBody\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
