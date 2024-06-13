@@ -289,7 +289,7 @@ UIEndMenu::UIEndMenu(Scene* scene) :
         m_winState1->SetString("Winner");
         m_winState1->SetColor(Colors::DarkBlue);
         m_winState2->SetString("Looser");
-        m_winState1->SetColor(Colors::Red);
+        m_winState2->SetColor(Colors::Red);
 
         m_fallCount1->SetColor(Colors::Green); 
         m_fallCount2->SetColor(Colors::Red);
